@@ -27,16 +27,16 @@ export class BoardsController {
 
   @Get('/:id')
   getOnePost(@Param('id') postId: number): Board {
-    return this.boardService.getOnePost({ postId });
+    return this.boardService.getOnePost(postId);
   }
 
   @Patch('/:id')
   updatePost(@Param('id') postId: number, @Body() postData: UpdatePostDto) {
-    return { postId, postData };
+    return this.boardService.updatePost(postId, postData);
   }
 
   @Delete('/:id')
   removePost(@Param('id') postId: number) {
-    return `delete ${postId}`;
+    return this.boardService.removePost(postId);
   }
 }

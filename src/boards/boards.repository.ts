@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { UpdatePostDto } from './dtos/update-post.dto';
 import { Board } from './entities/board.entity';
 
 @Injectable()
@@ -14,7 +15,24 @@ export class BoardsRepository {
     return this.posts;
   }
 
-  getOnePost(postData): Board {
-    return this.posts.filter((post) => post.id === postData.postId)[0];
+  getOnePost(postId: number): Board {
+    return this.posts.filter((post) => post.id === postId)[0];
+  }
+
+  updatePost(postId: number, postData: UpdatePostDto): Board {
+    this.posts = [
+      ...this.posts.map((post) => {
+        if (post.id === postId) {
+          Object.entries(postData).forEach((v) => (post[v[0]] = v[1]));
+        }
+        return post;
+      }),
+    ];
+    return this.posts.filter((post) => post.id === postId)[0];
+  }
+
+  removePost(postId: number) {
+    this.posts = [...this.posts.filter((v) => v.id !== postId)];
+    return this.posts;
   }
 }

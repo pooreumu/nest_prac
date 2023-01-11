@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BoardsRepository } from './boards.repository';
 import { CreatePostDto } from './dtos/create-post.dto';
+import { UpdatePostDto } from './dtos/update-post.dto';
 
 @Injectable()
 export class BoardsService {
@@ -15,7 +16,15 @@ export class BoardsService {
     return this.boardsRepository.getAllPosts();
   }
 
-  getOnePost(postData) {
-    return this.boardsRepository.getOnePost(postData);
+  getOnePost(postId: number) {
+    return this.boardsRepository.getOnePost(postId);
+  }
+
+  updatePost(postId: number, postData: UpdatePostDto) {
+    return this.boardsRepository.updatePost(postId, postData);
+  }
+
+  removePost(postId: number) {
+    return this.boardsRepository.removePost(postId);
   }
 }
