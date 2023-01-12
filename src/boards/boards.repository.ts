@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { Board } from './entities/board.entity';
-
 @Injectable()
 export class BoardsRepository {
   private posts: Board[] = [];
+  constructor(
+    @InjectRepository(Board)
+    private readonly boards: Repository<Board>,
+  ) {}
 
-  createPost(board: Board): Board[] {
-    this.posts = [...this.posts, board];
-    return this.posts;
+  async createPost(board: CreatePostDto): Promise<void> {
+    await this.boards.save(board);
   }
 
   getAllPosts() {

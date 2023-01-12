@@ -15,14 +15,15 @@ import { Board } from './entities/board.entity';
 @Controller('boards')
 export class BoardsController {
   constructor(private readonly boardService: BoardsService) {}
+
   @Post()
-  createPost(@Body() postData: CreatePostDto): Board[] {
-    return this.boardService.createPost(postData);
+  async createPost(@Body() postData: CreatePostDto) {
+    return await this.boardService.createPost(postData);
   }
 
   @Get()
-  getAllPosts(): Board[] {
-    return this.boardService.getAllPosts();
+  async getAllPosts(): Promise<Board[]> {
+    return await this.boardService.getAllPosts();
   }
 
   @Get('/:id')

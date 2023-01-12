@@ -8,8 +8,7 @@ export class BoardsService {
   constructor(private readonly boardsRepository: BoardsRepository) {}
 
   createPost(postData: CreatePostDto) {
-    const postId = this.boardsRepository.getAllPosts().length + 1;
-    return this.boardsRepository.createPost({ ...postData, id: postId });
+    this.boardsRepository.createPost(postData);
   }
 
   getAllPosts() {
