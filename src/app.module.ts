@@ -19,7 +19,7 @@ import { ConfigModule } from '@nestjs/config';
       password: process.env.RDS_PASSWORD,
       database: process.env.RDS_DATABASE,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
-      synchronize: true,
+      synchronize: process.env.NODE_ENV === 'production' ? false : true,
     }),
     BoardsModule,
   ],
