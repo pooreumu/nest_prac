@@ -10,4 +10,10 @@ export class Board {
 
   @Column()
   content: string;
+
+  @Column()
+  authorId: string;
+
+  @Column()
+  authorPassword: string;
 }
