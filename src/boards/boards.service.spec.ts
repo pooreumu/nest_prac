@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BoardsRepository } from './boards.repository';
 import { BoardsService } from './boards.service';
+import { BoardsRepository } from './boards.repository';
+jest.mock('./boards.repository');
+
 import { CreatePostDto } from './dtos/create-post.dto';
-import { Board } from './entities/board.entity';
 
 describe('BoardsService', () => {
   let service: BoardsService;
@@ -10,6 +11,7 @@ describe('BoardsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [],
       providers: [BoardsService, BoardsRepository],
     }).compile();
 
@@ -21,37 +23,18 @@ describe('BoardsService', () => {
     expect(service).toBeDefined();
   });
   describe('createPost', () => {
-    it('createPost를 실행하면 this.boardsRepository.getAllPosts를 1번 실행하나?', () => {
-      const postData: CreatePostDto = { title: 'title', content: 'content' };
-      const board: Board[] = [
-        {
-          id: 1,
-          title: 'title',
-          content: 'content',
-        },
-      ];
-      jest.spyOn(repository, 'getAllPosts').mockReturnValue(board);
+    const postData: CreatePostDto = {
+      title: 'title',
+      content: 'content',
+      authorId: 'author',
+      authorPassword: 'password',
+    };
 
+    it('service.createPost를 실행하면 this.boardsRepository.createPost를 실행하나?', () => {
       service.createPost(postData);
 
-      expect(repository.getAllPosts).toBeCalledTimes(1);
-    });
-
-    it(`createPost를 실행하면 this.boardsRepository.getAllPosts를 실행해서 id를 만들고 this.boardsRepository.createPost 를 실행하나?`, () => {
-      const postData: CreatePostDto = { title: 'title', content: 'content' };
-      const board: Board = {
-        id: 1,
-        title: postData.title,
-        content: postData.content,
-      };
-
-      jest.spyOn(repository, 'getAllPosts').mockReturnValue([]);
-      jest.spyOn(repository, 'createPost');
-
-      service.createPost(postData);
-
-      expect(repository.getAllPosts).toBeCalledTimes(1);
-      expect(repository.createPost).toBeCalledWith(board);
+      expect(repository.createPost).toBeCalledTimes(1);
+      expect(repository.createPost).toBeCalledWith(postData);
     });
   });
 });
