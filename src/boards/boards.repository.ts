@@ -13,7 +13,7 @@ export class BoardsRepository {
   ) {}
 
   async createPost(board: CreatePostDto): Promise<void> {
-    await this.boards.save(board);
+    await this.boards.insert(board);
   }
 
   getAllPosts() {
