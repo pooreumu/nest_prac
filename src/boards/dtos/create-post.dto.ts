@@ -1,4 +1,7 @@
+// 🐱 Nestjs imports
 import { ApiProperty } from '@nestjs/swagger';
+
+// 📦 Package imports
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreatePostDto {

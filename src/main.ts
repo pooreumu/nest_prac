@@ -1,5 +1,8 @@
-import { ValidationPipe } from '@nestjs/common';
+// 🐱 Nestjs imports
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
+
+// 🌏 Project imports
 import { AppModule } from './app.module';
 
 async function bootstrap() {

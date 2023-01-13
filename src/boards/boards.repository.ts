@@ -1,9 +1,15 @@
+// 🐱 Nestjs imports
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+
+// 📦 Package imports
 import { Repository } from 'typeorm';
+
+// 🌏 Project imports
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { Board } from './entities/board.entity';
+
 @Injectable()
 export class BoardsRepository {
   private posts: Board[] = [];

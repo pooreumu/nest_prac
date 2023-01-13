@@ -1,7 +1,10 @@
+// 🐱 Nestjs imports
 import { Module } from '@nestjs/common';
-import { BoardsModule } from './boards/boards.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+// 🌏 Project imports
+import { BoardsModule } from './boards/boards.module';
 
 @Module({
   imports: [

@@ -1,10 +1,13 @@
+// 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+
+// 📦 Package imports
 import { Repository } from 'typeorm';
+
+// 🌏 Project imports
 import { BoardsRepository } from './boards.repository';
-
 import { CreatePostDto } from './dtos/create-post.dto';
-
 import { Board } from './entities/board.entity';
 
 describe('BoardsRepository', () => {

@@ -1,3 +1,4 @@
+// 🐱 Nestjs imports
 import {
   Body,
   Controller,
@@ -7,6 +8,8 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+
+// 🌏 Project imports
 import { BoardsService } from './boards.service';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';

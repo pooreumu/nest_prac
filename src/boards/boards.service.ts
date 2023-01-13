@@ -1,4 +1,7 @@
+// 🐱 Nestjs imports
 import { Injectable } from '@nestjs/common';
+
+// 🌏 Project imports
 import { BoardsRepository } from './boards.repository';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';

@@ -1,9 +1,12 @@
+// 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
+
+// 🌏 Project imports
 import { BoardsService } from './boards.service';
 import { BoardsRepository } from './boards.repository';
-jest.mock('./boards.repository');
-
 import { CreatePostDto } from './dtos/create-post.dto';
+
+jest.mock('./boards.repository');
 
 describe('BoardsService', () => {
   let service: BoardsService;
