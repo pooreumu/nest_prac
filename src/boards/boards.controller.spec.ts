@@ -6,6 +6,8 @@ import { BoardsController } from './boards.controller';
 import { BoardsService } from './boards.service';
 import { CreatePostRequestDto } from './dtos/request.dtos/create-post-request.dto';
 import { CreatePostDto } from './dtos/create-post.dto';
+import { UpdatePostRequestDto } from './dtos/request.dtos/update-post-request.dto';
+import { UpdatePostDto } from './dtos/update-post.dto';
 
 jest.mock('./boards.service');
 
@@ -29,17 +31,22 @@ describe('BoardsController', () => {
 
   describe('게시글 작성: createPost', () => {
     it('비회원이 controller.createPost를 실행하면 boardService.createPost를 실행하나?', () => {
+      const title = 'title';
+      const content = 'content';
+      const authorId = 'author';
+      const password = 'password';
+
       const postData = new CreatePostRequestDto();
-      postData.title = 'title';
-      postData.content = 'content';
-      postData.authorId = 'author';
-      postData.authorPassword = 'password';
+      postData.title = title;
+      postData.content = content;
+      postData.authorId = authorId;
+      postData.password = password;
 
       const createPostDto = new CreatePostDto({
         title: postData.title,
         content: postData.content,
         authorId: postData.authorId,
-        authorPassword: postData.authorPassword,
+        password: postData.password,
         mebership: false,
       });
 
@@ -56,6 +63,25 @@ describe('BoardsController', () => {
 
       expect(service.getAllPosts).toBeCalledTimes(1);
       expect(service.getAllPosts).toBeCalledWith();
+    });
+  });
+
+  describe('게시글 수정: updatePost', () => {
+    it('controller.updatePost 실행하면 boardService.updatePost 실행하나?', () => {
+      const postId = 1;
+      const content = 'update content';
+      const password = 'password';
+
+      const postData = new UpdatePostRequestDto();
+      postData.content = content;
+      postData.password = password;
+
+      const updatePostDto = new UpdatePostDto({ ...postData });
+
+      controller.updatePost(postId, updatePostDto);
+
+      expect(service.updatePost).toBeCalledTimes(1);
+      expect(service.updatePost).toBeCalledWith(postId, postData);
     });
   });
 });

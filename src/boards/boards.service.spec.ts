@@ -6,6 +6,7 @@ import { BoardsService } from './boards.service';
 import { BoardsRepository } from './boards.repository';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { Board } from './entities/board.entity';
+import { UpdatePostDto } from './dtos/update-post.dto';
 
 jest.mock('./boards.repository');
 
@@ -26,13 +27,13 @@ describe('BoardsService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-  describe('createPost', () => {
+  describe('게시글 작성: createPost', () => {
     it('service.createPost를 실행하면 this.boardsRepository.createPost를 실행하나?', () => {
       const postData = new CreatePostDto({
         title: 'title',
         content: 'content',
         authorId: 'author',
-        authorPassword: 'password',
+        password: 'password',
         mebership: false,
       });
 
@@ -40,7 +41,7 @@ describe('BoardsService', () => {
       board.title = postData.title;
       board.content = postData.content;
       board.authorId = postData.authorId;
-      board.authorPassword = postData.authorPassword;
+      board.password = postData.password;
       board.membership = postData.mebership;
 
       service.createPost(postData);
@@ -49,12 +50,34 @@ describe('BoardsService', () => {
       expect(repository.createPost).toBeCalledWith(board);
     });
   });
-  describe('getAllPosts', () => {
+  describe('게시글 전체 조회: getAllPosts', () => {
     it('service.getAllPosts 실행하면 boardsRepository.getAllPosts 실행하나?', () => {
       service.getAllPosts();
 
       expect(repository.getAllPosts).toBeCalledTimes(1);
       expect(repository.getAllPosts).toBeCalledWith();
+    });
+  });
+
+  describe('게시글 수정: updatePost', () => {
+    it('service.updatePost 실행하면 boardsRepository.updatePost 실행하나?', () => {
+      const postId = 1;
+      const updatePostDto = new UpdatePostDto({
+        title: 'update title',
+        password: 'password',
+      });
+
+      const whereBoard = new Board();
+      whereBoard.id = postId;
+      whereBoard.password = updatePostDto.password;
+
+      const updateBoard = new Board();
+      updateBoard.title = updatePostDto.title;
+
+      service.updatePost(postId, updatePostDto);
+
+      expect(repository.updatePost).toBeCalledTimes(1);
+      expect(repository.updatePost).toBeCalledWith(whereBoard, updateBoard);
     });
   });
 });
