@@ -23,17 +23,17 @@ export class Board {
   @Column({
     name: 'author_id',
     type: 'varchar',
-    comment: '회원 아이디',
+    comment: '게시글 작성자 아이디',
   })
   authorId: string;
 
   @Column({
-    name: 'author_password',
+    name: 'password',
     type: 'varchar',
-    comment: '회원 비밀번호',
+    comment: '게시글 비밀번호',
     nullable: true,
   })
-  authorPassword: string;
+  password: string;
 
   @Column({
     name: 'membership',
