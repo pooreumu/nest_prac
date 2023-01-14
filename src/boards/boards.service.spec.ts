@@ -33,6 +33,7 @@ describe('BoardsService', () => {
         content: 'content',
         authorId: 'author',
         authorPassword: 'password',
+        mebership: false,
       });
 
       const board = new Board();
@@ -40,7 +41,7 @@ describe('BoardsService', () => {
       board.content = postData.content;
       board.authorId = postData.authorId;
       board.authorPassword = postData.authorPassword;
-      board.membership = false;
+      board.membership = postData.mebership;
 
       service.createPost(postData);
 

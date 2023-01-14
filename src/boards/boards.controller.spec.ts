@@ -40,6 +40,7 @@ describe('BoardsController', () => {
         content: postData.content,
         authorId: postData.authorId,
         authorPassword: postData.authorPassword,
+        mebership: false,
       });
 
       controller.createPost(postData);

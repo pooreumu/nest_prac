@@ -27,6 +27,7 @@ export class BoardsController {
       content: postData.content,
       authorId: postData.authorId,
       authorPassword: postData.authorPassword,
+      mebership: false,
     });
 
     return await this.boardService.createPost(createPostDto);

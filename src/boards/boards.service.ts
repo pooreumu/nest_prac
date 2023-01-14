@@ -17,7 +17,7 @@ export class BoardsService {
     board.content = postData.content;
     board.authorId = postData.authorId;
     board.authorPassword = postData.authorPassword;
-    board.membership = false;
+    board.membership = postData.mebership;
 
     return this.boardsRepository.createPost(board);
   }
