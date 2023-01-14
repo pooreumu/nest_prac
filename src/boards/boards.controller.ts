@@ -12,6 +12,7 @@ import {
 // 🌏 Project imports
 import { BoardsService } from './boards.service';
 import { CreatePostDto } from './dtos/create-post.dto';
+import { CreatePostRequestDto } from './dtos/request.dtos/create-post-request.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { Board } from './entities/board.entity';
 
@@ -20,13 +21,20 @@ export class BoardsController {
   constructor(private readonly boardService: BoardsService) {}
 
   @Post()
-  async createPost(@Body() postData: CreatePostDto) {
-    return await this.boardService.createPost(postData);
+  async createPost(@Body() postData: CreatePostRequestDto) {
+    const createPostDto = new CreatePostDto({
+      title: postData.title,
+      content: postData.content,
+      authorId: postData.authorId,
+      authorPassword: postData.authorPassword,
+    });
+
+    return await this.boardService.createPost(createPostDto);
   }
 
   @Get()
   async getAllPosts(): Promise<Board[]> {
-    return await this.boardService.getAllPosts();
+    return this.boardService.getAllPosts();
   }
 
   @Get('/:id')

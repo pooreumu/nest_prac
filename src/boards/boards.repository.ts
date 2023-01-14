@@ -6,7 +6,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // 🌏 Project imports
-import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { Board } from './entities/board.entity';
 
@@ -18,12 +17,16 @@ export class BoardsRepository {
     private readonly boards: Repository<Board>,
   ) {}
 
-  async createPost(board: CreatePostDto): Promise<void> {
-    await this.boards.insert(board);
+  async createPost(board: Board): Promise<void> {
+    try {
+      await this.boards.insert(board);
+    } catch (error) {
+      throw error;
+    }
   }
 
-  getAllPosts() {
-    return this.posts;
+  async getAllPosts(): Promise<Board[]> {
+    return this.boards.find();
   }
 
   getOnePost(postId: number): Board {

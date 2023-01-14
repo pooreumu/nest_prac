@@ -5,16 +5,24 @@ import { Injectable } from '@nestjs/common';
 import { BoardsRepository } from './boards.repository';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
+import { Board } from './entities/board.entity';
 
 @Injectable()
 export class BoardsService {
   constructor(private readonly boardsRepository: BoardsRepository) {}
 
-  createPost(postData: CreatePostDto) {
-    this.boardsRepository.createPost(postData);
+  async createPost(postData: CreatePostDto): Promise<void> {
+    const board = new Board();
+    board.title = postData.title;
+    board.content = postData.content;
+    board.authorId = postData.authorId;
+    board.authorPassword = postData.authorPassword;
+    board.membership = false;
+
+    return this.boardsRepository.createPost(board);
   }
 
-  getAllPosts() {
+  async getAllPosts(): Promise<Board[]> {
     return this.boardsRepository.getAllPosts();
   }
 

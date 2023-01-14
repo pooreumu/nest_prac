@@ -7,7 +7,6 @@ import { Repository } from 'typeorm';
 
 // 🌏 Project imports
 import { BoardsRepository } from './boards.repository';
-import { CreatePostDto } from './dtos/create-post.dto';
 import { Board } from './entities/board.entity';
 
 describe('BoardsRepository', () => {
@@ -35,20 +34,36 @@ describe('BoardsRepository', () => {
   });
 
   describe('createPost', () => {
-    const board: CreatePostDto = {
-      title: 'title',
-      content: 'content',
-      authorId: 'author',
-      authorPassword: 'password',
-    };
-
     it('BoardsRepository.createPost를 실행하면 this.boards.insert 실행하나?', async () => {
+      const title = 'title';
+      const content = 'content';
+      const authorId = 'author';
+      const authorPassword = 'password';
+      const membership = false;
+
+      const board = new Board();
+      board.title = title;
+      board.content = content;
+      board.authorId = authorId;
+      board.authorPassword = authorPassword;
+      board.membership = membership;
+
       boards.insert = jest.fn();
 
       repository.createPost(board);
 
       expect(boards.insert).toBeCalledTimes(1);
       expect(boards.insert).toBeCalledWith(board);
+    });
+  });
+  describe('getAllPosts', () => {
+    it('BoardsRepository.getAllPosts 실행하면 this.boards.find 실행하나?', async () => {
+      boards.find = jest.fn();
+
+      repository.getAllPosts();
+
+      expect(boards.find).toBeCalledTimes(1);
+      expect(boards.find).toBeCalledWith();
     });
   });
 });

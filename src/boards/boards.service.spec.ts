@@ -5,6 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BoardsService } from './boards.service';
 import { BoardsRepository } from './boards.repository';
 import { CreatePostDto } from './dtos/create-post.dto';
+import { Board } from './entities/board.entity';
 
 jest.mock('./boards.repository');
 
@@ -26,18 +27,33 @@ describe('BoardsService', () => {
     expect(service).toBeDefined();
   });
   describe('createPost', () => {
-    const postData: CreatePostDto = {
-      title: 'title',
-      content: 'content',
-      authorId: 'author',
-      authorPassword: 'password',
-    };
-
     it('service.createPost를 실행하면 this.boardsRepository.createPost를 실행하나?', () => {
+      const postData = new CreatePostDto({
+        title: 'title',
+        content: 'content',
+        authorId: 'author',
+        authorPassword: 'password',
+      });
+
+      const board = new Board();
+      board.title = postData.title;
+      board.content = postData.content;
+      board.authorId = postData.authorId;
+      board.authorPassword = postData.authorPassword;
+      board.membership = false;
+
       service.createPost(postData);
 
       expect(repository.createPost).toBeCalledTimes(1);
-      expect(repository.createPost).toBeCalledWith(postData);
+      expect(repository.createPost).toBeCalledWith(board);
+    });
+  });
+  describe('getAllPosts', () => {
+    it('service.getAllPosts 실행하면 boardsRepository.getAllPosts 실행하나?', () => {
+      service.getAllPosts();
+
+      expect(repository.getAllPosts).toBeCalledTimes(1);
+      expect(repository.getAllPosts).toBeCalledWith();
     });
   });
 });
