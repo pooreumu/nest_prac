@@ -26,8 +26,12 @@ export class BoardsService {
     return this.boardsRepository.getAllPosts(select, order);
   }
 
-  getOnePost(postId: number) {
-    return this.boardsRepository.getOnePost(postId);
+  async getOnePost(postId: number) {
+    const select = SelectBoardModel.selectBoard();
+
+    const whereBoard = Board.byPk(postId);
+
+    return this.boardsRepository.getOnePost(whereBoard, select);
   }
 
   async updatePost(postId: number, postData: UpdatePostDto) {
@@ -36,7 +40,9 @@ export class BoardsService {
     return this.boardsRepository.updatePost(whereBoard, updateBoard);
   }
 
-  removePost(postId: number) {
-    return this.boardsRepository.removePost(postId);
+  async removePost(postId: number, password: string): Promise<void> {
+    const whereBoard = Board.deleteBy(postId, password);
+
+    return this.boardsRepository.removePost(whereBoard);
   }
 }

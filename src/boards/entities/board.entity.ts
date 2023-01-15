@@ -101,4 +101,19 @@ export class Board {
 
     return { whereBoard, updateBoard };
   }
+
+  static byPk(id: number) {
+    const board = new Board();
+    board.id = id;
+
+    return board;
+  }
+
+  static deleteBy(id: number, password: string) {
+    const board = new Board();
+    board.id = id;
+    board.password = password;
+
+    return board;
+  }
 }

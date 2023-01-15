@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  Headers,
   Param,
   Patch,
   Post,
@@ -36,26 +37,29 @@ export class BoardsController {
 
   @Get()
   async getAllPosts(): Promise<Board[]> {
-    return this.boardService.getAllPosts();
+    return await this.boardService.getAllPosts();
   }
 
   @Get('/:id')
-  getOnePost(@Param('id') postId: number): Board {
-    return this.boardService.getOnePost(postId);
+  async getOnePost(@Param('id') postId: number): Promise<Board> {
+    return await this.boardService.getOnePost(postId);
   }
 
   @Patch('/:id')
   async updatePost(
     @Param('id') postId: number,
     @Body() postData: UpdatePostRequestDto,
-  ) {
+  ): Promise<void> {
     const updatePostDto = new UpdatePostDto(postData);
 
     return await this.boardService.updatePost(postId, updatePostDto);
   }
 
   @Delete('/:id')
-  removePost(@Param('id') postId: number) {
-    return this.boardService.removePost(postId);
+  async removePost(
+    @Param('id') postId: number,
+    @Headers('password') password: string,
+  ): Promise<void> {
+    return await this.boardService.removePost(postId, password);
   }
 }

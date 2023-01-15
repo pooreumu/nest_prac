@@ -1,5 +1,9 @@
 // 🐱 Nestjs imports
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 // 📦 Package imports
@@ -11,14 +15,13 @@ import { OrderBoardModel, SelectBoardModel } from './entities/board.model';
 
 @Injectable()
 export class BoardsRepository {
-  private posts: Board[] = [];
   constructor(
     @InjectRepository(Board) private readonly boards: Repository<Board>,
   ) {}
 
   async createPost(board: Board): Promise<void> {
     try {
-      await this.boards.insert(board);
+      this.boards.insert(board);
     } catch (error) {
       throw error;
     }
@@ -28,26 +31,39 @@ export class BoardsRepository {
     select: SelectBoardModel,
     order: OrderBoardModel,
   ): Promise<Board[]> {
-    return this.boards.find({
-      select,
-      order,
-    });
-  }
-
-  getOnePost(postId: number): Board {
-    return this.posts.filter((post) => post.id === postId)[0];
-  }
-
-  async updatePost(whereBoard: Board, updateBoard: Board): Promise<void> {
     try {
-      await this.boards.update({ ...whereBoard }, updateBoard);
+      return this.boards.find({ select, order });
     } catch (error) {
       throw error;
     }
   }
 
-  removePost(postId: number) {
-    this.posts = [...this.posts.filter((v) => v.id !== postId)];
-    return this.posts;
+  async getOnePost(where: Board, select: SelectBoardModel): Promise<Board> {
+    try {
+      const result = await this.boards.findOne({ where: { ...where }, select });
+      if (!result) throw new NotFoundException();
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async updatePost(whereBoard: Board, updateBoard: Board): Promise<void> {
+    try {
+      const result = await this.boards.update({ ...whereBoard }, updateBoard);
+      if (!result.affected) throw new ForbiddenException();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async removePost(where: Board): Promise<void> {
+    try {
+      const result = await this.boards.delete({ ...where });
+      if (!result.affected) throw new ForbiddenException();
+    } catch (error) {
+      throw error;
+    }
   }
 }

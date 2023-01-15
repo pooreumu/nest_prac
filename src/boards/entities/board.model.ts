@@ -22,6 +22,18 @@ export class SelectBoardModel implements FindOptionsSelect<Board> {
     const boardModel = new SelectBoardModel();
     boardModel.id = true;
     boardModel.title = true;
+    boardModel.authorId = true;
+    boardModel.membership = true;
+    boardModel.createdAt = true;
+    boardModel.updatedAt = true;
+
+    return boardModel;
+  }
+
+  public static selectBoard() {
+    const boardModel = new SelectBoardModel();
+    boardModel.id = true;
+    boardModel.title = true;
     boardModel.content = true;
     boardModel.authorId = true;
     boardModel.membership = true;
