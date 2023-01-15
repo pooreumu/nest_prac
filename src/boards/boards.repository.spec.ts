@@ -7,7 +7,10 @@ import { Repository } from 'typeorm';
 
 // 🌏 Project imports
 import { BoardsRepository } from './boards.repository';
+import { CreatePostDto } from './dtos/create-post.dto';
+import { UpdatePostDto } from './dtos/update-post.dto';
 import { Board } from './entities/board.entity';
+import { OrderBoardModel, SelectBoardModel } from './entities/board.model';
 
 describe('BoardsRepository', () => {
   let repository: BoardsRepository;
@@ -41,12 +44,15 @@ describe('BoardsRepository', () => {
       const password = 'password';
       const membership = false;
 
-      const board = new Board();
-      board.title = title;
-      board.content = content;
-      board.authorId = authorId;
-      board.password = password;
-      board.membership = membership;
+      const postData = new CreatePostDto({
+        title,
+        content,
+        authorId,
+        password,
+        membership,
+      });
+
+      const board = Board.createBoard(postData);
 
       boards.insert = jest.fn();
 
@@ -58,36 +64,37 @@ describe('BoardsRepository', () => {
   });
   describe('게시글 전체 조회: getAllPosts', () => {
     it('BoardsRepository.getAllPosts 실행하면 this.boards.find 실행하나?', async () => {
+      const select = SelectBoardModel.selectBoardList();
+
+      const order = OrderBoardModel.orderBoardList();
+
       boards.find = jest.fn();
 
-      repository.getAllPosts();
+      await repository.getAllPosts(select, order);
 
       expect(boards.find).toBeCalledTimes(1);
-      expect(boards.find).toBeCalledWith();
+      expect(boards.find).toBeCalledWith({ select, order });
     });
   });
 
   describe('게시글 수정: updatePost', () => {
     it('BoardsRepository.updatePost 실행하면 this.boards.update 실행하나?', async () => {
-      const id = 1;
+      const postId = 1;
       const password = 'password';
       const title = 'update title';
 
-      const whereBoard = new Board();
-      whereBoard.id = id;
-      whereBoard.password = password;
+      const postData = new UpdatePostDto({ title, password });
 
-      const updateBoard = new Board();
-      updateBoard.title = title;
+      const { whereBoard, updateBoard } = Board.updateBoard(postId, postData);
 
       boards.update = jest.fn();
 
-      repository.updatePost({ ...whereBoard }, { ...updateBoard });
+      repository.updatePost(whereBoard, updateBoard);
 
       expect(boards.update).toBeCalledTimes(1);
       expect(boards.update).toBeCalledWith(
-        { ...whereBoard },
-        { ...updateBoard },
+        { id: whereBoard.id, password: whereBoard.password },
+        updateBoard,
       );
     });
   });

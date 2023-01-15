@@ -2,21 +2,21 @@ export class CreatePostDto {
   private readonly _title: string;
   private readonly _content: string;
   private readonly _authorId: string;
-  private readonly _authorPassword: string;
-  private readonly _mebership: boolean;
+  private readonly _password: string;
+  private readonly _membership: boolean;
 
   constructor(postData: {
     title: string;
     content: string;
     authorId: string;
-    authorPassword?: string;
-    mebership: boolean;
+    password?: string;
+    membership: boolean;
   }) {
     this._title = postData.title;
     this._content = postData.content;
     this._authorId = postData.authorId;
-    this._authorPassword = postData.authorPassword;
-    this._mebership = postData.mebership;
+    this._password = postData.password;
+    this._membership = postData.membership;
   }
 
   public get title(): string {
@@ -31,11 +31,11 @@ export class CreatePostDto {
     return this._authorId;
   }
 
-  public get authorPassword(): string {
-    return this._authorPassword;
+  public get password(): string {
+    return this._password;
   }
 
-  public get mebership(): boolean {
-    return this._mebership;
+  public get membership(): boolean {
+    return this._membership;
   }
 }

@@ -6,32 +6,34 @@ import { BoardsRepository } from './boards.repository';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { Board } from './entities/board.entity';
+import { OrderBoardModel, SelectBoardModel } from './entities/board.model';
 
 @Injectable()
 export class BoardsService {
   constructor(private readonly boardsRepository: BoardsRepository) {}
 
   async createPost(postData: CreatePostDto): Promise<void> {
-    const board = new Board();
-    board.title = postData.title;
-    board.content = postData.content;
-    board.authorId = postData.authorId;
-    board.authorPassword = postData.authorPassword;
-    board.membership = postData.mebership;
+    const createBoard = Board.createBoard(postData);
 
-    return this.boardsRepository.createPost(board);
+    return this.boardsRepository.createPost(createBoard);
   }
 
   async getAllPosts(): Promise<Board[]> {
-    return this.boardsRepository.getAllPosts();
+    const select = SelectBoardModel.selectBoardList();
+
+    const order = OrderBoardModel.orderBoardList();
+
+    return this.boardsRepository.getAllPosts(select, order);
   }
 
   getOnePost(postId: number) {
     return this.boardsRepository.getOnePost(postId);
   }
 
-  updatePost(postId: number, postData: UpdatePostDto) {
-    return this.boardsRepository.updatePost(postId, postData);
+  async updatePost(postId: number, postData: UpdatePostDto) {
+    const { whereBoard, updateBoard } = Board.updateBoard(postId, postData);
+
+    return this.boardsRepository.updatePost(whereBoard, updateBoard);
   }
 
   removePost(postId: number) {

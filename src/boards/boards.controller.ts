@@ -11,8 +11,9 @@ import {
 
 // 🌏 Project imports
 import { BoardsService } from './boards.service';
-import { CreatePostDto } from './dtos/create-post.dto';
 import { CreatePostRequestDto } from './dtos/request.dtos/create-post-request.dto';
+import { CreatePostDto } from './dtos/create-post.dto';
+import { UpdatePostRequestDto } from './dtos/request.dtos/update-post-request.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
 import { Board } from './entities/board.entity';
 
@@ -26,8 +27,8 @@ export class BoardsController {
       title: postData.title,
       content: postData.content,
       authorId: postData.authorId,
-      authorPassword: postData.authorPassword,
-      mebership: false,
+      password: postData.password,
+      membership: false,
     });
 
     return await this.boardService.createPost(createPostDto);
@@ -44,8 +45,13 @@ export class BoardsController {
   }
 
   @Patch('/:id')
-  updatePost(@Param('id') postId: number, @Body() postData: UpdatePostDto) {
-    return this.boardService.updatePost(postId, postData);
+  async updatePost(
+    @Param('id') postId: number,
+    @Body() postData: UpdatePostRequestDto,
+  ) {
+    const updatePostDto = new UpdatePostDto(postData);
+
+    return await this.boardService.updatePost(postId, updatePostDto);
   }
 
   @Delete('/:id')

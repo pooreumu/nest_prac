@@ -1,7 +1,27 @@
-// 🐱 Nestjs imports
-import { PartialType } from '@nestjs/swagger';
+export class UpdatePostDto {
+  private readonly _title: string;
+  private readonly _content: string;
+  private readonly _password: string;
 
-// 🌏 Project imports
-import { CreatePostDto } from './create-post.dto';
+  constructor(postData: {
+    title?: string;
+    content?: string;
+    password: string;
+  }) {
+    this._title = postData.title;
+    this._content = postData.content;
+    this._password = postData.password;
+  }
 
-export class UpdatePostDto extends PartialType(CreatePostDto) {}
+  public get title(): string {
+    return this._title;
+  }
+
+  public get content(): string {
+    return this._content;
+  }
+
+  public get password(): string {
+    return this._password;
+  }
+}

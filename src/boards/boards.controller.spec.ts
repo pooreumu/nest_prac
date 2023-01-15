@@ -47,7 +47,7 @@ describe('BoardsController', () => {
         content: postData.content,
         authorId: postData.authorId,
         password: postData.password,
-        mebership: false,
+        membership: false,
       });
 
       controller.createPost(postData);
@@ -76,12 +76,12 @@ describe('BoardsController', () => {
       postData.content = content;
       postData.password = password;
 
-      const updatePostDto = new UpdatePostDto({ ...postData });
+      const updatePostDto = new UpdatePostDto(postData);
 
-      controller.updatePost(postId, updatePostDto);
+      controller.updatePost(postId, postData);
 
       expect(service.updatePost).toBeCalledTimes(1);
-      expect(service.updatePost).toBeCalledWith(postId, postData);
+      expect(service.updatePost).toBeCalledWith(postId, updatePostDto);
     });
   });
 });

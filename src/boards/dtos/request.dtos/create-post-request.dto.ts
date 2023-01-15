@@ -23,5 +23,5 @@ export class CreatePostRequestDto {
   @ApiProperty()
   @IsOptional()
   @IsString()
-  authorPassword?: string;
+  password?: string;
 }

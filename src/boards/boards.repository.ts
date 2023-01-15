@@ -6,15 +6,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // 🌏 Project imports
-import { UpdatePostDto } from './dtos/update-post.dto';
 import { Board } from './entities/board.entity';
+import { OrderBoardModel, SelectBoardModel } from './entities/board.model';
 
 @Injectable()
 export class BoardsRepository {
   private posts: Board[] = [];
   constructor(
-    @InjectRepository(Board)
-    private readonly boards: Repository<Board>,
+    @InjectRepository(Board) private readonly boards: Repository<Board>,
   ) {}
 
   async createPost(board: Board): Promise<void> {
@@ -25,24 +24,26 @@ export class BoardsRepository {
     }
   }
 
-  async getAllPosts(): Promise<Board[]> {
-    return this.boards.find();
+  async getAllPosts(
+    select: SelectBoardModel,
+    order: OrderBoardModel,
+  ): Promise<Board[]> {
+    return this.boards.find({
+      select,
+      order,
+    });
   }
 
   getOnePost(postId: number): Board {
     return this.posts.filter((post) => post.id === postId)[0];
   }
 
-  updatePost(postId: number, postData: UpdatePostDto): Board {
-    this.posts = [
-      ...this.posts.map((post) => {
-        if (post.id === postId) {
-          Object.entries(postData).forEach((v) => (post[v[0]] = v[1]));
-        }
-        return post;
-      }),
-    ];
-    return this.posts.filter((post) => post.id === postId)[0];
+  async updatePost(whereBoard: Board, updateBoard: Board): Promise<void> {
+    try {
+      await this.boards.update({ ...whereBoard }, updateBoard);
+    } catch (error) {
+      throw error;
+    }
   }
 
   removePost(postId: number) {

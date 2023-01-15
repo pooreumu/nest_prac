@@ -5,8 +5,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BoardsService } from './boards.service';
 import { BoardsRepository } from './boards.repository';
 import { CreatePostDto } from './dtos/create-post.dto';
-import { Board } from './entities/board.entity';
 import { UpdatePostDto } from './dtos/update-post.dto';
+import { Board } from './entities/board.entity';
+import { OrderBoardModel, SelectBoardModel } from './entities/board.model';
 
 jest.mock('./boards.repository');
 
@@ -34,28 +35,27 @@ describe('BoardsService', () => {
         content: 'content',
         authorId: 'author',
         password: 'password',
-        mebership: false,
+        membership: false,
       });
 
-      const board = new Board();
-      board.title = postData.title;
-      board.content = postData.content;
-      board.authorId = postData.authorId;
-      board.password = postData.password;
-      board.membership = postData.mebership;
+      const createBoard = Board.createBoard(postData);
 
       service.createPost(postData);
 
       expect(repository.createPost).toBeCalledTimes(1);
-      expect(repository.createPost).toBeCalledWith(board);
+      expect(repository.createPost).toBeCalledWith(createBoard);
     });
   });
   describe('게시글 전체 조회: getAllPosts', () => {
     it('service.getAllPosts 실행하면 boardsRepository.getAllPosts 실행하나?', () => {
+      const select = SelectBoardModel.selectBoardList();
+
+      const order = OrderBoardModel.orderBoardList();
+
       service.getAllPosts();
 
       expect(repository.getAllPosts).toBeCalledTimes(1);
-      expect(repository.getAllPosts).toBeCalledWith();
+      expect(repository.getAllPosts).toBeCalledWith(select, order);
     });
   });
 
@@ -67,13 +67,10 @@ describe('BoardsService', () => {
         password: 'password',
       });
 
-      const whereBoard = new Board();
-      whereBoard.id = postId;
-      whereBoard.password = updatePostDto.password;
-
-      const updateBoard = new Board();
-      updateBoard.title = updatePostDto.title;
-
+      const { whereBoard, updateBoard } = Board.updateBoard(
+        postId,
+        updatePostDto,
+      );
       service.updatePost(postId, updatePostDto);
 
       expect(repository.updatePost).toBeCalledTimes(1);
