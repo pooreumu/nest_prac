@@ -21,6 +21,7 @@ import { BoardsModule } from './boards/boards.module';
       database: process.env.RDS_DATABASE,
       entities: [__dirname + '/**/*.entity.{js,ts}'],
       synchronize: process.env.NODE_ENV === 'production' ? false : true,
+      logging: true,
     }),
     BoardsModule,
   ],
