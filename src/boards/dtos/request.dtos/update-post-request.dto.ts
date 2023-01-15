@@ -2,7 +2,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // 📦 Package imports
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsOptional,
+  IsAlphanumeric,
+} from 'class-validator';
 
 export class UpdatePostRequestDto {
   @ApiProperty()
@@ -17,6 +22,6 @@ export class UpdatePostRequestDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsString()
+  @IsAlphanumeric()
   password: string;
 }
