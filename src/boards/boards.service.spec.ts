@@ -46,6 +46,7 @@ describe('BoardsService', () => {
       expect(repository.createPost).toBeCalledWith(createBoard);
     });
   });
+
   describe('게시글 전체 조회: getAllPosts', () => {
     it('service.getAllPosts 실행하면 boardsRepository.getAllPosts 실행하나?', () => {
       const select = SelectBoardModel.selectBoardList();
@@ -59,22 +60,48 @@ describe('BoardsService', () => {
     });
   });
 
+  describe('게시글 상세 조회: getOnePost', () => {
+    it('service.getOnePost 실행하면 boardsRepository.getOnePost 실행하나?', () => {
+      const postId = 1;
+
+      const select = SelectBoardModel.selectBoard();
+      const whereBoard = Board.byPk(postId);
+
+      service.getOnePost(postId);
+
+      expect(repository.getOnePost).toBeCalledTimes(1);
+      expect(repository.getOnePost).toBeCalledWith(whereBoard, select);
+    });
+  });
+
   describe('게시글 수정: updatePost', () => {
     it('service.updatePost 실행하면 boardsRepository.updatePost 실행하나?', () => {
       const postId = 1;
-      const updatePostDto = new UpdatePostDto({
+      const postData = new UpdatePostDto({
         title: 'update title',
         password: 'password',
       });
 
-      const { whereBoard, updateBoard } = Board.updateBoard(
-        postId,
-        updatePostDto,
-      );
-      service.updatePost(postId, updatePostDto);
+      const { whereBoard, updateBoard } = Board.updateBoard(postId, postData);
+
+      service.updatePost(postId, postData);
 
       expect(repository.updatePost).toBeCalledTimes(1);
       expect(repository.updatePost).toBeCalledWith(whereBoard, updateBoard);
+    });
+  });
+
+  describe('게시글 삭제: removePost', () => {
+    it('service.removePost 실행하면 boardsRepository.removePost 실행하나?', () => {
+      const postId = 1;
+      const password = 'password';
+
+      const whereBoard = Board.deleteBy(postId, password);
+
+      service.removePost(postId, password);
+
+      expect(repository.removePost).toBeCalledTimes(1);
+      expect(repository.removePost).toBeCalledWith(whereBoard);
     });
   });
 });

@@ -66,6 +66,17 @@ describe('BoardsController', () => {
     });
   });
 
+  describe('게시글 상세 조회: getOnePost', () => {
+    it('controller.getOnePost 실행하면 boardService.getOnePost 실행하나?', () => {
+      const postId = 1;
+
+      controller.getOnePost(postId);
+
+      expect(service.getOnePost).toBeCalledTimes(1);
+      expect(service.getOnePost).toBeCalledWith(postId);
+    });
+  });
+
   describe('게시글 수정: updatePost', () => {
     it('controller.updatePost 실행하면 boardService.updatePost 실행하나?', () => {
       const postId = 1;
@@ -82,6 +93,18 @@ describe('BoardsController', () => {
 
       expect(service.updatePost).toBeCalledTimes(1);
       expect(service.updatePost).toBeCalledWith(postId, updatePostDto);
+    });
+  });
+
+  describe('게시글 삭제: removePost', () => {
+    it('controller.removePost 실행하면 boardService.removePost 실행하나?', () => {
+      const postId = 1;
+      const password = 'password';
+
+      controller.removePost(postId, password);
+
+      expect(service.removePost).toBeCalledTimes(1);
+      expect(service.removePost).toBeCalledWith(postId, password);
     });
   });
 });
