@@ -13,7 +13,13 @@ export class BoardsService {
   constructor(private readonly boardsRepository: BoardsRepository) {}
 
   async createPost(postData: CreatePostDto): Promise<void> {
-    const createBoard = Board.createBoard(postData);
+    const createBoard = Board.createBoard(
+      postData.title,
+      postData.content,
+      postData.authorId,
+      postData.password,
+      postData.membership,
+    );
 
     return this.boardsRepository.createPost(createBoard);
   }
@@ -35,7 +41,12 @@ export class BoardsService {
   }
 
   async updatePost(postId: number, postData: UpdatePostDto) {
-    const { whereBoard, updateBoard } = Board.updateBoard(postId, postData);
+    const { whereBoard, updateBoard } = Board.updateBoard(
+      postId,
+      postData.password,
+      postData.title,
+      postData.content,
+    );
 
     return this.boardsRepository.updatePost(whereBoard, updateBoard);
   }

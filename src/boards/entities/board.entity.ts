@@ -2,10 +2,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ChronoUnit, convert, LocalDateTime, nativeJs } from '@js-joda/core';
 
-// 🌏 Project imports
-import { CreatePostDto } from '../dtos/create-post.dto';
-import { UpdatePostDto } from '../dtos/update-post.dto';
-
 @Entity()
 export class Board {
   @PrimaryGeneratedColumn()
@@ -70,13 +66,19 @@ export class Board {
     return LocalDateTime.from(nativeJs(databaseValue));
   }
 
-  static createBoard(postData: CreatePostDto): Board {
+  static createBoard(
+    title: string,
+    content: string,
+    authorId: string,
+    password: string,
+    membership: boolean,
+  ): Board {
     const board = new Board();
-    board.title = postData.title;
-    board.content = postData.content;
-    board.authorId = postData.authorId;
-    board.password = postData.password;
-    board.membership = postData.membership;
+    board.title = title;
+    board.content = content;
+    board.authorId = authorId;
+    board.password = password;
+    board.membership = membership;
     board.createdAt = board.transformDateTo(
       LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     );
@@ -86,15 +88,17 @@ export class Board {
 
   static updateBoard(
     postId: number,
-    postData: UpdatePostDto,
+    password: string,
+    title?: string,
+    content?: string,
   ): { whereBoard: Board; updateBoard: Board } {
     const whereBoard = new Board();
     whereBoard.id = postId;
-    whereBoard.password = postData.password;
+    whereBoard.password = password;
 
     const updateBoard = new Board();
-    updateBoard.title = postData.title;
-    updateBoard.content = postData.content;
+    updateBoard.title = title;
+    updateBoard.content = content;
     updateBoard.updatedAt = updateBoard.transformDateTo(
       LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     );

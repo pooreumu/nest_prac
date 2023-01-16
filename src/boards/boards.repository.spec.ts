@@ -22,10 +22,7 @@ describe('BoardsRepository', () => {
       imports: [],
       providers: [
         BoardsRepository,
-        {
-          provide: getRepositoryToken(Board),
-          useClass: Repository<Board>,
-        },
+        { provide: getRepositoryToken(Board), useClass: Repository<Board> },
       ],
     }).compile();
 
@@ -53,7 +50,13 @@ describe('BoardsRepository', () => {
         membership,
       });
 
-      const board = Board.createBoard(postData);
+      const board = Board.createBoard(
+        postData.title,
+        postData.content,
+        postData.authorId,
+        postData.password,
+        postData.membership,
+      );
 
       boards.insert = jest.fn();
 
@@ -97,7 +100,7 @@ describe('BoardsRepository', () => {
       });
     });
 
-    it('게시글이 없으면 NotFoundException를 던지나?', async () => {
+    it('게시글이 없으면 NotFoundException을 던지나?', async () => {
       const postId = 1;
 
       const select = SelectBoardModel.selectBoard();
@@ -119,7 +122,11 @@ describe('BoardsRepository', () => {
 
       const postData = new UpdatePostDto({ title, password });
 
-      const { whereBoard, updateBoard } = Board.updateBoard(postId, postData);
+      const { whereBoard, updateBoard } = Board.updateBoard(
+        postId,
+        postData.password,
+        postData.title,
+      );
 
       boards.update = jest.fn().mockResolvedValue({ affected: 1 });
 
@@ -132,14 +139,18 @@ describe('BoardsRepository', () => {
       );
     });
 
-    it('수정이 안되면 ForbiddenException를 던지나?', async () => {
+    it('수정이 안되면 ForbiddenException을 던지나?', async () => {
       const postId = 1;
       const password = 'password';
       const title = 'update title';
 
       const postData = new UpdatePostDto({ title, password });
 
-      const { whereBoard, updateBoard } = Board.updateBoard(postId, postData);
+      const { whereBoard, updateBoard } = Board.updateBoard(
+        postId,
+        postData.password,
+        postData.title,
+      );
 
       boards.update = jest.fn().mockResolvedValue({ affected: 0 });
 
@@ -167,7 +178,7 @@ describe('BoardsRepository', () => {
       });
     });
 
-    it('삭제가 안되면 ForbiddenException를 던지나?', async () => {
+    it('삭제가 안되면 ForbiddenException을 던지나?', async () => {
       const postId = 1;
       const password = 'password';
 

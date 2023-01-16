@@ -38,7 +38,13 @@ describe('BoardsService', () => {
         membership: false,
       });
 
-      const createBoard = Board.createBoard(postData);
+      const createBoard = Board.createBoard(
+        postData.title,
+        postData.content,
+        postData.authorId,
+        postData.password,
+        postData.membership,
+      );
 
       service.createPost(postData);
 
@@ -82,7 +88,11 @@ describe('BoardsService', () => {
         password: 'password',
       });
 
-      const { whereBoard, updateBoard } = Board.updateBoard(postId, postData);
+      const { whereBoard, updateBoard } = Board.updateBoard(
+        postId,
+        postData.password,
+        postData.title,
+      );
 
       service.updatePost(postId, postData);
 
