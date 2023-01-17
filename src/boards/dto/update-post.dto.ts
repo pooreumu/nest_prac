@@ -36,13 +36,11 @@ export class UpdatePostDto {
   }
 
   public toEntity() {
-    const board = Board.updateBoard({
+    return Board.updateBoard({
       postId: this._postId,
       password: this._password,
       title: this._title,
       content: this._content,
     });
-
-    return board;
   }
 }

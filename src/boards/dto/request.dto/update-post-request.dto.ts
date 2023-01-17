@@ -29,13 +29,11 @@ export class UpdatePostRequestDto {
   password: string;
 
   public toUpdatePostDto(postId: number) {
-    const updatePostDto = new UpdatePostDto({
+    return new UpdatePostDto({
       postId,
       title: this.title,
       content: this.content,
       password: this.password,
     });
-
-    return updatePostDto;
   }
 }

@@ -22,9 +22,7 @@ export class BoardsController {
 
   @Post()
   async createPost(@Body() postData: CreatePostRequestDto) {
-    const createPostDto = postData.toCreatePostDto();
-
-    return await this.boardService.createPost(createPostDto);
+    return await this.boardService.createPost(postData.toCreatePostDto());
   }
 
   @Get()
@@ -42,9 +40,7 @@ export class BoardsController {
     @Param('id') postId: number,
     @Body() postData: UpdatePostRequestDto,
   ): Promise<void> {
-    const updatePostDto = postData.toUpdatePostDto(postId);
-
-    return await this.boardService.updatePost(updatePostDto);
+    return await this.boardService.updatePost(postData.toUpdatePostDto(postId));
   }
 
   @Delete('/:id')

@@ -34,14 +34,12 @@ export class CreatePostRequestDto {
   password?: string;
 
   public toCreatePostDto() {
-    const createPostDto = new CreatePostDto({
+    return new CreatePostDto({
       title: this.title,
       content: this.content,
       authorId: this.authorId,
       password: this.password,
       membership: false,
     });
-
-    return createPostDto;
   }
 }

@@ -19,11 +19,9 @@ export class DeletePostDTO {
   }
 
   public toEntity() {
-    const board = Board.deleteBy({
+    return Board.deleteBy({
       id: this._postId,
       password: this._password,
     });
-
-    return board;
   }
 }

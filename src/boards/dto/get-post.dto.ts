@@ -14,18 +14,16 @@ export class GetPostDto {
   }
 
   public toGetOneEntity() {
-    const select = SelectBoardModel.selectBoard();
-
-    const whereBoard = Board.byPk({ id: this._postId });
-
-    return { select, whereBoard };
+    return {
+      select: SelectBoardModel.selectBoard(),
+      whereBoard: Board.byPk({ id: this._postId }),
+    };
   }
 
   static toGetAllEntity() {
-    const select = SelectBoardModel.selectBoardList();
-
-    const order = OrderBoardModel.orderBoardList();
-
-    return { select, order };
+    return {
+      select: SelectBoardModel.selectBoardList(),
+      order: OrderBoardModel.orderBoardList(),
+    };
   }
 }
