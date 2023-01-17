@@ -21,7 +21,7 @@ export class BoardsRepository {
 
   async createPost(board: Board): Promise<void> {
     try {
-      this.boards.insert(board);
+      await this.boards.insert(board);
     } catch (error) {
       throw error;
     }

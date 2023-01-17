@@ -1,3 +1,6 @@
+// 🌏 Project imports
+import { Board } from '../entities/board.entity';
+
 export class CreatePostDto {
   private readonly _title: string;
   private readonly _content: string;
@@ -9,8 +12,8 @@ export class CreatePostDto {
     title: string;
     content: string;
     authorId: string;
-    password?: string;
     membership: boolean;
+    password?: string;
   }) {
     this._title = postData.title;
     this._content = postData.content;
@@ -37,5 +40,15 @@ export class CreatePostDto {
 
   public get membership(): boolean {
     return this._membership;
+  }
+
+  public toEntity() {
+    return Board.createBoard({
+      title: this._title,
+      content: this._content,
+      authorId: this._authorId,
+      password: this._password,
+      membership: this._membership,
+    });
   }
 }

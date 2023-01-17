@@ -12,10 +12,8 @@ import {
 
 // 🌏 Project imports
 import { BoardsService } from './boards.service';
-import { CreatePostRequestDto } from './dtos/request.dtos/create-post-request.dto';
-import { CreatePostDto } from './dtos/create-post.dto';
-import { UpdatePostRequestDto } from './dtos/request.dtos/update-post-request.dto';
-import { UpdatePostDto } from './dtos/update-post.dto';
+import { CreatePostRequestDto } from './dto/request.dto/create-post-request.dto';
+import { UpdatePostRequestDto } from './dto/request.dto/update-post-request.dto';
 import { Board } from './entities/board.entity';
 
 @Controller('boards')
@@ -24,13 +22,7 @@ export class BoardsController {
 
   @Post()
   async createPost(@Body() postData: CreatePostRequestDto) {
-    const createPostDto = new CreatePostDto({
-      title: postData.title,
-      content: postData.content,
-      authorId: postData.authorId,
-      password: postData.password,
-      membership: false,
-    });
+    const createPostDto = postData.toCreatePostDto();
 
     return await this.boardService.createPost(createPostDto);
   }
@@ -50,9 +42,9 @@ export class BoardsController {
     @Param('id') postId: number,
     @Body() postData: UpdatePostRequestDto,
   ): Promise<void> {
-    const updatePostDto = new UpdatePostDto(postData);
+    const updatePostDto = postData.toUpdatePostDto(postId);
 
-    return await this.boardService.updatePost(postId, updatePostDto);
+    return await this.boardService.updatePost(updatePostDto);
   }
 
   @Delete('/:id')

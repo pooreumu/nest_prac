@@ -4,10 +4,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 // 🌏 Project imports
 import { BoardsController } from './boards.controller';
 import { BoardsService } from './boards.service';
-import { CreatePostRequestDto } from './dtos/request.dtos/create-post-request.dto';
-import { CreatePostDto } from './dtos/create-post.dto';
-import { UpdatePostRequestDto } from './dtos/request.dtos/update-post-request.dto';
-import { UpdatePostDto } from './dtos/update-post.dto';
+import { CreatePostRequestDto } from './dto/request.dto/create-post-request.dto';
+import { UpdatePostRequestDto } from './dto/request.dto/update-post-request.dto';
 
 jest.mock('./boards.service');
 
@@ -42,13 +40,7 @@ describe('BoardsController', () => {
       postData.authorId = authorId;
       postData.password = password;
 
-      const createPostDto = new CreatePostDto({
-        title: postData.title,
-        content: postData.content,
-        authorId: postData.authorId,
-        password: postData.password,
-        membership: false,
-      });
+      const createPostDto = postData.toCreatePostDto();
 
       controller.createPost(postData);
 
@@ -87,12 +79,12 @@ describe('BoardsController', () => {
       postData.content = content;
       postData.password = password;
 
-      const updatePostDto = new UpdatePostDto(postData);
+      const updatePostDto = postData.toUpdatePostDto(postId);
 
       controller.updatePost(postId, postData);
 
       expect(service.updatePost).toBeCalledTimes(1);
-      expect(service.updatePost).toBeCalledWith(postId, updatePostDto);
+      expect(service.updatePost).toBeCalledWith(updatePostDto);
     });
   });
 

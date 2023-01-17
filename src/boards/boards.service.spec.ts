@@ -4,10 +4,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 // 🌏 Project imports
 import { BoardsService } from './boards.service';
 import { BoardsRepository } from './boards.repository';
-import { CreatePostDto } from './dtos/create-post.dto';
-import { UpdatePostDto } from './dtos/update-post.dto';
-import { Board } from './entities/board.entity';
-import { OrderBoardModel, SelectBoardModel } from './entities/board.model';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { DeletePostDTO } from './dto/delete-post.dto';
+import { GetPostDto } from './dto/get-post.dto';
 
 jest.mock('./boards.repository');
 
@@ -30,21 +30,21 @@ describe('BoardsService', () => {
   });
   describe('게시글 작성: createPost', () => {
     it('service.createPost를 실행하면 this.boardsRepository.createPost를 실행하나?', () => {
+      const title = 'title';
+      const content = 'content';
+      const authorId = 'author';
+      const password = 'password';
+      const membership = false;
+
       const postData = new CreatePostDto({
-        title: 'title',
-        content: 'content',
-        authorId: 'author',
-        password: 'password',
-        membership: false,
+        title,
+        content,
+        authorId,
+        membership,
+        password,
       });
 
-      const createBoard = Board.createBoard(
-        postData.title,
-        postData.content,
-        postData.authorId,
-        postData.password,
-        postData.membership,
-      );
+      const createBoard = postData.toEntity();
 
       service.createPost(postData);
 
@@ -55,9 +55,7 @@ describe('BoardsService', () => {
 
   describe('게시글 전체 조회: getAllPosts', () => {
     it('service.getAllPosts 실행하면 boardsRepository.getAllPosts 실행하나?', () => {
-      const select = SelectBoardModel.selectBoardList();
-
-      const order = OrderBoardModel.orderBoardList();
+      const { select, order } = GetPostDto.toGetAllEntity();
 
       service.getAllPosts();
 
@@ -70,8 +68,9 @@ describe('BoardsService', () => {
     it('service.getOnePost 실행하면 boardsRepository.getOnePost 실행하나?', () => {
       const postId = 1;
 
-      const select = SelectBoardModel.selectBoard();
-      const whereBoard = Board.byPk(postId);
+      const { whereBoard, select } = new GetPostDto({
+        postId,
+      }).toGetOneEntity();
 
       service.getOnePost(postId);
 
@@ -83,18 +82,18 @@ describe('BoardsService', () => {
   describe('게시글 수정: updatePost', () => {
     it('service.updatePost 실행하면 boardsRepository.updatePost 실행하나?', () => {
       const postId = 1;
+      const title = 'update title';
+      const password = 'password';
+
       const postData = new UpdatePostDto({
-        title: 'update title',
-        password: 'password',
+        postId,
+        title,
+        password,
       });
 
-      const { whereBoard, updateBoard } = Board.updateBoard(
-        postId,
-        postData.password,
-        postData.title,
-      );
+      const { whereBoard, updateBoard } = postData.toEntity();
 
-      service.updatePost(postId, postData);
+      service.updatePost(postData);
 
       expect(repository.updatePost).toBeCalledTimes(1);
       expect(repository.updatePost).toBeCalledWith(whereBoard, updateBoard);
@@ -106,7 +105,7 @@ describe('BoardsService', () => {
       const postId = 1;
       const password = 'password';
 
-      const whereBoard = Board.deleteBy(postId, password);
+      const whereBoard = new DeletePostDTO({ postId, password }).toEntity();
 
       service.removePost(postId, password);
 

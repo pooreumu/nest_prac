@@ -66,19 +66,19 @@ export class Board {
     return LocalDateTime.from(nativeJs(databaseValue));
   }
 
-  static createBoard(
-    title: string,
-    content: string,
-    authorId: string,
-    password: string,
-    membership: boolean,
-  ): Board {
+  static createBoard(boardData: {
+    title: string;
+    content: string;
+    authorId: string;
+    password: string;
+    membership: boolean;
+  }): Board {
     const board = new Board();
-    board.title = title;
-    board.content = content;
-    board.authorId = authorId;
-    board.password = password;
-    board.membership = membership;
+    board.title = boardData.title;
+    board.content = boardData.content;
+    board.authorId = boardData.authorId;
+    board.password = boardData.password;
+    board.membership = boardData.membership;
     board.createdAt = board.transformDateTo(
       LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     );
@@ -86,19 +86,19 @@ export class Board {
     return board;
   }
 
-  static updateBoard(
-    postId: number,
-    password: string,
-    title?: string,
-    content?: string,
-  ): { whereBoard: Board; updateBoard: Board } {
+  static updateBoard(boardData: {
+    postId: number;
+    password: string;
+    title?: string;
+    content?: string;
+  }): { whereBoard: Board; updateBoard: Board } {
     const whereBoard = new Board();
-    whereBoard.id = postId;
-    whereBoard.password = password;
+    whereBoard.id = boardData.postId;
+    whereBoard.password = boardData.password;
 
     const updateBoard = new Board();
-    updateBoard.title = title;
-    updateBoard.content = content;
+    updateBoard.title = boardData.title;
+    updateBoard.content = boardData.content;
     updateBoard.updatedAt = updateBoard.transformDateTo(
       LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
     );
@@ -106,17 +106,17 @@ export class Board {
     return { whereBoard, updateBoard };
   }
 
-  static byPk(id: number) {
+  static byPk(boardData: { id: number }) {
     const board = new Board();
-    board.id = id;
+    board.id = boardData.id;
 
     return board;
   }
 
-  static deleteBy(id: number, password: string) {
+  static deleteBy(boardData: { id: number; password: string }) {
     const board = new Board();
-    board.id = id;
-    board.password = password;
+    board.id = boardData.id;
+    board.password = boardData.password;
 
     return board;
   }

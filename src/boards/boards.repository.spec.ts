@@ -8,8 +8,6 @@ import { Repository } from 'typeorm';
 
 // 🌏 Project imports
 import { BoardsRepository } from './boards.repository';
-import { CreatePostDto } from './dtos/create-post.dto';
-import { UpdatePostDto } from './dtos/update-post.dto';
 import { Board } from './entities/board.entity';
 import { OrderBoardModel, SelectBoardModel } from './entities/board.model';
 
@@ -42,21 +40,13 @@ describe('BoardsRepository', () => {
       const password = 'password';
       const membership = false;
 
-      const postData = new CreatePostDto({
+      const board = Board.createBoard({
         title,
         content,
         authorId,
-        password,
         membership,
+        password,
       });
-
-      const board = Board.createBoard(
-        postData.title,
-        postData.content,
-        postData.authorId,
-        postData.password,
-        postData.membership,
-      );
 
       boards.insert = jest.fn();
 
@@ -70,7 +60,6 @@ describe('BoardsRepository', () => {
   describe('게시글 전체 조회: getAllPosts', () => {
     it('BoardsRepository.getAllPosts 실행하면 this.boards.find 실행하나?', async () => {
       const select = SelectBoardModel.selectBoardList();
-
       const order = OrderBoardModel.orderBoardList();
 
       boards.find = jest.fn();
@@ -87,7 +76,7 @@ describe('BoardsRepository', () => {
       const postId = 1;
 
       const select = SelectBoardModel.selectBoard();
-      const whereBoard = Board.byPk(postId);
+      const whereBoard = Board.byPk({ id: postId });
 
       boards.findOne = jest.fn().mockResolvedValue(new Board());
 
@@ -104,7 +93,7 @@ describe('BoardsRepository', () => {
       const postId = 1;
 
       const select = SelectBoardModel.selectBoard();
-      const whereBoard = Board.byPk(postId);
+      const whereBoard = Board.byPk({ id: postId });
 
       boards.findOne = jest.fn().mockResolvedValue(null);
 
@@ -120,13 +109,11 @@ describe('BoardsRepository', () => {
       const password = 'password';
       const title = 'update title';
 
-      const postData = new UpdatePostDto({ title, password });
-
-      const { whereBoard, updateBoard } = Board.updateBoard(
+      const { whereBoard, updateBoard } = Board.updateBoard({
         postId,
-        postData.password,
-        postData.title,
-      );
+        password,
+        title,
+      });
 
       boards.update = jest.fn().mockResolvedValue({ affected: 1 });
 
@@ -144,13 +131,11 @@ describe('BoardsRepository', () => {
       const password = 'password';
       const title = 'update title';
 
-      const postData = new UpdatePostDto({ title, password });
-
-      const { whereBoard, updateBoard } = Board.updateBoard(
+      const { whereBoard, updateBoard } = Board.updateBoard({
         postId,
-        postData.password,
-        postData.title,
-      );
+        title,
+        password,
+      });
 
       boards.update = jest.fn().mockResolvedValue({ affected: 0 });
 
@@ -165,7 +150,7 @@ describe('BoardsRepository', () => {
       const postId = 1;
       const password = 'password';
 
-      const whereBoard = Board.deleteBy(postId, password);
+      const whereBoard = Board.deleteBy({ id: postId, password });
 
       boards.delete = jest.fn().mockResolvedValue({ affected: 1 });
 
@@ -182,7 +167,7 @@ describe('BoardsRepository', () => {
       const postId = 1;
       const password = 'password';
 
-      const whereBoard = Board.deleteBy(postId, password);
+      const whereBoard = Board.deleteBy({ id: postId, password });
 
       boards.delete = jest.fn().mockResolvedValue({ affected: 0 });
 

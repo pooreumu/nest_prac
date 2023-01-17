@@ -9,6 +9,9 @@ import {
   IsAlphanumeric,
 } from 'class-validator';
 
+// 🌏 Project imports
+import { UpdatePostDto } from '../update-post.dto';
+
 export class UpdatePostRequestDto {
   @ApiProperty()
   @IsOptional()
@@ -24,4 +27,15 @@ export class UpdatePostRequestDto {
   @IsNotEmpty()
   @IsAlphanumeric()
   password: string;
+
+  public toUpdatePostDto(postId: number) {
+    const updatePostDto = new UpdatePostDto({
+      postId,
+      title: this.title,
+      content: this.content,
+      password: this.password,
+    });
+
+    return updatePostDto;
+  }
 }

@@ -9,6 +9,9 @@ import {
   IsString,
 } from 'class-validator';
 
+// 🌏 Project imports
+import { CreatePostDto } from '../create-post.dto';
+
 export class CreatePostRequestDto {
   @ApiProperty()
   @IsNotEmpty()
@@ -29,4 +32,16 @@ export class CreatePostRequestDto {
   @IsOptional()
   @IsAlphanumeric()
   password?: string;
+
+  public toCreatePostDto() {
+    const createPostDto = new CreatePostDto({
+      title: this.title,
+      content: this.content,
+      authorId: this.authorId,
+      password: this.password,
+      membership: false,
+    });
+
+    return createPostDto;
+  }
 }
