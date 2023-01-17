@@ -14,6 +14,7 @@ async function bootstrap() {
       transform: true,
     }),
   );
+  app.getHttpAdapter().getInstance().disable('x-powered-by');
   await app.listen(3000);
 }
 bootstrap();
