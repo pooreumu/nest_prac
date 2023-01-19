@@ -9,15 +9,15 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
-    "start:dev": "nest start --watch",
+    "start:dev": "NODE_ENV=dev nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest --verbose",
+    "test": "jest --verbose --runInBand --detectOpenHandles --forceExit",
     "test:watch": "jest --watch --verbose",
     "test:cov": "jest --coverage --verbose",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --detectOpenHandles --forceExit --config ./test/jest-e2e.json"
   },
   "dependencies": {
     "@js-joda/core": "^5.5.2",
@@ -47,6 +47,7 @@
     "eslint": "^8.0.1",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-unused-imports": "^2.0.0",
     "jest": "29.3.1",
     "prettier": "^2.3.2",
     "source-map-support": "^0.5.20",
