@@ -41,7 +41,7 @@ export class BoardsRepository {
   async getOnePost(where: Board, select: SelectBoardModel): Promise<Board> {
     try {
       const result = await this.boards.findOne({ where: { ...where }, select });
-      if (!result) throw new NotFoundException();
+      if (!result) return Promise.reject(new NotFoundException());
 
       return result;
     } catch (error) {
@@ -52,7 +52,7 @@ export class BoardsRepository {
   async updatePost(whereBoard: Board, updateBoard: Board): Promise<void> {
     try {
       const result = await this.boards.update({ ...whereBoard }, updateBoard);
-      if (!result.affected) throw new ForbiddenException();
+      if (!result.affected) return Promise.reject(new ForbiddenException());
     } catch (error) {
       throw error;
     }
@@ -61,7 +61,7 @@ export class BoardsRepository {
   async removePost(where: Board): Promise<void> {
     try {
       const result = await this.boards.delete({ ...where });
-      if (!result.affected) throw new ForbiddenException();
+      if (!result.affected) return Promise.reject(new ForbiddenException());
     } catch (error) {
       throw error;
     }
