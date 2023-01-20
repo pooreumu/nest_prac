@@ -40,7 +40,7 @@ describe('BoardsController', () => {
       postData.authorId = authorId;
       postData.password = password;
 
-      const createPostDto = postData.toCreatePostDto();
+      const createPostDto = postData.toCreatePostDto(false);
 
       controller.createPost(postData);
 

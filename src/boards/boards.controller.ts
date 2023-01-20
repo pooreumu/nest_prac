@@ -22,7 +22,7 @@ export class BoardsController {
 
   @Post()
   async createPost(@Body() postData: CreatePostRequestDto) {
-    return await this.boardService.createPost(postData.toCreatePostDto());
+    return await this.boardService.createPost(postData.toCreatePostDto(false));
   }
 
   @Get()
