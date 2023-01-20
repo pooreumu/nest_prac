@@ -1,15 +1,18 @@
 // 🐱 Nestjs imports
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 📦 Package imports
 import { Repository } from 'typeorm';
+import { LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
+import { BoardsModule } from './boards.module';
 import { BoardsRepository } from './boards.repository';
 import { Board } from './entities/board.entity';
 import { OrderBoardModel, SelectBoardModel } from './entities/board.model';
+import typeormConfig from '../configs/typeorm.config';
 
 describe('BoardsRepository', () => {
   let repository: BoardsRepository;
@@ -17,15 +20,19 @@ describe('BoardsRepository', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [],
-      providers: [
-        BoardsRepository,
-        { provide: getRepositoryToken(Board), useClass: Repository<Board> },
+      imports: [
+        BoardsModule,
+        TypeOrmModule.forRoot(typeormConfig()[process.env.NODE_ENV]),
       ],
     }).compile();
 
     repository = module.get<BoardsRepository>(BoardsRepository);
-    boards = module.get<Repository<Board>>(getRepositoryToken(Board));
+    boards = module.get('BoardRepository');
+    jest.clearAllMocks();
+  });
+
+  afterEach(async () => {
+    await boards.query('TRUNCATE board RESTART IDENTITY');
   });
 
   it('should be defined', () => {
@@ -39,6 +46,7 @@ describe('BoardsRepository', () => {
       const authorId = 'author';
       const password = 'password';
       const membership = false;
+      const createdAt = LocalDateTime.of(2023, 1, 19, 19, 19, 19);
 
       const board = Board.createBoard({
         title,
@@ -46,6 +54,7 @@ describe('BoardsRepository', () => {
         authorId,
         membership,
         password,
+        createdAt,
       });
 
       boards.insert = jest.fn();
@@ -108,11 +117,13 @@ describe('BoardsRepository', () => {
       const postId = 1;
       const password = 'password';
       const title = 'update title';
+      const updatedAt = LocalDateTime.of(2023, 1, 20, 19, 19, 19);
 
       const { whereBoard, updateBoard } = Board.updateBoard({
         postId,
         password,
         title,
+        updatedAt,
       });
 
       boards.update = jest.fn().mockResolvedValue({ affected: 1 });
@@ -130,11 +141,13 @@ describe('BoardsRepository', () => {
       const postId = 1;
       const password = 'password';
       const title = 'update title';
+      const updatedAt = LocalDateTime.of(2023, 1, 20, 19, 19, 19);
 
       const { whereBoard, updateBoard } = Board.updateBoard({
         postId,
         title,
         password,
+        updatedAt,
       });
 
       boards.update = jest.fn().mockResolvedValue({ affected: 0 });
