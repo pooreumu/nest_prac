@@ -1,6 +1,9 @@
 // 🐱 Nestjs imports
 import { Injectable } from '@nestjs/common';
 
+// 📦 Package imports
+import { LocalDateTime } from '@js-joda/core';
+
 // 🌏 Project imports
 import { BoardsRepository } from './boards.repository';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -14,7 +17,7 @@ export class BoardsService {
   constructor(private readonly boardsRepository: BoardsRepository) {}
 
   async createPost(postData: CreatePostDto): Promise<void> {
-    const createBoard = postData.toEntity();
+    const createBoard = postData.toEntity(LocalDateTime.now());
 
     return this.boardsRepository.createPost(createBoard);
   }
@@ -32,7 +35,7 @@ export class BoardsService {
   }
 
   async updatePost(postData: UpdatePostDto): Promise<void> {
-    const { whereBoard, updateBoard } = postData.toEntity();
+    const { whereBoard, updateBoard } = postData.toEntity(LocalDateTime.now());
 
     return this.boardsRepository.updatePost(whereBoard, updateBoard);
   }

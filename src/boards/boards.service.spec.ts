@@ -1,6 +1,9 @@
 // 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
 
+// 📦 Package imports
+import { LocalDateTime } from '@js-joda/core';
+
 // 🌏 Project imports
 import { BoardsService } from './boards.service';
 import { BoardsRepository } from './boards.repository';
@@ -44,7 +47,7 @@ describe('BoardsService', () => {
         password,
       });
 
-      const createBoard = postData.toEntity();
+      const createBoard = postData.toEntity(LocalDateTime.now());
 
       service.createPost(postData);
 
@@ -91,7 +94,9 @@ describe('BoardsService', () => {
         password,
       });
 
-      const { whereBoard, updateBoard } = postData.toEntity();
+      const { whereBoard, updateBoard } = postData.toEntity(
+        LocalDateTime.now(),
+      );
 
       service.updatePost(postData);
 

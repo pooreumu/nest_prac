@@ -1,3 +1,6 @@
+// 📦 Package imports
+import { ChronoUnit, LocalDateTime } from '@js-joda/core';
+
 // 🌏 Project imports
 import { Board } from '../entities/board.entity';
 
@@ -35,12 +38,13 @@ export class UpdatePostDto {
     return this._content;
   }
 
-  public toEntity() {
+  public toEntity(updatedAt: LocalDateTime) {
     return Board.updateBoard({
       postId: this._postId,
       password: this._password,
       title: this._title,
       content: this._content,
+      updatedAt: updatedAt.truncatedTo(ChronoUnit.SECONDS),
     });
   }
 }

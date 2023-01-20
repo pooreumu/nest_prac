@@ -1,6 +1,9 @@
 // 📦 Package imports
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { ChronoUnit, convert, LocalDateTime, nativeJs } from '@js-joda/core';
+import { LocalDateTime } from '@js-joda/core';
+
+// 🌏 Project imports
+import { LocalDateTimeTransformer } from '../../transformer/local-date-time.transformer';
 
 @Entity()
 export class Board {
@@ -46,25 +49,19 @@ export class Board {
   @Column({
     name: 'created_at',
     type: 'timestamp',
+    transformer: new LocalDateTimeTransformer(),
     comment: '게시글 게시 시간',
   })
-  createdAt: Date;
+  createdAt: LocalDateTime | Date;
 
   @Column({
     name: 'updated_at',
     type: 'timestamp',
     comment: '게시글 수정 시간',
+    transformer: new LocalDateTimeTransformer(),
     nullable: true,
   })
-  updatedAt: Date;
-
-  transformDateTo(entityValue: LocalDateTime): Date {
-    return convert(entityValue).toDate();
-  }
-
-  transformDateFrom(databaseValue: Date): LocalDateTime {
-    return LocalDateTime.from(nativeJs(databaseValue));
-  }
+  updatedAt: LocalDateTime | Date;
 
   static createBoard(boardData: {
     title: string;
@@ -72,6 +69,7 @@ export class Board {
     authorId: string;
     password: string;
     membership: boolean;
+    createdAt: LocalDateTime;
   }): Board {
     const board = new Board();
     board.title = boardData.title;
@@ -79,9 +77,7 @@ export class Board {
     board.authorId = boardData.authorId;
     board.password = boardData.password;
     board.membership = boardData.membership;
-    board.createdAt = board.transformDateTo(
-      LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
-    );
+    board.createdAt = boardData.createdAt;
 
     return board;
   }
@@ -91,6 +87,7 @@ export class Board {
     password: string;
     title?: string;
     content?: string;
+    updatedAt: LocalDateTime;
   }): { whereBoard: Board; updateBoard: Board } {
     const whereBoard = new Board();
     whereBoard.id = boardData.postId;
@@ -99,9 +96,7 @@ export class Board {
     const updateBoard = new Board();
     updateBoard.title = boardData.title;
     updateBoard.content = boardData.content;
-    updateBoard.updatedAt = updateBoard.transformDateTo(
-      LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS),
-    );
+    updateBoard.updatedAt = boardData.updatedAt;
 
     return { whereBoard, updateBoard };
   }
