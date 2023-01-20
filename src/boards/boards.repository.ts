@@ -40,7 +40,10 @@ export class BoardsRepository {
 
   async getOnePost(where: Board, select: SelectBoardModel): Promise<Board> {
     try {
-      const result = await this.boards.findOne({ where: { ...where }, select });
+      const result = await this.boards.findOne({
+        select,
+        where: { id: where.id },
+      });
       if (!result) return Promise.reject(new NotFoundException());
 
       return result;
@@ -51,7 +54,10 @@ export class BoardsRepository {
 
   async updatePost(whereBoard: Board, updateBoard: Board): Promise<void> {
     try {
-      const result = await this.boards.update({ ...whereBoard }, updateBoard);
+      const result = await this.boards.update(
+        { id: whereBoard.id, password: whereBoard.password },
+        updateBoard,
+      );
       if (!result.affected) return Promise.reject(new ForbiddenException());
     } catch (error) {
       throw error;
@@ -60,7 +66,10 @@ export class BoardsRepository {
 
   async removePost(where: Board): Promise<void> {
     try {
-      const result = await this.boards.delete({ ...where });
+      const result = await this.boards.delete({
+        id: where.id,
+        password: where.password,
+      });
       if (!result.affected) return Promise.reject(new ForbiddenException());
     } catch (error) {
       throw error;
