@@ -1,7 +1,9 @@
 // 📦 Package imports
 import { ValueTransformer } from 'typeorm';
 import { LocalDateTime } from '@js-joda/core';
-import { DateTimeUtil } from '../util/date-time.util';
+
+// 🌏 Project imports
+import { DateTimeUtil } from '../util/DateTimeUtil';
 
 export class LocalDateTimeTransformer implements ValueTransformer {
   to(entityValue: LocalDateTime): Date {

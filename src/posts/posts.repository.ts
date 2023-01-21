@@ -10,37 +10,37 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // 🌏 Project imports
-import { Board } from './entities/board.entity';
-import { OrderBoardModel, SelectBoardModel } from './entities/board.model';
+import { Post } from './entities/post.entity';
+import { OrderPostModel, SelectPostModel } from './entities/post.model';
 
 @Injectable()
-export class BoardsRepository {
+export class PostsRepository {
   constructor(
-    @InjectRepository(Board) private readonly boards: Repository<Board>,
+    @InjectRepository(Post) private readonly posts: Repository<Post>,
   ) {}
 
-  async createPost(board: Board): Promise<void> {
+  async createPost(board: Post): Promise<void> {
     try {
-      await this.boards.insert(board);
+      await this.posts.insert(board);
     } catch (error) {
       throw error;
     }
   }
 
-  async getAllPosts(
-    select: SelectBoardModel,
-    order: OrderBoardModel,
-  ): Promise<Board[]> {
+  async getPosts(
+    select: SelectPostModel,
+    order: OrderPostModel,
+  ): Promise<Post[]> {
     try {
-      return this.boards.find({ select, order });
+      return await this.posts.find({ select, order });
     } catch (error) {
       throw error;
     }
   }
 
-  async getOnePost(where: Board, select: SelectBoardModel): Promise<Board> {
+  async getPost(where: Post, select: SelectPostModel): Promise<Post> {
     try {
-      const result = await this.boards.findOne({
+      const result = await this.posts.findOne({
         select,
         where: { id: where.id },
       });
@@ -52,9 +52,9 @@ export class BoardsRepository {
     }
   }
 
-  async updatePost(whereBoard: Board, updateBoard: Board): Promise<void> {
+  async updatePost(whereBoard: Post, updateBoard: Post): Promise<void> {
     try {
-      const result = await this.boards.update(
+      const result = await this.posts.update(
         { id: whereBoard.id, password: whereBoard.password },
         updateBoard,
       );
@@ -64,9 +64,9 @@ export class BoardsRepository {
     }
   }
 
-  async removePost(where: Board): Promise<void> {
+  async removePost(where: Post): Promise<void> {
     try {
-      const result = await this.boards.delete({
+      const result = await this.posts.delete({
         id: where.id,
         password: where.password,
       });

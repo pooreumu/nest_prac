@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 🌏 Project imports
-import { BoardsModule } from './boards/boards.module';
+import { PostsModule } from './posts/posts.module';
 import typeormConfig from './configs/typeorm.config';
 
 @Module({
@@ -15,7 +15,7 @@ import typeormConfig from './configs/typeorm.config';
       load: [typeormConfig],
     }),
     TypeOrmModule.forRoot(typeormConfig()[process.env.NODE_ENV]),
-    BoardsModule,
+    PostsModule,
   ],
   controllers: [],
   providers: [],

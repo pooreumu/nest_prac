@@ -2,25 +2,25 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 // 🌏 Project imports
-import { BoardsController } from './boards.controller';
-import { BoardsService } from './boards.service';
+import { PostsController } from './posts.controller';
+import { PostsService } from './posts.service';
 import { CreatePostRequestDto } from './dto/request.dto/create-post-request.dto';
 import { UpdatePostRequestDto } from './dto/request.dto/update-post-request.dto';
 
-jest.mock('./boards.service');
+jest.mock('./posts.service');
 
-describe('BoardsController', () => {
-  let controller: BoardsController;
-  let service: BoardsService;
+describe('PostsController', () => {
+  let controller: PostsController;
+  let service: PostsService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [BoardsController],
-      providers: [BoardsService],
+      controllers: [PostsController],
+      providers: [PostsService],
     }).compile();
 
-    controller = module.get<BoardsController>(BoardsController);
-    service = module.get<BoardsService>(BoardsService);
+    controller = module.get<PostsController>(PostsController);
+    service = module.get<PostsService>(PostsService);
   });
 
   it('should be defined', () => {
@@ -51,10 +51,10 @@ describe('BoardsController', () => {
 
   describe('게시글 전체 조회: getAllPosts', () => {
     it('controller.getAllPosts 실행하면 boardService.getAllPosts 실행하나?', () => {
-      controller.getAllPosts();
+      controller.getPosts();
 
-      expect(service.getAllPosts).toBeCalledTimes(1);
-      expect(service.getAllPosts).toBeCalledWith();
+      expect(service.getPosts).toBeCalledTimes(1);
+      expect(service.getPosts).toBeCalledWith();
     });
   });
 
@@ -62,10 +62,10 @@ describe('BoardsController', () => {
     it('controller.getOnePost 실행하면 boardService.getOnePost 실행하나?', () => {
       const postId = 1;
 
-      controller.getOnePost(postId);
+      controller.getPost(postId);
 
-      expect(service.getOnePost).toBeCalledTimes(1);
-      expect(service.getOnePost).toBeCalledWith(postId);
+      expect(service.getPost).toBeCalledTimes(1);
+      expect(service.getPost).toBeCalledWith(postId);
     });
   });
 

@@ -5,27 +5,27 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
-import { BoardsService } from './boards.service';
-import { BoardsRepository } from './boards.repository';
+import { PostsService } from './posts.service';
+import { PostsRepository } from './posts.repository';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { DeletePostDTO } from './dto/delete-post.dto';
+import { DeletePostDto } from './dto/delete-post.dto';
 import { GetPostDto } from './dto/get-post.dto';
 
-jest.mock('./boards.repository');
+jest.mock('./posts.repository');
 
-describe('BoardsService', () => {
-  let service: BoardsService;
-  let repository: BoardsRepository;
+describe('PostsService', () => {
+  let service: PostsService;
+  let repository: PostsRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
-      providers: [BoardsService, BoardsRepository],
+      providers: [PostsService, PostsRepository],
     }).compile();
 
-    service = module.get<BoardsService>(BoardsService);
-    repository = module.get<BoardsRepository>(BoardsRepository);
+    service = module.get<PostsService>(PostsService);
+    repository = module.get<PostsRepository>(PostsRepository);
   });
 
   it('should be defined', () => {
@@ -60,10 +60,12 @@ describe('BoardsService', () => {
     it('service.getAllPosts 실행하면 boardsRepository.getAllPosts 실행하나?', () => {
       const { select, order } = GetPostDto.toGetAllEntity();
 
-      service.getAllPosts();
+      repository.getPosts = jest.fn().mockResolvedValue([]);
 
-      expect(repository.getAllPosts).toBeCalledTimes(1);
-      expect(repository.getAllPosts).toBeCalledWith(select, order);
+      service.getPosts();
+
+      expect(repository.getPosts).toBeCalledTimes(1);
+      expect(repository.getPosts).toBeCalledWith(select, order);
     });
   });
 
@@ -71,14 +73,16 @@ describe('BoardsService', () => {
     it('service.getOnePost 실행하면 boardsRepository.getOnePost 실행하나?', () => {
       const postId = 1;
 
-      const { whereBoard, select } = new GetPostDto({
+      const { whereBoard, select } = GetPostDto.toGetOneEntity({
         postId,
-      }).toGetOneEntity();
+      });
 
-      service.getOnePost(postId);
+      repository.getPost = jest.fn().mockResolvedValue({});
 
-      expect(repository.getOnePost).toBeCalledTimes(1);
-      expect(repository.getOnePost).toBeCalledWith(whereBoard, select);
+      service.getPost(postId);
+
+      expect(repository.getPost).toBeCalledTimes(1);
+      expect(repository.getPost).toBeCalledWith(whereBoard, select);
     });
   });
 
@@ -94,14 +98,12 @@ describe('BoardsService', () => {
         password,
       });
 
-      const { whereBoard, updateBoard } = postData.toEntity(
-        LocalDateTime.now(),
-      );
+      const { wherePost, updatePost } = postData.toEntity(LocalDateTime.now());
 
       service.updatePost(postData);
 
       expect(repository.updatePost).toBeCalledTimes(1);
-      expect(repository.updatePost).toBeCalledWith(whereBoard, updateBoard);
+      expect(repository.updatePost).toBeCalledWith(wherePost, updatePost);
     });
   });
 
@@ -110,7 +112,7 @@ describe('BoardsService', () => {
       const postId = 1;
       const password = 'password';
 
-      const whereBoard = new DeletePostDTO({ postId, password }).toEntity();
+      const whereBoard = new DeletePostDto({ postId, password }).toEntity();
 
       service.removePost(postId, password);
 

@@ -3,10 +3,10 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
-import { LocalDateTimeTransformer } from '../../transformer/local-date-time.transformer';
+import { LocalDateTimeTransformer } from '../../lib/transformer/LocalDateTimeTransformer';
 
 @Entity()
-export class Board {
+export class Post {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -63,56 +63,56 @@ export class Board {
   })
   updatedAt: LocalDateTime | Date;
 
-  static createBoard(boardData: {
+  static createPost(postData: {
     title: string;
     content: string;
     authorId: string;
     password: string;
     membership: boolean;
     createdAt: LocalDateTime;
-  }): Board {
-    const board = new Board();
-    board.title = boardData.title;
-    board.content = boardData.content;
-    board.authorId = boardData.authorId;
-    board.password = boardData.password;
-    board.membership = boardData.membership;
-    board.createdAt = boardData.createdAt;
+  }): Post {
+    const post = new Post();
+    post.title = postData.title;
+    post.content = postData.content;
+    post.authorId = postData.authorId;
+    post.password = postData.password;
+    post.membership = postData.membership;
+    post.createdAt = postData.createdAt;
 
-    return board;
+    return post;
   }
 
-  static updateBoard(boardData: {
+  static updatePost(postData: {
     postId: number;
     password: string;
     title?: string;
     content?: string;
     updatedAt: LocalDateTime;
-  }): { whereBoard: Board; updateBoard: Board } {
-    const whereBoard = new Board();
-    whereBoard.id = boardData.postId;
-    whereBoard.password = boardData.password;
+  }): { wherePost: Post; updatePost: Post } {
+    const wherePost = new Post();
+    wherePost.id = postData.postId;
+    wherePost.password = postData.password;
 
-    const updateBoard = new Board();
-    updateBoard.title = boardData.title;
-    updateBoard.content = boardData.content;
-    updateBoard.updatedAt = boardData.updatedAt;
+    const updatePost = new Post();
+    updatePost.title = postData.title;
+    updatePost.content = postData.content;
+    updatePost.updatedAt = postData.updatedAt;
 
-    return { whereBoard, updateBoard };
+    return { wherePost: wherePost, updatePost: updatePost };
   }
 
-  static byPk(boardData: { id: number }) {
-    const board = new Board();
-    board.id = boardData.id;
+  static byPk(postData: { id: number }): Post {
+    const post = new Post();
+    post.id = postData.id;
 
-    return board;
+    return post;
   }
 
-  static deleteBy(boardData: { id: number; password: string }) {
-    const board = new Board();
-    board.id = boardData.id;
-    board.password = boardData.password;
+  static deleteBy(postData: { id: number; password: string }): Post {
+    const post = new Post();
+    post.id = postData.id;
+    post.password = postData.password;
 
-    return board;
+    return post;
   }
 }

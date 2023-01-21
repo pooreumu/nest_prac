@@ -2,7 +2,7 @@
 import { ChronoUnit, LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
-import { Board } from '../entities/board.entity';
+import { Post } from '../entities/post.entity';
 
 export class CreatePostDto {
   private readonly _title: string;
@@ -46,7 +46,7 @@ export class CreatePostDto {
   }
 
   public toEntity(createdAt: LocalDateTime) {
-    return Board.createBoard({
+    return Post.createPost({
       title: this._title,
       content: this._content,
       authorId: this._authorId,

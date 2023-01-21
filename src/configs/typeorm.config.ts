@@ -1,3 +1,4 @@
+// 🐱 Nestjs imports
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 export default (): {
@@ -18,14 +19,14 @@ export default (): {
   },
   test: {
     type: 'postgres',
-    host: process.env.RDS_TEST_HOSTNAME,
-    port: Number(process.env.RDS_TEST_PORT),
-    username: process.env.RDS_TEST_USERNAME,
-    password: process.env.RDS_TEST_PASSWORD,
-    database: process.env.RDS_TEST_DATABASE,
+    host: process.env.RDS_TEST_HOSTNAME || 'localhost',
+    port: 5432,
+    username: 'test',
+    password: 'test',
+    database: 'test',
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
     synchronize: true,
-    logging: true,
+    logging: false,
   },
   product: {
     type: 'postgres',

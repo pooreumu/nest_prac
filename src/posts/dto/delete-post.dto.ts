@@ -1,7 +1,7 @@
 // 🌏 Project imports
-import { Board } from '../entities/board.entity';
+import { Post } from '../entities/post.entity';
 
-export class DeletePostDTO {
+export class DeletePostDto {
   private readonly _postId: number;
   private readonly _password: string;
 
@@ -19,7 +19,7 @@ export class DeletePostDTO {
   }
 
   public toEntity() {
-    return Board.deleteBy({
+    return Post.deleteBy({
       id: this._postId,
       password: this._password,
     });

@@ -2,7 +2,7 @@
 import { ChronoUnit, LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
-import { Board } from '../entities/board.entity';
+import { Post } from '../entities/post.entity';
 
 export class UpdatePostDto {
   private readonly _postId: number;
@@ -39,7 +39,7 @@ export class UpdatePostDto {
   }
 
   public toEntity(updatedAt: LocalDateTime) {
-    return Board.updateBoard({
+    return Post.updatePost({
       postId: this._postId,
       password: this._password,
       title: this._title,
