@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
-import { LocalDateTimeTransformer } from '../../lib/transformer/LocalDateTimeTransformer';
+import { LocalDateTimeTransformer } from '../../../lib/transformer/LocalDateTimeTransformer';
 
 @Entity()
 export class Post {

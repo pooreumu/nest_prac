@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 🌏 Project imports
-import { PostsModule } from './posts/posts.module';
+import { PostsModule } from './api/posts/posts.module';
 import typeormConfig from './configs/typeorm.config';
 
 @Module({

@@ -15,7 +15,7 @@ import { PostsService } from './posts.service';
 import { GetPostDto } from './dto/get-post.dto';
 import { CreatePostRequestDto } from './dto/request.dto/create-post-request.dto';
 import { UpdatePostRequestDto } from './dto/request.dto/update-post-request.dto';
-import { ResponseEntity } from '../lib/response/ResponseEntity';
+import { ResponseEntity } from '../../lib/response/ResponseEntity';
 
 @Controller('posts')
 export class PostsController {

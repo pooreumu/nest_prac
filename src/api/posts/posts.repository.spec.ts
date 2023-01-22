@@ -12,7 +12,7 @@ import { PostsModule } from './posts.module';
 import { PostsRepository } from './posts.repository';
 import { Post } from './entities/post.entity';
 import { OrderPostModel, SelectPostModel } from './entities/post.model';
-import typeormConfig from '../configs/typeorm.config';
+import typeormConfig from '../../configs/typeorm.config';
 
 describe('PostsRepository', () => {
   let postsRepository: PostsRepository;
