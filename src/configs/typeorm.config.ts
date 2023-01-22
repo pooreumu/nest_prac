@@ -1,6 +1,9 @@
 // 🐱 Nestjs imports
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
+// 📦 Package imports
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+
 export default (): {
   dev: TypeOrmModuleOptions;
   test: TypeOrmModuleOptions;
@@ -16,6 +19,7 @@ export default (): {
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
     synchronize: true,
     logging: true,
+    namingStrategy: new SnakeNamingStrategy(),
   },
   test: {
     type: 'postgres',
@@ -27,6 +31,7 @@ export default (): {
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
     synchronize: true,
     logging: false,
+    namingStrategy: new SnakeNamingStrategy(),
   },
   product: {
     type: 'postgres',
@@ -38,5 +43,6 @@ export default (): {
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
     synchronize: false,
     logging: false,
+    namingStrategy: new SnakeNamingStrategy(),
   },
 });
