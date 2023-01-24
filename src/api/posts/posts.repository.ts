@@ -43,6 +43,9 @@ export class PostsRepository {
       const result = await this.posts.findOne({
         select,
         where: { id: where.id },
+        relations: {
+          comments: true,
+        },
       });
       if (!result) return Promise.reject(new NotFoundException());
 

@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 📦 Package imports
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
@@ -17,6 +17,7 @@ import typeormConfig from '../../configs/typeorm.config';
 describe('PostsRepository', () => {
   let postsRepository: PostsRepository;
   let repository: Repository<Post>;
+  let dataSource: DataSource;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -27,12 +28,11 @@ describe('PostsRepository', () => {
     }).compile();
 
     postsRepository = module.get<PostsRepository>(PostsRepository);
-    repository = module.get('PostRepository');
-    jest.clearAllMocks();
-  });
+    repository = module.get<Repository<Post>>('PostRepository');
+    dataSource = module.get<DataSource>(DataSource);
 
-  afterEach(async () => {
-    await repository.query('TRUNCATE post RESTART IDENTITY');
+    await dataSource.synchronize(true);
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -45,14 +45,12 @@ describe('PostsRepository', () => {
       const content = 'content';
       const authorId = 'author';
       const password = 'password';
-      const membership = false;
       const createdAt = LocalDateTime.of(2023, 1, 19, 19, 19, 19);
 
       const board = Post.createPost({
         title,
         content,
         authorId,
-        membership,
         password,
         createdAt,
       });
@@ -95,6 +93,7 @@ describe('PostsRepository', () => {
       expect(repository.findOne).toBeCalledWith({
         where: { id: whereBoard.id },
         select,
+        relations: { comments: true },
       });
     });
 

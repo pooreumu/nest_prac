@@ -9,24 +9,26 @@ import { Exclude, Expose } from 'class-transformer';
 import { DateTimeUtil } from '../../../lib/util/DateTimeUtil';
 import { Post } from '../entities/post.entity';
 import { OrderPostModel, SelectPostModel } from '../entities/post.model';
+import { Comment } from '../../comments/entities/comment.entity';
+import { GetCommentDto } from '../../comments/dto/get-comment.dto';
 
 export class GetPostDto {
   @Exclude() private readonly _id: number;
   @Exclude() private readonly _title: string;
   @Exclude() private readonly _content: string;
   @Exclude() private readonly _authorId: string;
-  @Exclude() private readonly _membership: boolean;
   @Exclude() private readonly _createdAt: LocalDateTime | Date;
   @Exclude() private readonly _updatedAt: LocalDateTime | Date;
+  @Exclude() private readonly _comments: Comment[];
 
   constructor(post: Post) {
     this._id = post.id;
     this._title = post.title;
     this._content = post.content;
     this._authorId = post.authorId;
-    this._membership = post.membership;
     this._createdAt = post.createdAt;
     this._updatedAt = post.updatedAt;
+    this._comments = post.comments;
   }
 
   @ApiProperty()
@@ -55,12 +57,6 @@ export class GetPostDto {
 
   @ApiProperty()
   @Expose()
-  get membership(): boolean {
-    return this._membership;
-  }
-
-  @ApiProperty()
-  @Expose()
   get createdAt(): string {
     return DateTimeUtil.toString(this._createdAt as LocalDateTime);
   }
@@ -69,6 +65,11 @@ export class GetPostDto {
   @Expose()
   get updatedAt(): string {
     return DateTimeUtil.toString(this._updatedAt as LocalDateTime);
+  }
+  @ApiProperty()
+  @Expose()
+  get comments(): GetCommentDto[] {
+    return this._comments?.map((comment) => new GetCommentDto(comment));
   }
 
   static toGetOneEntity(postData: { postId: number }) {
