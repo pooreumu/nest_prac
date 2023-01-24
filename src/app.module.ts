@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // 🌏 Project imports
 import { PostsModule } from './api/posts/posts.module';
 import typeormConfig from './configs/typeorm.config';
+import { CommentsModule } from './api/comments/comments.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import typeormConfig from './configs/typeorm.config';
     }),
     TypeOrmModule.forRoot(typeormConfig()[process.env.NODE_ENV]),
     PostsModule,
+    CommentsModule,
   ],
   controllers: [],
   providers: [],
