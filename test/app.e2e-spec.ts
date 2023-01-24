@@ -15,6 +15,7 @@ import { DataSource } from 'typeorm';
 import { AppModule } from '../src/app.module';
 import { ResponseEntity } from '../src/lib/response/ResponseEntity';
 import { GetPostDto } from '../src/api/posts/dto/get-post.dto';
+import { GetCommentDto } from '../src/api/comments/dto/get-comment.dto';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -54,8 +55,25 @@ describe('AppController (e2e)', () => {
     password: 'asdf1234',
   };
 
+  const comments = {
+    post: 1,
+    content: 'test content',
+    authorId: 'ㅇㅇ',
+    password: 'asdf1234',
+  };
+
   it('게시글 생성 POST /posts', async () => {
     const res = await request(app.getHttpServer()).post('/posts').send(posts);
+    expect(res.status).toBe(201);
+
+    const body: ResponseEntity<string> = res.body;
+    expect(body.statusCode).toBe('OK');
+  });
+
+  it('댓글 생성 POST /comments', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/comments')
+      .send(comments);
     expect(res.status).toBe(201);
 
     const body: ResponseEntity<string> = res.body;
@@ -92,6 +110,10 @@ describe('AppController (e2e)', () => {
     expect(data.title).toBe(posts.title);
     expect(data.content).toBe(posts.content);
     expect(data.authorId).toBe(posts.authorId);
+
+    const dataComments: GetCommentDto[] = data.comments;
+    expect(dataComments[0].authorId).toBe(comments.authorId);
+    expect(dataComments[0].content).toBe(comments.content);
   });
 
   it('게시글 업데이트 PATCH /posts/:boarId', async () => {
