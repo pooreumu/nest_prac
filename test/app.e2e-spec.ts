@@ -9,17 +9,16 @@ import {
 
 // 📦 Package imports
 import * as request from 'supertest';
-import { Repository } from 'typeorm';
+import { DataSource } from 'typeorm';
 
 // 🌏 Project imports
 import { AppModule } from '../src/app.module';
-import { Post } from '../src/api/posts/entities/post.entity';
 import { ResponseEntity } from '../src/lib/response/ResponseEntity';
 import { GetPostDto } from '../src/api/posts/dto/get-post.dto';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
-  let repository: Repository<Post>;
+  let dataSource: DataSource;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -37,13 +36,14 @@ describe('AppController (e2e)', () => {
         transform: true,
       }),
     );
+
     await app.init();
 
-    repository = moduleFixture.get('PostRepository');
+    dataSource = app.get<DataSource>(DataSource);
   });
 
   afterAll(async () => {
-    await repository.query('TRUNCATE post RESTART IDENTITY;');
+    await dataSource.synchronize(true);
     await app.close();
   });
 
