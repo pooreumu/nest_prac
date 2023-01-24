@@ -4,7 +4,7 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 // 🌏 Project imports
 import { BaseEntity } from '../../../lib/entity/BaseEntity';
 import { Post } from '../../posts/entities/post.entity';
-import { LocalDateTime } from '@js-joda/core';
+import { ChronoUnit, LocalDateTime } from '@js-joda/core';
 
 @Entity()
 export class Comment extends BaseEntity {
@@ -40,7 +40,7 @@ export class Comment extends BaseEntity {
     comment.authorId = commentData.authorId;
     comment.password = commentData.password;
     comment.content = commentData.content;
-    comment.createdAt = LocalDateTime.now();
+    comment.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
     comment.updatedAt = comment.createdAt;
 
     return comment;
