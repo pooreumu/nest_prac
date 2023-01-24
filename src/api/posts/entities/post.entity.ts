@@ -1,15 +1,13 @@
 // 📦 Package imports
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
-import { LocalDateTimeTransformer } from '../../../lib/transformer/LocalDateTimeTransformer';
+import { Comment } from '../../comments/entities/comment.entity';
+import { BaseEntity } from '../../../lib/entity/BaseEntity';
 
 @Entity()
-export class Post {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class Post extends BaseEntity {
   @Column({
     name: 'title',
     type: 'varchar',
@@ -39,36 +37,14 @@ export class Post {
   })
   password: string;
 
-  @Column({
-    name: 'membership',
-    type: 'bool',
-    comment: '회원 여부',
-  })
-  membership: boolean;
-
-  @Column({
-    name: 'created_at',
-    type: 'timestamp',
-    transformer: new LocalDateTimeTransformer(),
-    comment: '게시글 게시 시간',
-  })
-  createdAt: LocalDateTime | Date;
-
-  @Column({
-    name: 'updated_at',
-    type: 'timestamp',
-    comment: '게시글 수정 시간',
-    transformer: new LocalDateTimeTransformer(),
-    nullable: true,
-  })
-  updatedAt: LocalDateTime | Date;
+  @OneToMany(() => Comment, (comment) => comment.post, { cascade: true })
+  comments: Comment[];
 
   static createPost(postData: {
     title: string;
     content: string;
     authorId: string;
     password: string;
-    membership: boolean;
     createdAt: LocalDateTime;
   }): Post {
     const post = new Post();
@@ -76,8 +52,8 @@ export class Post {
     post.content = postData.content;
     post.authorId = postData.authorId;
     post.password = postData.password;
-    post.membership = postData.membership;
     post.createdAt = postData.createdAt;
+    post.updatedAt = postData.createdAt;
 
     return post;
   }

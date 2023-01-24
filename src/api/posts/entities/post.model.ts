@@ -14,7 +14,6 @@ export class SelectPostModel implements FindOptionsSelect<Post> {
   content?: boolean;
   authorId?: boolean;
   password?: boolean;
-  membership?: boolean;
   createdAt?: boolean;
   updatedAt?: boolean;
 
@@ -23,7 +22,6 @@ export class SelectPostModel implements FindOptionsSelect<Post> {
     selectPostModel.id = true;
     selectPostModel.title = true;
     selectPostModel.authorId = true;
-    selectPostModel.membership = true;
     selectPostModel.createdAt = true;
     selectPostModel.updatedAt = true;
 
@@ -36,7 +34,6 @@ export class SelectPostModel implements FindOptionsSelect<Post> {
     selectPostModel.title = true;
     selectPostModel.content = true;
     selectPostModel.authorId = true;
-    selectPostModel.membership = true;
     selectPostModel.createdAt = true;
     selectPostModel.updatedAt = true;
 
@@ -49,7 +46,6 @@ export class OrderPostModel implements FindOptionsOrder<Post> {
   content?: FindOptionsOrderValue;
   authorId?: FindOptionsOrderValue;
   password?: FindOptionsOrderValue;
-  membership?: FindOptionsOrderValue;
   createdAt?: FindOptionsOrderValue;
   updatedAt?: FindOptionsOrderValue;
 

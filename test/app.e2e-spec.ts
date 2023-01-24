@@ -78,7 +78,6 @@ describe('AppController (e2e)', () => {
     expect(data.length).toBe(3);
     expect(data[0].title).toBe(posts.title);
     expect(data[0].authorId).toBe(posts.authorId);
-    expect(data[0].membership).toBe(false);
   });
 
   it('게시글 상세 조회 GET /posts/:boarId', async () => {
@@ -93,7 +92,6 @@ describe('AppController (e2e)', () => {
     expect(data.title).toBe(posts.title);
     expect(data.content).toBe(posts.content);
     expect(data.authorId).toBe(posts.authorId);
-    expect(data.membership).toBe(false);
   });
 
   it('게시글 업데이트 PATCH /posts/:boarId', async () => {

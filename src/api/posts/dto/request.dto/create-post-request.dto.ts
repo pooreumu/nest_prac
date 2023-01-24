@@ -33,13 +33,12 @@ export class CreatePostRequestDto {
   @IsAlphanumeric()
   password?: string;
 
-  public toCreatePostDto(membership: boolean) {
+  public toCreatePostDto() {
     return new CreatePostDto({
       title: this.title,
       content: this.content,
       authorId: this.authorId,
       password: this.password,
-      membership: membership,
     });
   }
 }

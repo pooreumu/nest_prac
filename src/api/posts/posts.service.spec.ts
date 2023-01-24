@@ -37,13 +37,11 @@ describe('PostsService', () => {
       const content = 'content';
       const authorId = 'author';
       const password = 'password';
-      const membership = false;
 
       const postData = new CreatePostDto({
         title,
         content,
         authorId,
-        membership,
         password,
       });
 

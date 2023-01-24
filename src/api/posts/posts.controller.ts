@@ -25,7 +25,7 @@ export class PostsController {
   async createPost(
     @Body() postData: CreatePostRequestDto,
   ): Promise<ResponseEntity<string>> {
-    await this.boardService.createPost(postData.toCreatePostDto(false));
+    await this.boardService.createPost(postData.toCreatePostDto());
     return ResponseEntity.OK();
   }
 
