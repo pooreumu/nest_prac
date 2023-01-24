@@ -10,7 +10,7 @@ export default (): {
   product: TypeOrmModuleOptions;
 } => ({
   dev: {
-    type: 'postgres',
+    type: 'mysql',
     host: process.env.RDS_HOSTNAME,
     port: Number(process.env.RDS_PORT),
     username: process.env.RDS_USERNAME,
@@ -22,9 +22,9 @@ export default (): {
     namingStrategy: new SnakeNamingStrategy(),
   },
   test: {
-    type: 'postgres',
-    host: process.env.RDS_TEST_HOSTNAME || 'localhost',
-    port: 5432,
+    type: 'mysql',
+    host: process.env.RDS_TEST_HOSTNAME || '127.0.0.1',
+    port: 3306,
     username: 'test',
     password: 'test',
     database: 'test',
@@ -34,7 +34,7 @@ export default (): {
     namingStrategy: new SnakeNamingStrategy(),
   },
   product: {
-    type: 'postgres',
+    type: 'mysql',
     host: process.env.RDS_HOSTNAME,
     port: Number(process.env.RDS_PORT),
     username: process.env.RDS_USERNAME,
