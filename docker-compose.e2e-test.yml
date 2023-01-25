@@ -2,14 +2,17 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:13-alpine3.17
+    image: mysql:5.7
     ports:
-      - '5433:5432'
+      - '3306:3306'
     environment:
-      - POSTGRES_DB=test
-      - POSTGRES_USER=test
-      - POSTGRES_PASSWORD=test
-      - POSTGRES_INITDB_ARGS=--encoding=UTF-8
+      - MYSQL_DATABASE=test
+      - MYSQL_USER=test
+      - MYSQL_PASSWORD=test
+      - MYSQL_ROOT_PASSWORD=test
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
 
   app:
     build:
@@ -17,8 +20,6 @@ services:
       dockerfile: dockerfile
     env_file:
       - .env.test
-    environment:
-      - RDS_TEST_HOSTNAME=db
     depends_on:
       - db
     ports:
