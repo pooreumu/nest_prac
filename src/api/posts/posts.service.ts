@@ -13,41 +13,39 @@ import { GetPostDto } from './dto/get-post.dto';
 
 @Injectable()
 export class PostsService {
-  constructor(private readonly boardsRepository: PostsRepository) {}
+  constructor(private readonly postRepository: PostsRepository) {}
 
   async createPost(postData: CreatePostDto): Promise<void> {
-    const createBoard = postData.toEntity(LocalDateTime.now());
+    const createPost = postData.toEntity(LocalDateTime.now());
 
-    return this.boardsRepository.createPost(createBoard);
+    return this.postRepository.createPost(createPost);
   }
 
   async getPosts(): Promise<GetPostDto[]> {
     const { select, order } = GetPostDto.toGetAllEntity();
 
-    const posts = await this.boardsRepository.getPosts(select, order);
+    const posts = await this.postRepository.getPosts(select, order);
 
     return posts.map((post) => new GetPostDto(post));
   }
 
   async getPost(postId: number): Promise<GetPostDto> {
-    const { whereBoard, select } = GetPostDto.toGetOneEntity({
+    const { wherePost, select } = GetPostDto.toGetOneEntity({
       postId,
     });
 
-    return new GetPostDto(
-      await this.boardsRepository.getPost(whereBoard, select),
-    );
+    return new GetPostDto(await this.postRepository.getPost(wherePost, select));
   }
 
   async updatePost(postData: UpdatePostDto): Promise<void> {
     const { wherePost, updatePost } = postData.toEntity(LocalDateTime.now());
 
-    return this.boardsRepository.updatePost(wherePost, updatePost);
+    return this.postRepository.updatePost(wherePost, updatePost);
   }
 
   async removePost(postId: number, password: string): Promise<void> {
-    const whereBoard = new DeletePostDto({ postId, password }).toEntity();
+    const wherePost = new DeletePostDto({ postId, password }).toEntity();
 
-    return this.boardsRepository.removePost(whereBoard);
+    return this.postRepository.removePost(wherePost);
   }
 }

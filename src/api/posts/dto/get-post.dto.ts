@@ -75,7 +75,7 @@ export class GetPostDto {
   static toGetOneEntity(postData: { postId: number }) {
     return {
       select: SelectPostModel.selectPost(),
-      whereBoard: Post.byPk({ id: postData.postId }),
+      wherePost: Post.byPk({ id: postData.postId }),
     };
   }
   static toGetAllEntity() {

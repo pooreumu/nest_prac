@@ -32,7 +32,7 @@ describe('PostsService', () => {
     expect(service).toBeDefined();
   });
   describe('게시글 작성: createPost', () => {
-    it('service.createPost를 실행하면 this.boardsRepository.createPost를 실행하나?', () => {
+    it('service.createPost를 실행하면 this.postRepository.createPost를 실행하나?', () => {
       const title = 'title';
       const content = 'content';
       const authorId = 'author';
@@ -45,17 +45,17 @@ describe('PostsService', () => {
         password,
       });
 
-      const createBoard = postData.toEntity(LocalDateTime.now());
+      const createPost = postData.toEntity(LocalDateTime.now());
 
       service.createPost(postData);
 
       expect(repository.createPost).toBeCalledTimes(1);
-      expect(repository.createPost).toBeCalledWith(createBoard);
+      expect(repository.createPost).toBeCalledWith(createPost);
     });
   });
 
   describe('게시글 전체 조회: getAllPosts', () => {
-    it('service.getAllPosts 실행하면 boardsRepository.getAllPosts 실행하나?', () => {
+    it('service.getAllPosts 실행하면 postRepository.getAllPosts 실행하나?', () => {
       const { select, order } = GetPostDto.toGetAllEntity();
 
       repository.getPosts = jest.fn().mockResolvedValue([]);
@@ -68,10 +68,10 @@ describe('PostsService', () => {
   });
 
   describe('게시글 상세 조회: getOnePost', () => {
-    it('service.getOnePost 실행하면 boardsRepository.getOnePost 실행하나?', () => {
+    it('service.getOnePost 실행하면 postRepository.getOnePost 실행하나?', () => {
       const postId = 1;
 
-      const { whereBoard, select } = GetPostDto.toGetOneEntity({
+      const { wherePost, select } = GetPostDto.toGetOneEntity({
         postId,
       });
 
@@ -80,12 +80,12 @@ describe('PostsService', () => {
       service.getPost(postId);
 
       expect(repository.getPost).toBeCalledTimes(1);
-      expect(repository.getPost).toBeCalledWith(whereBoard, select);
+      expect(repository.getPost).toBeCalledWith(wherePost, select);
     });
   });
 
   describe('게시글 수정: updatePost', () => {
-    it('service.updatePost 실행하면 boardsRepository.updatePost 실행하나?', () => {
+    it('service.updatePost 실행하면 postRepository.updatePost 실행하나?', () => {
       const postId = 1;
       const title = 'update title';
       const password = 'password';
@@ -106,16 +106,16 @@ describe('PostsService', () => {
   });
 
   describe('게시글 삭제: removePost', () => {
-    it('service.removePost 실행하면 boardsRepository.removePost 실행하나?', () => {
+    it('service.removePost 실행하면 postRepository.removePost 실행하나?', () => {
       const postId = 1;
       const password = 'password';
 
-      const whereBoard = new DeletePostDto({ postId, password }).toEntity();
+      const wherePost = new DeletePostDto({ postId, password }).toEntity();
 
       service.removePost(postId, password);
 
       expect(repository.removePost).toBeCalledTimes(1);
-      expect(repository.removePost).toBeCalledWith(whereBoard);
+      expect(repository.removePost).toBeCalledWith(wherePost);
     });
   });
 });

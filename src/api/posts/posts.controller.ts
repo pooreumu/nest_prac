@@ -19,26 +19,26 @@ import { ResponseEntity } from '../../lib/response/ResponseEntity';
 
 @Controller('posts')
 export class PostsController {
-  constructor(private readonly boardService: PostsService) {}
+  constructor(private readonly postService: PostsService) {}
 
   @Post()
   async createPost(
     @Body() postData: CreatePostRequestDto,
   ): Promise<ResponseEntity<string>> {
-    await this.boardService.createPost(postData.toCreatePostDto());
+    await this.postService.createPost(postData.toCreatePostDto());
     return ResponseEntity.OK();
   }
 
   @Get()
   async getPosts(): Promise<ResponseEntity<GetPostDto[]>> {
-    return ResponseEntity.OK_WITH(await this.boardService.getPosts());
+    return ResponseEntity.OK_WITH(await this.postService.getPosts());
   }
 
   @Get('/:id')
   async getPost(
     @Param('id') postId: number,
   ): Promise<ResponseEntity<GetPostDto>> {
-    return ResponseEntity.OK_WITH(await this.boardService.getPost(postId));
+    return ResponseEntity.OK_WITH(await this.postService.getPost(postId));
   }
 
   @Patch('/:id')
@@ -46,7 +46,7 @@ export class PostsController {
     @Param('id') postId: number,
     @Body() postData: UpdatePostRequestDto,
   ): Promise<ResponseEntity<string>> {
-    await this.boardService.updatePost(postData.toUpdatePostDto(postId));
+    await this.postService.updatePost(postData.toUpdatePostDto(postId));
     return ResponseEntity.OK();
   }
 
@@ -55,7 +55,7 @@ export class PostsController {
     @Param('id') postId: number,
     @Headers('password') password: string,
   ): Promise<ResponseEntity<string>> {
-    await this.boardService.removePost(postId, password);
+    await this.postService.removePost(postId, password);
     return ResponseEntity.OK();
   }
 }

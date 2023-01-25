@@ -19,9 +19,9 @@ export class PostsRepository {
     @InjectRepository(Post) private readonly posts: Repository<Post>,
   ) {}
 
-  async createPost(board: Post): Promise<void> {
+  async createPost(post: Post): Promise<void> {
     try {
-      await this.posts.insert(board);
+      await this.posts.insert(post);
     } catch (error) {
       throw error;
     }
@@ -55,11 +55,11 @@ export class PostsRepository {
     }
   }
 
-  async updatePost(whereBoard: Post, updateBoard: Post): Promise<void> {
+  async updatePost(wherePost: Post, updatePost: Post): Promise<void> {
     try {
       const result = await this.posts.update(
-        { id: whereBoard.id, password: whereBoard.password },
-        updateBoard,
+        { id: wherePost.id, password: wherePost.password },
+        updatePost,
       );
       if (!result.affected) return Promise.reject(new ForbiddenException());
     } catch (error) {

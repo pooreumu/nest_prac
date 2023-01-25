@@ -40,14 +40,14 @@ describe('PostsRepository', () => {
   });
 
   describe('게시글 작성: createPost', () => {
-    it('BoardsRepository.createPost를 실행하면 this.posts.insert 실행하나?', async () => {
+    it('PostRepository.createPost를 실행하면 this.posts.insert 실행하나?', async () => {
       const title = 'title';
       const content = 'content';
       const authorId = 'author';
       const password = 'password';
       const createdAt = LocalDateTime.of(2023, 1, 19, 19, 19, 19);
 
-      const board = Post.createPost({
+      const post = Post.createPost({
         title,
         content,
         authorId,
@@ -57,15 +57,15 @@ describe('PostsRepository', () => {
 
       repository.insert = jest.fn();
 
-      await postsRepository.createPost(board);
+      await postsRepository.createPost(post);
 
       expect(repository.insert).toBeCalledTimes(1);
-      expect(repository.insert).toBeCalledWith(board);
+      expect(repository.insert).toBeCalledWith(post);
     });
   });
 
   describe('게시글 전체 조회: getAllPosts', () => {
-    it('BoardsRepository.getAllPosts 실행하면 this.posts.find 실행하나?', async () => {
+    it('PostRepository.getAllPosts 실행하면 this.posts.find 실행하나?', async () => {
       const select = SelectPostModel.selectPostList();
       const order = OrderPostModel.orderPostList();
 
@@ -79,19 +79,19 @@ describe('PostsRepository', () => {
   });
 
   describe('게시글 상세 조회: getOnePost', () => {
-    it('BoardsRepository.getOnePost 실행하면 this.posts.findOne 실행하나?', async () => {
+    it('PostRepository.getOnePost 실행하면 this.posts.findOne 실행하나?', async () => {
       const postId = 1;
 
       const select = SelectPostModel.selectPost();
-      const whereBoard = Post.byPk({ id: postId });
+      const wherePost = Post.byPk({ id: postId });
 
       repository.findOne = jest.fn().mockResolvedValue(new Post());
 
-      await postsRepository.getPost(whereBoard, select);
+      await postsRepository.getPost(wherePost, select);
 
       expect(repository.findOne).toBeCalledTimes(1);
       expect(repository.findOne).toBeCalledWith({
-        where: { id: whereBoard.id },
+        where: { id: wherePost.id },
         select,
         relations: { comments: true },
       });
@@ -101,18 +101,18 @@ describe('PostsRepository', () => {
       const postId = 1;
 
       const select = SelectPostModel.selectPost();
-      const whereBoard = Post.byPk({ id: postId });
+      const wherePost = Post.byPk({ id: postId });
 
       repository.findOne = jest.fn().mockResolvedValue(null);
 
       await expect(async () => {
-        return await postsRepository.getPost(whereBoard, select);
+        return await postsRepository.getPost(wherePost, select);
       }).rejects.toThrowError(new NotFoundException());
     });
   });
 
   describe('게시글 수정: updatePost', () => {
-    it('BoardsRepository.updatePost 실행하면 this.posts.update 실행하나?', async () => {
+    it('PostRepository.updatePost 실행하면 this.posts.update 실행하나?', async () => {
       const postId = 1;
       const password = 'password';
       const title = 'update title';
@@ -158,20 +158,20 @@ describe('PostsRepository', () => {
   });
 
   describe('게시글 삭제: removePost', () => {
-    it('BoardsRepository.removePost 실행하면 this.posts.delete 실행하나?', async () => {
+    it('PostRepository.removePost 실행하면 this.posts.delete 실행하나?', async () => {
       const postId = 1;
       const password = 'password';
 
-      const whereBoard = Post.deleteBy({ id: postId, password });
+      const wherePost = Post.deleteBy({ id: postId, password });
 
       repository.delete = jest.fn().mockResolvedValue({ affected: 1 });
 
-      await postsRepository.removePost(whereBoard);
+      await postsRepository.removePost(wherePost);
 
       expect(repository.delete).toBeCalledTimes(1);
       expect(repository.delete).toBeCalledWith({
-        id: whereBoard.id,
-        password: whereBoard.password,
+        id: wherePost.id,
+        password: wherePost.password,
       });
     });
 
@@ -179,12 +179,12 @@ describe('PostsRepository', () => {
       const postId = 1;
       const password = 'password';
 
-      const whereBoard = Post.deleteBy({ id: postId, password });
+      const wherePost = Post.deleteBy({ id: postId, password });
 
       repository.delete = jest.fn().mockResolvedValue({ affected: 0 });
 
       await expect(async () => {
-        await postsRepository.removePost(whereBoard);
+        await postsRepository.removePost(wherePost);
       }).rejects.toThrowError(new ForbiddenException());
     });
   });

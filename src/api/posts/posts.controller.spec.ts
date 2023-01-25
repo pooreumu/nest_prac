@@ -28,7 +28,7 @@ describe('PostsController', () => {
   });
 
   describe('게시글 작성: createPost', () => {
-    it('비회원이 controller.createPost를 실행하면 boardService.createPost를 실행하나?', () => {
+    it('비회원이 controller.createPost를 실행하면 postService.createPost를 실행하나?', () => {
       const title = 'title';
       const content = 'content';
       const authorId = 'author';
@@ -50,7 +50,7 @@ describe('PostsController', () => {
   });
 
   describe('게시글 전체 조회: getAllPosts', () => {
-    it('controller.getAllPosts 실행하면 boardService.getAllPosts 실행하나?', () => {
+    it('controller.getAllPosts 실행하면 postService.getAllPosts 실행하나?', () => {
       controller.getPosts();
 
       expect(service.getPosts).toBeCalledTimes(1);
@@ -59,7 +59,7 @@ describe('PostsController', () => {
   });
 
   describe('게시글 상세 조회: getOnePost', () => {
-    it('controller.getOnePost 실행하면 boardService.getOnePost 실행하나?', () => {
+    it('controller.getOnePost 실행하면 postService.getOnePost 실행하나?', () => {
       const postId = 1;
 
       controller.getPost(postId);
@@ -70,7 +70,7 @@ describe('PostsController', () => {
   });
 
   describe('게시글 수정: updatePost', () => {
-    it('controller.updatePost 실행하면 boardService.updatePost 실행하나?', () => {
+    it('controller.updatePost 실행하면 postService.updatePost 실행하나?', () => {
       const postId = 1;
       const content = 'update content';
       const password = 'password';
@@ -89,7 +89,7 @@ describe('PostsController', () => {
   });
 
   describe('게시글 삭제: removePost', () => {
-    it('controller.removePost 실행하면 boardService.removePost 실행하나?', () => {
+    it('controller.removePost 실행하면 postService.removePost 실행하나?', () => {
       const postId = 1;
       const password = 'password';
 
