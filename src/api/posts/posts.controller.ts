@@ -16,11 +16,14 @@ import { GetPostDto } from './dto/get-post.dto';
 import { CreatePostRequestDto } from './dto/request.dto/create-post-request.dto';
 import { UpdatePostRequestDto } from './dto/request.dto/update-post-request.dto';
 import { ResponseEntity } from '../../lib/response/ResponseEntity';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('POST')
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postService: PostsService) {}
 
+  @ApiOperation({ summary: '게시글 작성' })
   @Post()
   async createPost(
     @Body() postData: CreatePostRequestDto,

@@ -5,7 +5,9 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { ResponseEntity } from '../../lib/response/ResponseEntity';
 import { CreateCommentDto } from './dto/create-comment.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('COMMENT')
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
