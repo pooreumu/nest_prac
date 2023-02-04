@@ -34,6 +34,7 @@ export class Post extends BaseEntity {
     type: 'varchar',
     comment: '게시글 비밀번호',
     nullable: true,
+    select: false,
   })
   password: string;
 
