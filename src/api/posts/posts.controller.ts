@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 // 🌏 Project imports
 import { PostsService } from './posts.service';
@@ -16,7 +17,6 @@ import { GetPostDto } from './dto/get-post.dto';
 import { CreatePostRequestDto } from './dto/request.dto/create-post-request.dto';
 import { UpdatePostRequestDto } from './dto/request.dto/update-post-request.dto';
 import { ResponseEntity } from '../../lib/response/ResponseEntity';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('POST')
 @Controller('posts')
@@ -32,11 +32,13 @@ export class PostsController {
     return ResponseEntity.OK();
   }
 
+  @ApiOperation({ summary: '전체 게시글 조회' })
   @Get()
   async getPosts(): Promise<ResponseEntity<GetPostDto[]>> {
     return ResponseEntity.OK_WITH(await this.postService.getPosts());
   }
 
+  @ApiOperation({ summary: '게시글 상세 조회' })
   @Get('/:id')
   async getPost(
     @Param('id') postId: number,
@@ -44,6 +46,7 @@ export class PostsController {
     return ResponseEntity.OK_WITH(await this.postService.getPost(postId));
   }
 
+  @ApiOperation({ summary: '게시글 수정' })
   @Patch('/:id')
   async updatePost(
     @Param('id') postId: number,
@@ -53,6 +56,7 @@ export class PostsController {
     return ResponseEntity.OK();
   }
 
+  @ApiOperation({ summary: '게시글 삭제' })
   @Delete('/:id')
   async removePost(
     @Param('id') postId: number,
