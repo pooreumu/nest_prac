@@ -1,5 +1,5 @@
 // 🐱 Nestjs imports
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 // 📦 Package imports
@@ -18,7 +18,7 @@ export class CommentsRepository {
     try {
       await this.comments.insert(comment);
     } catch (e) {
-      throw e;
+      throw new InternalServerErrorException(e);
     }
   }
 }

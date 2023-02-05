@@ -2,6 +2,7 @@
 import {
   ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -22,8 +23,8 @@ export class PostsRepository {
   async createPost(post: Post): Promise<void> {
     try {
       await this.posts.insert(post);
-    } catch (error) {
-      throw error;
+    } catch (e) {
+      throw new InternalServerErrorException(e);
     }
   }
 
@@ -33,8 +34,8 @@ export class PostsRepository {
   ): Promise<Post[]> {
     try {
       return await this.posts.find({ select, order });
-    } catch (error) {
-      throw error;
+    } catch (e) {
+      throw new InternalServerErrorException(e);
     }
   }
 
@@ -50,8 +51,8 @@ export class PostsRepository {
       if (!result) return Promise.reject(new NotFoundException());
 
       return result;
-    } catch (error) {
-      throw error;
+    } catch (e) {
+      throw new InternalServerErrorException(e);
     }
   }
 
@@ -62,8 +63,8 @@ export class PostsRepository {
         updatePost,
       );
       if (!result.affected) return Promise.reject(new ForbiddenException());
-    } catch (error) {
-      throw error;
+    } catch (e) {
+      throw new InternalServerErrorException(e);
     }
   }
 
@@ -74,8 +75,8 @@ export class PostsRepository {
         password: where.password,
       });
       if (!result.affected) return Promise.reject(new ForbiddenException());
-    } catch (error) {
-      throw error;
+    } catch (e) {
+      throw new InternalServerErrorException(e);
     }
   }
 }
