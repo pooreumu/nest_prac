@@ -21,4 +21,15 @@ export class CommentsRepository {
       throw new InternalServerErrorException(e);
     }
   }
+
+  async updateComment(comment: Comment) {
+    try {
+      await this.comments.update(
+        { id: comment.id, password: comment.password },
+        { content: comment.content },
+      );
+    } catch (e) {
+      throw new InternalServerErrorException(e);
+    }
+  }
 }
