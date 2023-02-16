@@ -5,6 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CommentsService } from './comments.service';
 import { CommentsRepository } from './comments.repository';
 import { CreateCommentDto } from './dto/create-comment.dto';
+import { UpdateCommentDto } from './dto/update-comment.dto';
 
 jest.mock('./comments.repository');
 
@@ -19,6 +20,8 @@ describe('CommentsService', () => {
 
     service = module.get<CommentsService>(CommentsService);
     repository = module.get<CommentsRepository>(CommentsRepository);
+
+    jest.clearAllMocks();
   });
 
   it('should be defined', () => {
@@ -40,11 +43,35 @@ describe('CommentsService', () => {
       createCommentDto.content = commentData.content;
       createCommentDto.password = commentData.password;
 
+      repository.createComment = jest.fn();
       await service.createComment(createCommentDto);
 
       expect(repository.createComment).toBeCalledTimes(1);
       expect(repository.createComment).toBeCalledWith(
-        createCommentDto.toEntity(),
+        expect.objectContaining({
+          authorId: commentData.authorId,
+          content: commentData.content,
+          password: commentData.password,
+          post: commentData.postId,
+        }),
+      );
+    });
+  });
+
+  describe('댓글 수정', () => {
+    it('service.updateComment 실행하면 repository.updateComment 실행 함?', async () => {
+      const id = 1;
+      const content = 'new comment content';
+      const password = commentData.password;
+
+      const updateCommentDto = new UpdateCommentDto();
+      updateCommentDto.content = content;
+      updateCommentDto.password = password;
+
+      await service.updateComment(id, updateCommentDto);
+      expect(repository.updateComment).toBeCalledTimes(1);
+      expect(repository.updateComment).toBeCalledWith(
+        expect.objectContaining({ id, content, password }),
       );
     });
   });
