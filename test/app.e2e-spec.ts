@@ -62,6 +62,8 @@ describe('AppController (e2e)', () => {
     password: 'asdf1234',
   };
 
+  const updateComment = { content: 'update comment content' };
+
   it('게시글 생성 POST /posts', async () => {
     const res = await request(app.getHttpServer()).post('/posts').send(posts);
     expect(res.status).toBe(201);
@@ -75,6 +77,17 @@ describe('AppController (e2e)', () => {
       .post('/comments')
       .send(comments);
     expect(res.status).toBe(201);
+
+    const body: ResponseEntity<string> = res.body;
+    expect(body.statusCode).toBe('OK');
+  });
+
+  it('댓글 업데이트 PUT /comments/:id', async () => {
+    const res = await request(app.getHttpServer()).put('/comments/1').send({
+      content: updateComment.content,
+      password: comments.password,
+    });
+    expect(res.status).toBe(200);
 
     const body: ResponseEntity<string> = res.body;
     expect(body.statusCode).toBe('OK');
@@ -113,7 +126,7 @@ describe('AppController (e2e)', () => {
 
     const dataComments: GetCommentDto[] = data.comments;
     expect(dataComments[0].authorId).toBe(comments.authorId);
-    expect(dataComments[0].content).toBe(comments.content);
+    expect(dataComments[0].content).toBe(updateComment.content);
   });
 
   it('게시글 업데이트 PATCH /posts/:boarId', async () => {
