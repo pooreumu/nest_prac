@@ -148,4 +148,16 @@ describe('AppController (e2e)', () => {
     const body: ResponseEntity<string> = res.body;
     expect(body.statusCode).toBe('OK');
   });
+
+  it('회원가입 POST /users/sign-up', async () => {
+    const user = {
+      nickname: 'nickname',
+      password: 'password',
+    };
+    const res = await request(app.getHttpServer())
+      .post('/users/sign-up')
+      .send(user);
+
+    expect(res.status).toBe(201);
+  });
 });
