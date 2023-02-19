@@ -8,6 +8,7 @@ import { PostsModule } from './api/posts/posts.module';
 import typeormConfig from './configs/typeorm.config';
 import { CommentsModule } from './api/comments/comments.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
+import { UsersModule } from './api/users/users.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
     TypeOrmModule.forRoot(typeormConfig()[process.env.NODE_ENV]),
     PostsModule,
     CommentsModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
