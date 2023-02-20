@@ -4,6 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 // 📦 Package imports
 import { IsNotEmpty, IsString } from 'class-validator';
 import { Column, Entity } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 // 🌏 Project imports
 import { BaseTimeEntity } from '../../../lib/entity/BaseTimeEntity';
@@ -34,4 +35,12 @@ export class User extends BaseTimeEntity {
     comment: '비밀번호',
   })
   password: string;
+
+  static async from(nickname: string, password: string) {
+    const user = new User();
+    user.nickname = nickname;
+    user.password = await bcrypt.hash(password, 12);
+
+    return user;
+  }
 }
