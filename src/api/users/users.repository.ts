@@ -1,12 +1,9 @@
-// 🐱 Nestjs imports
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-// 📦 Package imports
 import { Repository } from 'typeorm';
 
-// 🌏 Project imports
-import { User } from './entities/user.entity';
+import { User } from '@users/entities/user.entity';
 
 @Injectable()
 export class UsersRepository extends Repository<any> {
