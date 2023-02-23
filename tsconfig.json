@@ -16,6 +16,23 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "@root/*": [
+        "./src/*"
+      ],
+      "@users/*": [
+        "./src/api/users/*"
+      ],
+      "@posts/*": [
+        "./src/api/posts/*"
+      ],
+      "@comments/*": [
+        "./src/api/comments/*"
+      ],
+      "@lib/*": [
+        "./src/lib/*"
+      ]
+    }
   }
 }
