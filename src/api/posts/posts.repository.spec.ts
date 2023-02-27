@@ -4,15 +4,16 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 📦 Package imports
-import { DataSource, Repository } from 'typeorm';
 import { LocalDateTime } from '@js-joda/core';
+import { DataSource, Repository } from 'typeorm';
 
 // 🌏 Project imports
-import { PostsModule } from './posts.module';
-import { PostsRepository } from './posts.repository';
+import typeormConfig from '../../configs/typeorm.config';
+
 import { Post } from './entities/post.entity';
 import { OrderPostModel, SelectPostModel } from './entities/post.model';
-import typeormConfig from '../../configs/typeorm.config';
+import { PostsModule } from './posts.module';
+import { PostsRepository } from './posts.repository';
 
 describe('PostsRepository', () => {
   let postsRepository: PostsRepository;

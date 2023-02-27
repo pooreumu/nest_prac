@@ -2,10 +2,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 // 🌏 Project imports
-import { PostsController } from './posts.controller';
-import { PostsService } from './posts.service';
 import { CreatePostRequestDto } from './dto/request.dto/create-post-request.dto';
 import { UpdatePostRequestDto } from './dto/request.dto/update-post-request.dto';
+import { PostsController } from './posts.controller';
+import { PostsService } from './posts.service';
 
 jest.mock('./posts.service');
 

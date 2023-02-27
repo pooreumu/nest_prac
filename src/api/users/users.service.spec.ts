@@ -7,12 +7,13 @@ import * as bcrypt from 'bcrypt';
 import { DataSource } from 'typeorm';
 
 // 🌏 Project imports
-import { UsersService } from './users.service';
-import { UsersRepository } from './users.repository';
+import typeormConfig from '../../configs/typeorm.config';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
-import typeormConfig from '../../configs/typeorm.config';
 import { UsersModule } from './users.module';
+import { UsersRepository } from './users.repository';
+import { UsersService } from './users.service';
 
 describe('UsersService', () => {
   let service: UsersService;

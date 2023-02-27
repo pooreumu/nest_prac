@@ -1,10 +1,11 @@
 // 📦 Package imports
-import { Column, Entity, OneToMany } from 'typeorm';
 import { LocalDateTime } from '@js-joda/core';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 // 🌏 Project imports
-import { Comment } from '../../comments/entities/comment.entity';
-import { BaseEntity } from '../../../lib/entity/BaseEntity';
+import { BaseEntity } from '@lib/entity/BaseEntity';
+
+import { Comment } from '@comments/entities/comment.entity';
 
 @Entity()
 export class Post extends BaseEntity {

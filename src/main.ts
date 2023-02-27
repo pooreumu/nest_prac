@@ -1,6 +1,6 @@
 // 🐱 Nestjs imports
-import { NestFactory, Reflector } from '@nestjs/core';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 // 🌏 Project imports
@@ -31,4 +31,5 @@ async function bootstrap() {
 
   await app.listen(3000);
 }
+
 bootstrap();

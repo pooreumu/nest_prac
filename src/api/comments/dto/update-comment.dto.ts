@@ -1,5 +1,7 @@
 import { PickType } from '@nestjs/swagger';
+
 import { Comment } from '../entities/comment.entity';
+
 import { CreateCommentDto } from './create-comment.dto';
 
 export class UpdateCommentDto extends PickType(CreateCommentDto, [

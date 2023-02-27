@@ -1,21 +1,23 @@
 // 🐱 Nestjs imports
-import { Test, TestingModule } from '@nestjs/testing';
-import { Reflector } from '@nestjs/core';
 import {
   ClassSerializerInterceptor,
   INestApplication,
   ValidationPipe,
 } from '@nestjs/common';
+import { Reflector } from '@nestjs/core';
+import { Test, TestingModule } from '@nestjs/testing';
 
 // 📦 Package imports
+import { AppModule } from '@root/app.module';
 import * as request from 'supertest';
 import { DataSource } from 'typeorm';
 
 // 🌏 Project imports
-import { AppModule } from '../src/app.module';
-import { ResponseEntity } from '../src/lib/response/ResponseEntity';
-import { GetPostDto } from '../src/api/posts/dto/get-post.dto';
-import { GetCommentDto } from '../src/api/comments/dto/get-comment.dto';
+import { GetPostDto } from '@posts/dto/get-post.dto';
+
+import { ResponseEntity } from '@lib/response/ResponseEntity';
+
+import { GetCommentDto } from '@comments/dto/get-comment.dto';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

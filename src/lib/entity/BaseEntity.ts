@@ -1,4 +1,5 @@
 // 📦 Package imports
+import { LocalDateTime } from '@js-joda/core';
 import {
   CreateDateColumn,
   Entity,
@@ -6,7 +7,6 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
 import { LocalDateTimeTransformer } from '../transformer/LocalDateTimeTransformer';

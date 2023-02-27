@@ -4,8 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 🌏 Project imports
 import { CommentsController } from './comments.controller';
-import { CommentsService } from './comments.service';
 import { CommentsRepository } from './comments.repository';
+import { CommentsService } from './comments.service';
 import { Comment } from './entities/comment.entity';
 
 @Module({

@@ -12,11 +12,12 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 // 🌏 Project imports
-import { PostsService } from './posts.service';
+import { ResponseEntity } from '@lib/response/ResponseEntity';
+
 import { GetPostDto } from './dto/get-post.dto';
 import { CreatePostRequestDto } from './dto/request.dto/create-post-request.dto';
 import { UpdatePostRequestDto } from './dto/request.dto/update-post-request.dto';
-import { ResponseEntity } from '../../lib/response/ResponseEntity';
+import { PostsService } from './posts.service';
 
 @ApiTags('POST')
 @Controller('posts')

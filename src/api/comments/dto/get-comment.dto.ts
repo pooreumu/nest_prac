@@ -2,11 +2,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // 📦 Package imports
-import { Exclude, Expose } from 'class-transformer';
 import { LocalDateTime } from '@js-joda/core';
+import { Exclude, Expose } from 'class-transformer';
 
 // 🌏 Project imports
-import { DateTimeUtil } from '../../../lib/util/DateTimeUtil';
+import { DateTimeUtil } from '@lib/util/DateTimeUtil';
+
 import { Comment } from '../entities/comment.entity';
 
 export class GetCommentDto {

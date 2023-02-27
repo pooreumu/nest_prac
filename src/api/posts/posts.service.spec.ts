@@ -5,12 +5,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
-import { PostsService } from './posts.service';
-import { PostsRepository } from './posts.repository';
 import { CreatePostDto } from './dto/create-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
 import { DeletePostDto } from './dto/delete-post.dto';
 import { GetPostDto } from './dto/get-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { PostsRepository } from './posts.repository';
+import { PostsService } from './posts.service';
 
 jest.mock('./posts.repository');
 

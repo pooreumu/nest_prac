@@ -6,11 +6,13 @@ import { LocalDateTime } from '@js-joda/core';
 import { Exclude, Expose } from 'class-transformer';
 
 // 🌏 Project imports
-import { DateTimeUtil } from '../../../lib/util/DateTimeUtil';
+import { DateTimeUtil } from '@lib/util/DateTimeUtil';
+
+import { GetCommentDto } from '@comments/dto/get-comment.dto';
+import { Comment } from '@comments/entities/comment.entity';
+
 import { Post } from '../entities/post.entity';
 import { OrderPostModel, SelectPostModel } from '../entities/post.model';
-import { Comment } from '../../comments/entities/comment.entity';
-import { GetCommentDto } from '../../comments/dto/get-comment.dto';
 
 export class GetPostDto {
   @Exclude() private readonly _id: number;
@@ -66,6 +68,7 @@ export class GetPostDto {
   get updatedAt(): string {
     return DateTimeUtil.toString(this._updatedAt as LocalDateTime);
   }
+
   @ApiProperty()
   @Expose()
   get comments(): GetCommentDto[] {
@@ -78,6 +81,7 @@ export class GetPostDto {
       wherePost: Post.byPk({ id: postData.postId }),
     };
   }
+
   static toGetAllEntity() {
     return {
       select: SelectPostModel.selectPostList(),

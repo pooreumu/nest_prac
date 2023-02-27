@@ -3,17 +3,19 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 📦 Package imports
-import { DataSource, Repository } from 'typeorm';
 import { LocalDateTime } from '@js-joda/core';
+import { DataSource, Repository } from 'typeorm';
 
 // 🌏 Project imports
+import { Post } from '@posts/entities/post.entity';
+
 import typeormConfig from '../../configs/typeorm.config';
-import { CommentsRepository } from './comments.repository';
+
 import { CommentsModule } from './comments.module';
-import { Post } from '../posts/entities/post.entity';
-import { Comment } from './entities/comment.entity';
+import { CommentsRepository } from './comments.repository';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { Comment } from './entities/comment.entity';
 
 describe('Comments', () => {
   let commentsRepository: CommentsRepository;

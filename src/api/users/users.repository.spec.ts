@@ -3,9 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 🌏 Project imports
-import { UsersRepository } from './users.repository';
-import { UsersModule } from './users.module';
 import typeormConfig from '../../configs/typeorm.config';
+
+import { UsersModule } from './users.module';
+import { UsersRepository } from './users.repository';
 
 describe('Users', () => {
   let usersRepository: UsersRepository;

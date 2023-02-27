@@ -2,12 +2,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // 📦 Package imports
+import * as bcrypt from 'bcrypt';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { Column, Entity } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 
 // 🌏 Project imports
-import { BaseTimeEntity } from '../../../lib/entity/BaseTimeEntity';
+import { BaseTimeEntity } from '@lib/entity/BaseTimeEntity';
 
 @Entity()
 export class User extends BaseTimeEntity {
