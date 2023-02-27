@@ -73,5 +73,9 @@ module.exports = {
         'newlines-between': 'always',
       },
     ],
+    '@typescript-eslint/member-ordering': [
+      'error',
+      { classes: ['field', 'constructor', 'method'] },
+    ],
   },
 };
