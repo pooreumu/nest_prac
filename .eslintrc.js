@@ -44,17 +44,32 @@ module.exports = {
             position: 'before',
           },
           {
+            pattern: '@src/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
+            pattern: '@lib/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
+            pattern: '@decorator/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
+            pattern: '@auth/**',
+            group: 'internal',
+            position: 'after',
+          },
+          {
             pattern: '@users/**',
             group: 'parent',
             position: 'after',
           },
           {
             pattern: '@posts/**',
-            group: 'internal',
-            position: 'after',
-          },
-          {
-            pattern: '@lib/**',
             group: 'internal',
             position: 'after',
           },

@@ -1,9 +1,23 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
   "rootDir": ".",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@entities/(.*)$": "<rootDir>/../src/entities/$1",
+    "^@lib/(.*)$": "<rootDir>/../src/lib/$1",
+    "^@decorator/(.*)$": "<rootDir>/../src/common/decorator/$1",
+    "^@users/(.*)$": "<rootDir>/../src/api/users/$1",
+    "^@comments/(.*)$": "<rootDir>/../src/api/comments/$1",
+    "^@posts/(.*)$": "<rootDir>/../src/api/posts/$1",
+    "^@auth/(.*)$": "<rootDir>/../src/api/auth/$1",
+    "^@src/(.*)$": "<rootDir>/../src/$1"
   }
 }

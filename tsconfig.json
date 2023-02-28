@@ -18,7 +18,7 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@root/*": [
+      "@src/*": [
         "./src/*"
       ],
       "@users/*": [
@@ -30,8 +30,14 @@
       "@comments/*": [
         "./src/api/comments/*"
       ],
+      "@auth/*": [
+        "./src/api/auth/*"
+      ],
       "@lib/*": [
         "./src/lib/*"
+      ],
+      "@decorator/*": [
+        "./src/common/decorator/*"
       ]
     }
   }
