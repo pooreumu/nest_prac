@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 📦 Package imports
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { DataSource } from 'typeorm';
 
 // 🌏 Project imports

@@ -1,5 +1,5 @@
 // 📦 Package imports
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 // 🌏 Project imports
 import { CreateUserDto } from './create-user.dto';

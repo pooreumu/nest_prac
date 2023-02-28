@@ -2,7 +2,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // 📦 Package imports
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { Column, Entity } from 'typeorm';
 
