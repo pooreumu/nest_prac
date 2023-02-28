@@ -43,4 +43,11 @@ export class User extends BaseTimeEntity {
 
     return user;
   }
+
+  static fromNickname(nickname: string) {
+    const user = new User();
+    user.nickname = nickname;
+
+    return user;
+  }
 }

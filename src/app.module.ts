@@ -4,6 +4,8 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 🌏 Project imports
+import { AuthModule } from '@auth/auth.module';
+
 import { PostsModule } from '@posts/posts.module';
 
 import { CommentsModule } from '@comments/comments.module';
@@ -24,6 +26,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
     PostsModule,
     CommentsModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

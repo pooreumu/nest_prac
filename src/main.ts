@@ -3,6 +3,9 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import * as session from 'express-session';
+import * as passport from 'passport';
+
 // 🌏 Project imports
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './filter/http-exception.filter';
@@ -29,6 +32,18 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  app.use(
+    session({
+      resave: false,
+      saveUninitialized: false,
+      secret: process.env.COOKIE_SECRET,
+      cookie: {
+        httpOnly: true,
+      },
+    }),
+  );
+  app.use(passport.initialize());
+  app.use(passport.session());
   await app.listen(3000);
 }
 

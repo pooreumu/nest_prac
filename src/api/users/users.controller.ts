@@ -1,6 +1,10 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+
+import { User } from '@src/common/decorator/user.decorator';
 
 import { ResponseEntity } from '@lib/response/ResponseEntity';
+
+import { LocalAuthGuard } from '@auth/local-auth.guard';
 
 import { CreateUserDto } from '@users/dto/create-user.dto';
 import { UsersService } from '@users/users.service';
@@ -15,5 +19,11 @@ export class UsersController {
   ): Promise<ResponseEntity<string>> {
     await this.usersService.signUp(createUserDto);
     return ResponseEntity.OK();
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('sign-in')
+  async signIn(@User() user) {
+    return user;
   }
 }
