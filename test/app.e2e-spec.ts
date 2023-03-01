@@ -8,16 +8,21 @@ import { Reflector } from '@nestjs/core';
 import { Test, TestingModule } from '@nestjs/testing';
 
 // 📦 Package imports
-import { AppModule } from '@root/app.module';
-import * as request from 'supertest';
+import session from 'express-session';
+import passport from 'passport';
+import request from 'supertest';
 import { DataSource } from 'typeorm';
 
 // 🌏 Project imports
-import { GetPostDto } from '@posts/dto/get-post.dto';
+import { AppModule } from '@src/app.module';
 
 import { ResponseEntity } from '@lib/response/ResponseEntity';
 
+import { GetPostDto } from '@posts/dto/get-post.dto';
+
 import { GetCommentDto } from '@comments/dto/get-comment.dto';
+
+import { User } from '@users/entities/user.entity';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -39,6 +44,19 @@ describe('AppController (e2e)', () => {
         transform: true,
       }),
     );
+
+    app.use(
+      session({
+        resave: false,
+        saveUninitialized: false,
+        secret: process.env.COOKIE_SECRET,
+        cookie: {
+          httpOnly: true,
+        },
+      }),
+    );
+    app.use(passport.initialize());
+    app.use(passport.session());
 
     await app.init();
 
@@ -161,5 +179,25 @@ describe('AppController (e2e)', () => {
       .send(user);
 
     expect(res.status).toBe(201);
+  });
+
+  it('로그인 POST /users/sign-in', async () => {
+    const user = {
+      nickname: 'nickname',
+      password: 'password',
+    };
+    const res = await request(app.getHttpServer())
+      .post('/users/sign-in')
+      .send(user);
+
+    expect(res.status).toBe(201);
+
+    const body: User = res.body;
+    expect(body.id).toBe(1);
+    expect(body.nickname).toBe(user.nickname);
+
+    const [connectSid] = res.headers['set-cookie'][0].split(' ');
+    const [key] = connectSid.split('=');
+    expect(key).toBe('connect.sid');
   });
 });
