@@ -1,9 +1,9 @@
 // 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 🌏 Project imports
-import typeormConfig from '../../configs/typeorm.config';
+
+import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
 import { UsersModule } from './users.module';
 import { UsersRepository } from './users.repository';
@@ -13,10 +13,7 @@ describe('Users', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        UsersModule,
-        TypeOrmModule.forRoot(typeormConfig()[process.env.NODE_ENV]),
-      ],
+      imports: [UsersModule, TypeormConfigModule],
     }).compile();
 
     usersRepository = module.get<UsersRepository>(UsersRepository);

@@ -1,14 +1,14 @@
 // 🐱 Nestjs imports
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 📦 Package imports
 import { LocalDateTime } from '@js-joda/core';
 import { DataSource, Repository } from 'typeorm';
 
 // 🌏 Project imports
-import typeormConfig from '../../configs/typeorm.config';
+
+import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
 import { Post } from './entities/post.entity';
 import { OrderPostModel, SelectPostModel } from './entities/post.model';
@@ -22,10 +22,7 @@ describe('PostsRepository', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        PostsModule,
-        TypeOrmModule.forRoot(typeormConfig()[process.env.NODE_ENV]),
-      ],
+      imports: [PostsModule, TypeormConfigModule],
     }).compile();
 
     postsRepository = module.get<PostsRepository>(PostsRepository);

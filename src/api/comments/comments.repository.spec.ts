@@ -1,15 +1,14 @@
 // 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 📦 Package imports
 import { LocalDateTime } from '@js-joda/core';
 import { DataSource, Repository } from 'typeorm';
 
 // 🌏 Project imports
-import { Post } from '@posts/entities/post.entity';
+import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
-import typeormConfig from '../../configs/typeorm.config';
+import { Post } from '@posts/entities/post.entity';
 
 import { CommentsModule } from './comments.module';
 import { CommentsRepository } from './comments.repository';
@@ -24,10 +23,7 @@ describe('Comments', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        CommentsModule,
-        TypeOrmModule.forRoot(typeormConfig()[process.env.NODE_ENV]),
-      ],
+      imports: [CommentsModule, TypeormConfigModule],
     }).compile();
 
     commentsRepository = module.get<CommentsRepository>(CommentsRepository);

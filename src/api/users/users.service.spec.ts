@@ -1,13 +1,13 @@
 // 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 // 📦 Package imports
 import bcrypt from 'bcrypt';
 import { DataSource } from 'typeorm';
 
 // 🌏 Project imports
-import typeormConfig from '../../configs/typeorm.config';
+
+import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
@@ -22,10 +22,7 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        UsersModule,
-        TypeOrmModule.forRoot(typeormConfig()[process.env.NODE_ENV]),
-      ],
+      imports: [UsersModule, TypeormConfigModule],
     }).compile();
 
     service = module.get<UsersService>(UsersService);

@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { DataSource } from 'typeorm';
 
-import typeormConfig from '@src/configs/typeorm.config';
+import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
 import { AuthModule } from '@auth/auth.module';
 
@@ -17,10 +16,7 @@ describe('AuthService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot(typeormConfig()[process.env.NODE_ENV]),
-        AuthModule,
-      ],
+      imports: [TypeormConfigModule, AuthModule],
     }).compile();
 
     authService = module.get<AuthService>(AuthService);
