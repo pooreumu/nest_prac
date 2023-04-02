@@ -2,7 +2,7 @@ import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 
 import { User } from '@src/common/decorator/user.decorator';
 
-import { ResponseEntity } from '@lib/response/ResponseEntity';
+import { ResponseEntity } from '@lib/response/response-entity';
 
 import { LocalAuthGuard } from '@auth/local-auth.guard';
 

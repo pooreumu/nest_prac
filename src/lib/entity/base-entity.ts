@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 // 🌏 Project imports
-import { LocalDateTimeTransformer } from '../transformer/LocalDateTimeTransformer';
+import { LocalDateTimeTransformer } from '../transformer/local-date-time-transformer';
 
 @Entity()
 export class BaseEntity {

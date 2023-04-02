@@ -7,7 +7,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 import { Column, Entity } from 'typeorm';
 
 // 🌏 Project imports
-import { BaseTimeEntity } from '@lib/entity/BaseTimeEntity';
+import { BaseTimeEntity } from '@lib/entity/base-time-entity';
 
 @Entity()
 export class User extends BaseTimeEntity {

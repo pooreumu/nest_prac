@@ -10,8 +10,8 @@ import {
 import { Response } from 'express';
 
 // 🌏 Project imports
-import { ResponseEntity } from '../lib/response/ResponseEntity';
-import { ResponseStatus } from '../lib/response/ResponseStatus';
+import { ResponseEntity } from '@lib/response/response-entity';
+import { ResponseStatus } from '@lib/response/response-status';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {

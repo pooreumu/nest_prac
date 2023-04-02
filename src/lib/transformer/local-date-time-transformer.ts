@@ -3,7 +3,7 @@ import { LocalDateTime } from '@js-joda/core';
 import { ValueTransformer } from 'typeorm';
 
 // 🌏 Project imports
-import { DateTimeUtil } from '../util/DateTimeUtil';
+import { DateTimeUtil } from '../util/date-time-util';
 
 export class LocalDateTimeTransformer implements ValueTransformer {
   to(entityValue: LocalDateTime): Date {

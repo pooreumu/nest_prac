@@ -5,7 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 
 // 🌏 Project imports
-import { ResponseStatus } from './ResponseStatus';
+import { ResponseStatus } from './response-status';
 
 export class ResponseEntity<T> {
   @Exclude() private readonly _statusCode: string;
@@ -16,6 +16,24 @@ export class ResponseEntity<T> {
     this._statusCode = ResponseStatus[status];
     this._message = message;
     this._data = data;
+  }
+
+  @ApiProperty()
+  @Expose()
+  get statusCode(): string {
+    return this._statusCode;
+  }
+
+  @ApiProperty()
+  @Expose()
+  get message(): string {
+    return this._message;
+  }
+
+  @ApiProperty()
+  @Expose()
+  get data(): T {
+    return this._data;
   }
 
   static OK(): ResponseEntity<string> {
@@ -47,23 +65,5 @@ export class ResponseEntity<T> {
     data: T,
   ): ResponseEntity<T> {
     return new ResponseEntity<T>(code, message, data);
-  }
-
-  @ApiProperty()
-  @Expose()
-  get statusCode(): string {
-    return this._statusCode;
-  }
-
-  @ApiProperty()
-  @Expose()
-  get message(): string {
-    return this._message;
-  }
-
-  @ApiProperty()
-  @Expose()
-  get data(): T {
-    return this._data;
   }
 }

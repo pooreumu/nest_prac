@@ -3,9 +3,9 @@ import { ChronoUnit, LocalDateTime } from '@js-joda/core';
 import { Column, Entity, ManyToOne } from 'typeorm';
 
 // 🌏 Project imports
-import { Post } from '@posts/entities/post.entity';
+import { BaseEntity } from '@lib/entity/base-entity';
 
-import { BaseEntity } from '@lib/entity/BaseEntity';
+import { Post } from '@posts/entities/post.entity';
 
 @Entity()
 export class Comment extends BaseEntity {

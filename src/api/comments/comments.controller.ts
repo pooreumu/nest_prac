@@ -3,7 +3,7 @@ import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 // 🌏 Project imports
-import { ResponseEntity } from '@lib/response/ResponseEntity';
+import { ResponseEntity } from '@lib/response/response-entity';
 
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';

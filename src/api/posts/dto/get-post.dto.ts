@@ -6,7 +6,7 @@ import { LocalDateTime } from '@js-joda/core';
 import { Exclude, Expose } from 'class-transformer';
 
 // 🌏 Project imports
-import { DateTimeUtil } from '@lib/util/DateTimeUtil';
+import { DateTimeUtil } from '@lib/util/date-time-util';
 
 import { GetCommentDto } from '@comments/dto/get-comment.dto';
 import { Comment } from '@comments/entities/comment.entity';

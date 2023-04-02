@@ -13,7 +13,7 @@ import {
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 // 🌏 Project imports
-import { ResponseEntity } from '@lib/response/ResponseEntity';
+import { ResponseEntity } from '@lib/response/response-entity';
 
 import { PageDto } from '@posts/dto/page.dto';
 import { GetPostRequestDto } from '@posts/dto/request.dto/get-post-request.dto';

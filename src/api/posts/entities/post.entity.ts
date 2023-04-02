@@ -3,7 +3,7 @@ import { LocalDateTime } from '@js-joda/core';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 // 🌏 Project imports
-import { BaseEntity } from '@lib/entity/BaseEntity';
+import { BaseEntity } from '@lib/entity/base-entity';
 
 import { Comment } from '@comments/entities/comment.entity';
 

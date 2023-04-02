@@ -16,7 +16,7 @@ import { DataSource } from 'typeorm';
 // 🌏 Project imports
 import { AppModule } from '@src/app.module';
 
-import { ResponseEntity } from '@lib/response/ResponseEntity';
+import { ResponseEntity } from '@lib/response/response-entity';
 
 import { GetPostDto } from '@posts/dto/get-post.dto';
 import { PageDto } from '@posts/dto/page.dto';
