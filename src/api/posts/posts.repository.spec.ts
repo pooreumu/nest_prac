@@ -40,7 +40,7 @@ describe('PostsRepository', () => {
   });
 
   describe('게시글 작성: createPost', () => {
-    it('PostRepository.createPost를 실행하면 this.posts.insert 실행하나?', async () => {
+    it('PostRepository.createPost 실행 하면 this.posts.insert 실행 하나?', async () => {
       const title = 'title';
       const content = 'content';
       const authorId = 'author';
@@ -65,26 +65,27 @@ describe('PostsRepository', () => {
   });
 
   describe('게시글 전체 조회: getAllPosts', () => {
-    describe('페이지네이션 테스트', () => {
-      it('size만큼 가져옴?', async () => {
+    describe('pagination 테스트', () => {
+      it('size 만큼 가져옴?', async () => {
+        const page = 1;
         const size = 3;
         await repository.insert(paginationSample);
 
         const [posts, totalCount] = await postsRepository.getPosts(
-          new PostModel(1, size),
+          new PostModel({ page, size }),
         );
 
         expect(posts.length).toBe(size);
         expect(totalCount).toBe(9);
       });
 
-      it('page만큼 건너뛰고 가져옴?', async () => {
+      it('page 만큼 건너뛰고 가져옴?', async () => {
         const size = 3;
         const page = 2;
         await repository.insert(paginationSample);
 
         const [posts, totalCount] = await postsRepository.getPosts(
-          new PostModel(page, size),
+          new PostModel({ page, size }),
         );
 
         expect(posts[0].id).toBe(6);
@@ -93,10 +94,66 @@ describe('PostsRepository', () => {
         expect(totalCount).toBe(9);
       });
     });
+
+    describe('검색 테스트', () => {
+      it('title에 검색어가 포함된 게시글만 가져옴?', async () => {
+        const page = 1;
+        const size = 3;
+        const search = 'search';
+
+        const postData = {
+          title: search,
+          content: 'content',
+          authorId: 'author',
+          password: 'password',
+          createdAt: LocalDateTime.now(),
+        };
+
+        await repository.insert([
+          ...paginationSample,
+          Post.createPost(postData),
+        ]);
+
+        const [posts, totalCount] = await postsRepository.getPosts(
+          new PostModel({ page, size, search }),
+        );
+
+        expect(totalCount).toBe(1);
+        expect(posts[0].title).toBe(search);
+      });
+
+      it('content에 검색어가 포함된 게시글만 가져옴?', async () => {
+        const page = 1;
+        const size = 3;
+        const search = 'search';
+
+        const postData = {
+          title: 'content에 검색어가 포함된 게시글만 가져옴?',
+          content: search,
+          authorId: 'author',
+          password: 'password',
+          createdAt: LocalDateTime.now(),
+        };
+
+        await repository.insert([
+          ...paginationSample,
+          Post.createPost(postData),
+        ]);
+
+        const [posts, totalCount] = await postsRepository.getPosts(
+          new PostModel({ page, size, search }),
+        );
+
+        expect(totalCount).toBe(1);
+        expect(posts[0].title).toBe(
+          'content에 검색어가 포함된 게시글만 가져옴?',
+        );
+      });
+    });
   });
 
   describe('게시글 상세 조회: getOnePost', () => {
-    it('PostRepository.getOnePost 실행하면 this.posts.findOne 실행하나?', async () => {
+    it('PostRepository.getOnePost 실행 하면 this.posts.findOne 실행 하나?', async () => {
       const postId = 1;
 
       const select = SelectPostModel.selectPost();
@@ -114,7 +171,7 @@ describe('PostsRepository', () => {
       });
     });
 
-    it('게시글이 없으면 NotFoundException을 던지나?', async () => {
+    it('게시 글이 없으면 NotFoundException 을 던지나?', async () => {
       const postId = 1;
 
       const select = SelectPostModel.selectPost();
@@ -129,7 +186,7 @@ describe('PostsRepository', () => {
   });
 
   describe('게시글 수정: updatePost', () => {
-    it('PostRepository.updatePost 실행하면 this.posts.update 실행하나?', async () => {
+    it('PostRepository.updatePost 실행 하면 this.posts.update 실행 하나?', async () => {
       const postId = 1;
       const password = 'password';
       const title = 'update title';
@@ -153,7 +210,7 @@ describe('PostsRepository', () => {
       );
     });
 
-    it('수정이 안되면 ForbiddenException을 던지나?', async () => {
+    it('수정이 안되면 ForbiddenException 던지나?', async () => {
       const postId = 1;
       const password = 'password';
       const title = 'update title';
@@ -175,7 +232,7 @@ describe('PostsRepository', () => {
   });
 
   describe('게시글 삭제: removePost', () => {
-    it('PostRepository.removePost 실행하면 this.posts.delete 실행하나?', async () => {
+    it('PostRepository.removePost 실행 하면 this.posts.delete 실행 하나?', async () => {
       const postId = 1;
       const password = 'password';
 
@@ -192,7 +249,7 @@ describe('PostsRepository', () => {
       });
     });
 
-    it('삭제가 안되면 ForbiddenException을 던지나?', async () => {
+    it('삭제가 안되면 ForbiddenException 던지나?', async () => {
       const postId = 1;
       const password = 'password';
 
