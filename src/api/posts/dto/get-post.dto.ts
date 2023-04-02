@@ -12,7 +12,6 @@ import { GetCommentDto } from '@comments/dto/get-comment.dto';
 import { Comment } from '@comments/entities/comment.entity';
 
 import { Post } from '../entities/post.entity';
-import { SelectPostModel } from '../entities/post.model';
 
 export class GetPostDto {
   @Exclude() private readonly _id: number;
@@ -73,12 +72,5 @@ export class GetPostDto {
   @Expose()
   get comments(): GetCommentDto[] {
     return this._comments?.map((comment) => new GetCommentDto(comment));
-  }
-
-  static toGetOneEntity(postData: { postId: number }) {
-    return {
-      select: SelectPostModel.selectPost(),
-      wherePost: Post.byPk({ id: postData.postId }),
-    };
   }
 }

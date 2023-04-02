@@ -39,11 +39,7 @@ export class PostsService {
   }
 
   async getPost(postId: number): Promise<GetPostDto> {
-    const { wherePost, select } = GetPostDto.toGetOneEntity({
-      postId,
-    });
-
-    return new GetPostDto(await this.postRepository.getPost(wherePost, select));
+    return new GetPostDto(await this.postRepository.getPost(postId));
   }
 
   async updatePost(postData: UpdatePostDto): Promise<void> {

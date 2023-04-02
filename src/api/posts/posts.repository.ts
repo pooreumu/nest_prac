@@ -12,7 +12,7 @@ import { EntityNotFoundError, Repository } from 'typeorm';
 
 // 🌏 Project imports
 import { Post } from './entities/post.entity';
-import { PostModel, SelectPostModel } from './entities/post.model';
+import { PostModel } from './entities/post.model';
 
 @Injectable()
 export class PostsRepository {
@@ -50,11 +50,27 @@ export class PostsRepository {
     }
   }
 
-  async getPost(where: Post, select: SelectPostModel): Promise<Post> {
+  async getPost(postId: number): Promise<Post> {
     try {
       return await this.posts.findOneOrFail({
-        select,
-        where: { id: where.id },
+        select: {
+          id: true,
+          title: true,
+          content: true,
+          authorId: true,
+          createdAt: true,
+          updatedAt: true,
+          comments: {
+            id: true,
+            content: true,
+            authorId: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        },
+        where: {
+          id: postId,
+        },
         relations: {
           comments: true,
         },
