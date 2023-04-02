@@ -159,12 +159,12 @@ describe('PostsRepository', () => {
       const select = SelectPostModel.selectPost();
       const wherePost = Post.byPk({ id: postId });
 
-      repository.findOne = jest.fn().mockResolvedValue(new Post());
+      repository.findOneOrFail = jest.fn().mockResolvedValue(new Post());
 
       await postsRepository.getPost(wherePost, select);
 
-      expect(repository.findOne).toBeCalledTimes(1);
-      expect(repository.findOne).toBeCalledWith({
+      expect(repository.findOneOrFail).toBeCalledTimes(1);
+      expect(repository.findOneOrFail).toBeCalledWith({
         where: { id: wherePost.id },
         select,
         relations: { comments: true },
