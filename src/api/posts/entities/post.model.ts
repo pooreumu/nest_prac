@@ -1,9 +1,5 @@
 // 📦 Package imports
-import {
-  FindOptionsOrder,
-  FindOptionsOrderValue,
-  FindOptionsSelect,
-} from 'typeorm';
+import { FindOptionsSelect } from 'typeorm';
 
 // 🌏 Project imports
 import { Post } from './post.entity';
@@ -40,19 +36,21 @@ export class SelectPostModel implements FindOptionsSelect<Post> {
     return selectPostModel;
   }
 }
-export class OrderPostModel implements FindOptionsOrder<Post> {
-  id?: FindOptionsOrderValue;
-  title?: FindOptionsOrderValue;
-  content?: FindOptionsOrderValue;
-  authorId?: FindOptionsOrderValue;
-  password?: FindOptionsOrderValue;
-  createdAt?: FindOptionsOrderValue;
-  updatedAt?: FindOptionsOrderValue;
 
-  public static orderPostList() {
-    const orderPostModel = new OrderPostModel();
-    orderPostModel.id = 'desc';
+export class PostModel {
+  private readonly _page: number;
+  private readonly _size: number;
 
-    return orderPostModel;
+  constructor(page: number, size: number) {
+    this._page = page;
+    this._size = size;
+  }
+
+  getOffset() {
+    return (this._page - 1) * this._size;
+  }
+
+  getLimit() {
+    return this._size;
   }
 }

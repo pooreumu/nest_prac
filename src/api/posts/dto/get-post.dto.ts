@@ -12,7 +12,7 @@ import { GetCommentDto } from '@comments/dto/get-comment.dto';
 import { Comment } from '@comments/entities/comment.entity';
 
 import { Post } from '../entities/post.entity';
-import { OrderPostModel, SelectPostModel } from '../entities/post.model';
+import { SelectPostModel } from '../entities/post.model';
 
 export class GetPostDto {
   @Exclude() private readonly _id: number;
@@ -79,13 +79,6 @@ export class GetPostDto {
     return {
       select: SelectPostModel.selectPost(),
       wherePost: Post.byPk({ id: postData.postId }),
-    };
-  }
-
-  static toGetAllEntity() {
-    return {
-      select: SelectPostModel.selectPostList(),
-      order: OrderPostModel.orderPostList(),
     };
   }
 }

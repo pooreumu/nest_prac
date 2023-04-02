@@ -8,11 +8,15 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 // 🌏 Project imports
 import { ResponseEntity } from '@lib/response/ResponseEntity';
+
+import { PageDto } from '@posts/dto/page.dto';
+import { GetPostRequestDto } from '@posts/dto/request.dto/get-post-request.dto';
 
 import { GetPostDto } from './dto/get-post.dto';
 import { CreatePostRequestDto } from './dto/request.dto/create-post-request.dto';
@@ -35,8 +39,12 @@ export class PostsController {
 
   @ApiOperation({ summary: '전체 게시글 조회' })
   @Get()
-  async getPosts(): Promise<ResponseEntity<GetPostDto[]>> {
-    return ResponseEntity.OK_WITH(await this.postService.getPosts());
+  async getPosts(
+    @Query() getPostRequestDto: GetPostRequestDto,
+  ): Promise<ResponseEntity<PageDto<GetPostDto>>> {
+    return ResponseEntity.OK_WITH(
+      await this.postService.getPosts(getPostRequestDto),
+    );
   }
 
   @ApiOperation({ summary: '게시글 상세 조회' })

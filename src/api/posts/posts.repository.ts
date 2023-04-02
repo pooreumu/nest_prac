@@ -12,7 +12,7 @@ import { Repository } from 'typeorm';
 
 // 🌏 Project imports
 import { Post } from './entities/post.entity';
-import { OrderPostModel, SelectPostModel } from './entities/post.model';
+import { PostModel, SelectPostModel } from './entities/post.model';
 
 @Injectable()
 export class PostsRepository {
@@ -28,12 +28,15 @@ export class PostsRepository {
     }
   }
 
-  async getPosts(
-    select: SelectPostModel,
-    order: OrderPostModel,
-  ): Promise<Post[]> {
+  async getPosts(post: PostModel) {
     try {
-      return await this.posts.find({ select, order });
+      return await this.posts
+        .createQueryBuilder('p')
+        .select(['p.id', 'p.title', 'p.authorId', 'p.createdAt', 'p.updatedAt'])
+        .orderBy('p.id', 'DESC')
+        .offset(post.getOffset())
+        .limit(post.getLimit())
+        .getManyAndCount();
     } catch (e) {
       throw new InternalServerErrorException(e);
     }

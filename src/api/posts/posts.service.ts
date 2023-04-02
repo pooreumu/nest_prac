@@ -5,6 +5,9 @@ import { Injectable } from '@nestjs/common';
 import { LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
+import { PageDto } from '@posts/dto/page.dto';
+import { GetPostRequestDto } from '@posts/dto/request.dto/get-post-request.dto';
+
 import { CreatePostDto } from './dto/create-post.dto';
 import { DeletePostDto } from './dto/delete-post.dto';
 import { GetPostDto } from './dto/get-post.dto';
@@ -21,12 +24,18 @@ export class PostsService {
     return this.postRepository.createPost(createPost);
   }
 
-  async getPosts(): Promise<GetPostDto[]> {
-    const { select, order } = GetPostDto.toGetAllEntity();
+  async getPosts(
+    getPostRequestDto: GetPostRequestDto,
+  ): Promise<PageDto<GetPostDto>> {
+    const posts = await this.postRepository.getPosts(
+      getPostRequestDto.toEntityForPagination(),
+    );
 
-    const posts = await this.postRepository.getPosts(select, order);
-
-    return posts.map((post) => new GetPostDto(post));
+    return new PageDto(
+      posts[1],
+      getPostRequestDto.size,
+      posts[0].map((post) => new GetPostDto(post)),
+    );
   }
 
   async getPost(postId: number): Promise<GetPostDto> {
