@@ -30,13 +30,21 @@ export class PostsRepository {
 
   async getPosts(post: PostModel) {
     try {
-      return await this.posts
+      const selectQueryBuilder = this.posts
         .createQueryBuilder('p')
         .select(['p.id', 'p.title', 'p.authorId', 'p.createdAt', 'p.updatedAt'])
         .orderBy('p.id', 'DESC')
         .offset(post.getOffset())
-        .limit(post.getLimit())
-        .getManyAndCount();
+        .limit(post.getLimit());
+
+      if (post.getSearch()) {
+        selectQueryBuilder.andWhere(
+          'p.title like :search or p.content like :search',
+          { search: `%${post.getSearch()}%` },
+        );
+      }
+
+      return await selectQueryBuilder.getManyAndCount();
     } catch (e) {
       throw new InternalServerErrorException(e);
     }

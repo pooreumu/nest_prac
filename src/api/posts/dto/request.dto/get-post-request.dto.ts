@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { IsInt, IsOptional } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
 import { PostModel } from '@posts/entities/post.model';
 
@@ -15,7 +15,16 @@ export class GetPostRequestDto {
   @IsInt()
   size?: number = 10;
 
+  @ApiProperty()
+  @IsOptional()
+  @IsString()
+  search?: string;
+
   toEntityForPagination() {
-    return new PostModel(this.page, this.size);
+    return new PostModel({
+      page: this.page,
+      size: this.size,
+      search: this.search,
+    });
   }
 }
