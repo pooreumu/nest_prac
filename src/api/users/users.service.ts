@@ -1,9 +1,5 @@
 // 🐱 Nestjs imports
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 // 🌏 Project imports
 import { CreateUserDto } from './dto/create-user.dto';
@@ -13,13 +9,7 @@ import { UsersRepository } from './users.repository';
 export class UsersService {
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  async signUp(createUserDto: CreateUserDto) {
-    try {
-      await this.usersRepository.insert(await createUserDto.toEntity());
-    } catch (e) {
-      throw e.code === 'ER_DUP_ENTRY'
-        ? new BadRequestException('이미 사용중인 닉네임입니다.')
-        : new InternalServerErrorException();
-    }
+  async signUp(createUserDto: CreateUserDto): Promise<void> {
+    await this.usersRepository.insert(await createUserDto.toEntity());
   }
 }

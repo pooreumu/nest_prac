@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
@@ -6,11 +10,19 @@ import { Repository } from 'typeorm';
 import { User } from '@users/entities/user.entity';
 
 @Injectable()
-export class UsersRepository extends Repository<any> {
+export class UsersRepository {
   constructor(
     @InjectRepository(User)
-    private readonly user: Repository<User>,
-  ) {
-    super(user.target, user.manager, user.queryRunner);
+    private readonly userTypeOrmRepository: Repository<User>,
+  ) {}
+
+  async insert(user: User) {
+    try {
+      return await this.userTypeOrmRepository.insert(user);
+    } catch (e) {
+      throw e.code === 'ER_DUP_ENTRY'
+        ? new BadRequestException('이미 사용중인 닉네임입니다.')
+        : new InternalServerErrorException();
+    }
   }
 }
