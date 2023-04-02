@@ -6,7 +6,6 @@ import bcrypt from 'bcrypt';
 import { DataSource } from 'typeorm';
 
 // 🌏 Project imports
-
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
 import { CreateUserDto } from './dto/create-user.dto';
@@ -48,7 +47,7 @@ describe('UsersService', () => {
     it('usersService.signUp 실행되면 usersRepository.insert로 저장 함?', async () => {
       await service.signUp(createUserDto);
 
-      const user: User = await repository.findOne({
+      const user: User = await dataSource.getRepository(User).findOne({
         where: {
           id: 1,
         },
