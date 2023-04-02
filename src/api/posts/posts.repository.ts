@@ -8,7 +8,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 
 // 📦 Package imports
-import { Repository } from 'typeorm';
+import { EntityNotFoundError, Repository } from 'typeorm';
 
 // 🌏 Project imports
 import { Post } from './entities/post.entity';
@@ -24,7 +24,7 @@ export class PostsRepository {
     try {
       await this.posts.insert(post);
     } catch (e) {
-      throw new InternalServerErrorException(e);
+      throw new InternalServerErrorException();
     }
   }
 
@@ -46,24 +46,22 @@ export class PostsRepository {
 
       return await selectQueryBuilder.getManyAndCount();
     } catch (e) {
-      throw new InternalServerErrorException(e);
+      throw new InternalServerErrorException();
     }
   }
 
   async getPost(where: Post, select: SelectPostModel): Promise<Post> {
     try {
-      const result = await this.posts.findOne({
+      return await this.posts.findOneOrFail({
         select,
         where: { id: where.id },
         relations: {
           comments: true,
         },
       });
-      if (!result) return Promise.reject(new NotFoundException());
-
-      return result;
     } catch (e) {
-      throw new InternalServerErrorException(e);
+      if (e instanceof EntityNotFoundError) throw new NotFoundException();
+      throw new InternalServerErrorException();
     }
   }
 
@@ -75,7 +73,7 @@ export class PostsRepository {
       );
       if (!result.affected) return Promise.reject(new ForbiddenException());
     } catch (e) {
-      throw new InternalServerErrorException(e);
+      throw new InternalServerErrorException();
     }
   }
 
@@ -87,7 +85,7 @@ export class PostsRepository {
       });
       if (!result.affected) return Promise.reject(new ForbiddenException());
     } catch (e) {
-      throw new InternalServerErrorException(e);
+      throw new InternalServerErrorException();
     }
   }
 }
