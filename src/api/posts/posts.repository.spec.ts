@@ -7,11 +7,13 @@ import { LocalDateTime } from '@js-joda/core';
 import { DataSource, Repository } from 'typeorm';
 
 // 🌏 Project imports
-
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
+import { PostModel, SelectPostModel } from '@posts/entities/post.model';
+
+import { paginationSample } from '../../../test/data/post/pagination-sample';
+
 import { Post } from './entities/post.entity';
-import { OrderPostModel, SelectPostModel } from './entities/post.model';
 import { PostsModule } from './posts.module';
 import { PostsRepository } from './posts.repository';
 
@@ -63,16 +65,33 @@ describe('PostsRepository', () => {
   });
 
   describe('게시글 전체 조회: getAllPosts', () => {
-    it('PostRepository.getAllPosts 실행하면 this.posts.find 실행하나?', async () => {
-      const select = SelectPostModel.selectPostList();
-      const order = OrderPostModel.orderPostList();
+    describe('페이지네이션 테스트', () => {
+      it('size만큼 가져옴?', async () => {
+        const size = 3;
+        await repository.insert(paginationSample);
 
-      repository.find = jest.fn();
+        const [posts, totalCount] = await postsRepository.getPosts(
+          new PostModel(1, size),
+        );
 
-      await postsRepository.getPosts(select, order);
+        expect(posts.length).toBe(size);
+        expect(totalCount).toBe(9);
+      });
 
-      expect(repository.find).toBeCalledTimes(1);
-      expect(repository.find).toBeCalledWith({ select, order });
+      it('page만큼 건너뛰고 가져옴?', async () => {
+        const size = 3;
+        const page = 2;
+        await repository.insert(paginationSample);
+
+        const [posts, totalCount] = await postsRepository.getPosts(
+          new PostModel(page, size),
+        );
+
+        expect(posts[0].id).toBe(6);
+        expect(posts[1].id).toBe(5);
+        expect(posts[2].id).toBe(4);
+        expect(totalCount).toBe(9);
+      });
     });
   });
 

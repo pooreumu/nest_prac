@@ -19,6 +19,7 @@ import { AppModule } from '@src/app.module';
 import { ResponseEntity } from '@lib/response/ResponseEntity';
 
 import { GetPostDto } from '@posts/dto/get-post.dto';
+import { PageDto } from '@posts/dto/page.dto';
 
 import { GetCommentDto } from '@comments/dto/get-comment.dto';
 
@@ -122,13 +123,13 @@ describe('AppController (e2e)', () => {
     const res = await request(app.getHttpServer()).get('/posts');
     expect(res.status).toBe(200);
 
-    const body: ResponseEntity<GetPostDto[]> = res.body;
+    const body: ResponseEntity<PageDto<GetPostDto>> = res.body;
     expect(body.statusCode).toBe('OK');
 
     const data = body.data;
-    expect(data.length).toBe(3);
-    expect(data[0].title).toBe(posts.title);
-    expect(data[0].authorId).toBe(posts.authorId);
+    expect(data.totalPages).toBe(1);
+    expect(data.items[0].title).toBe(posts.title);
+    expect(data.items[0].authorId).toBe(posts.authorId);
   });
 
   it('게시글 상세 조회 GET /posts/:boarId', async () => {

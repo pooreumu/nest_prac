@@ -5,6 +5,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
+import { GetPostRequestDto } from '@posts/dto/request.dto/get-post-request.dto';
+
 import { CreatePostDto } from './dto/create-post.dto';
 import { DeletePostDto } from './dto/delete-post.dto';
 import { GetPostDto } from './dto/get-post.dto';
@@ -56,14 +58,16 @@ describe('PostsService', () => {
 
   describe('게시글 전체 조회: getAllPosts', () => {
     it('service.getAllPosts 실행하면 postRepository.getAllPosts 실행하나?', () => {
-      const { select, order } = GetPostDto.toGetAllEntity();
+      const getPostRequestDto = new GetPostRequestDto();
 
-      repository.getPosts = jest.fn().mockResolvedValue([]);
+      repository.getPosts = jest.fn().mockResolvedValue([[], 0]);
 
-      service.getPosts();
+      service.getPosts(getPostRequestDto);
 
       expect(repository.getPosts).toBeCalledTimes(1);
-      expect(repository.getPosts).toBeCalledWith(select, order);
+      expect(repository.getPosts).toBeCalledWith(
+        getPostRequestDto.toEntityForPagination(),
+      );
     });
   });
 

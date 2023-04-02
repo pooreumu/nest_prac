@@ -2,6 +2,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 // 🌏 Project imports
+import { GetPostRequestDto } from '@posts/dto/request.dto/get-post-request.dto';
+
 import { CreatePostRequestDto } from './dto/request.dto/create-post-request.dto';
 import { UpdatePostRequestDto } from './dto/request.dto/update-post-request.dto';
 import { PostsController } from './posts.controller';
@@ -51,10 +53,11 @@ describe('PostsController', () => {
 
   describe('게시글 전체 조회: getAllPosts', () => {
     it('controller.getAllPosts 실행하면 postService.getAllPosts 실행하나?', () => {
-      controller.getPosts();
+      const getPostRequestDto = new GetPostRequestDto();
+      controller.getPosts(getPostRequestDto);
 
       expect(service.getPosts).toBeCalledTimes(1);
-      expect(service.getPosts).toBeCalledWith();
+      expect(service.getPosts).toBeCalledWith(getPostRequestDto);
     });
   });
 
