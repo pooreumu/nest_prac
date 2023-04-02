@@ -18,14 +18,14 @@ export class BaseEntity {
   id: number;
 
   @CreateDateColumn({
-    type: 'datetime',
+    type: 'timestamp',
     comment: '생성 시간',
     transformer: new LocalDateTimeTransformer(),
   })
   createdAt: LocalDateTime | Date;
 
   @UpdateDateColumn({
-    type: 'datetime',
+    type: 'timestamp',
     comment: '수정 시간',
     transformer: new LocalDateTimeTransformer(),
   })

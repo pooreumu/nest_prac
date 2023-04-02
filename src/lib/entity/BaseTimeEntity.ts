@@ -14,13 +14,13 @@ export abstract class BaseTimeEntity {
   id: number;
 
   @CreateDateColumn({
-    type: 'datetime',
+    type: 'timestamp',
     comment: '생성 시간',
   })
   createdAt: Date;
 
   @UpdateDateColumn({
-    type: 'datetime',
+    type: 'timestamp',
     comment: '수정 시간',
   })
   updatedAt: Date;
