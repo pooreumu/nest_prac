@@ -7,8 +7,9 @@ import session from 'express-session';
 import passport from 'passport';
 
 // 🌏 Project imports
+import { HttpExceptionFilter } from '@lib/filter/http-exception.filter';
+
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './filter/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

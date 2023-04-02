@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 
-import { User } from '@src/common/decorator/user.decorator';
+import { User } from '@src/lib/decorator/user.decorator';
 
 import { ResponseEntity } from '@lib/response/response-entity';
 

@@ -38,7 +38,7 @@
         "./src/lib/*"
       ],
       "@decorator/*": [
-        "./src/common/decorator/*"
+        "./src/lib/decorator/*"
       ]
     }
   }
