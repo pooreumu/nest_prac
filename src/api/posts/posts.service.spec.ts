@@ -9,7 +9,6 @@ import { GetPostRequestDto } from '@posts/dto/request.dto/get-post-request.dto';
 
 import { CreatePostDto } from './dto/create-post.dto';
 import { DeletePostDto } from './dto/delete-post.dto';
-import { GetPostDto } from './dto/get-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostsRepository } from './posts.repository';
 import { PostsService } from './posts.service';
@@ -75,16 +74,12 @@ describe('PostsService', () => {
     it('service.getOnePost 실행하면 postRepository.getOnePost 실행하나?', () => {
       const postId = 1;
 
-      const { wherePost, select } = GetPostDto.toGetOneEntity({
-        postId,
-      });
-
       repository.getPost = jest.fn().mockResolvedValue({});
 
       service.getPost(postId);
 
       expect(repository.getPost).toBeCalledTimes(1);
-      expect(repository.getPost).toBeCalledWith(wherePost, select);
+      expect(repository.getPost).toBeCalledWith(postId);
     });
   });
 

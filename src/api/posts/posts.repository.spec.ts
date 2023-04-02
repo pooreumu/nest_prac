@@ -9,7 +9,7 @@ import { DataSource, Repository } from 'typeorm';
 // 🌏 Project imports
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
-import { PostModel, SelectPostModel } from '@posts/entities/post.model';
+import { PostModel } from '@posts/entities/post.model';
 
 import { paginationSample } from '../../../test/data/post/pagination-sample';
 
@@ -156,31 +156,43 @@ describe('PostsRepository', () => {
     it('PostRepository.getOnePost 실행 하면 this.posts.findOne 실행 하나?', async () => {
       const postId = 1;
 
-      const select = SelectPostModel.selectPost();
-      const wherePost = Post.byPk({ id: postId });
-
       repository.findOneOrFail = jest.fn().mockResolvedValue(new Post());
 
-      await postsRepository.getPost(wherePost, select);
+      await postsRepository.getPost(postId);
 
       expect(repository.findOneOrFail).toBeCalledTimes(1);
       expect(repository.findOneOrFail).toBeCalledWith({
-        where: { id: wherePost.id },
-        select,
-        relations: { comments: true },
+        select: {
+          authorId: true,
+          comments: {
+            authorId: true,
+            content: true,
+            createdAt: true,
+            id: true,
+            updatedAt: true,
+          },
+          content: true,
+          createdAt: true,
+          id: true,
+          title: true,
+          updatedAt: true,
+        },
+        where: {
+          id: postId,
+        },
+        relations: {
+          comments: true,
+        },
       });
     });
 
     it('게시 글이 없으면 NotFoundException 을 던지나?', async () => {
       const postId = 1;
 
-      const select = SelectPostModel.selectPost();
-      const wherePost = Post.byPk({ id: postId });
-
       repository.findOne = jest.fn().mockResolvedValue(null);
 
       await expect(async () => {
-        return await postsRepository.getPost(wherePost, select);
+        return await postsRepository.getPost(postId);
       }).rejects.toThrowError(new NotFoundException());
     });
   });
