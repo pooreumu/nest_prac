@@ -45,14 +45,12 @@ describe('PostsRepository', () => {
       const content = 'content';
       const authorId = 'author';
       const password = 'password';
-      const createdAt = LocalDateTime.of(2023, 1, 19, 19, 19, 19);
 
       const post = Post.createPost({
         title,
         content,
         authorId,
         password,
-        createdAt,
       });
 
       repository.insert = jest.fn();
@@ -202,13 +200,11 @@ describe('PostsRepository', () => {
       const postId = 1;
       const password = 'password';
       const title = 'update title';
-      const updatedAt = LocalDateTime.of(2023, 1, 20, 19, 19, 19);
 
       const { wherePost, updatePost } = Post.updatePost({
         postId,
         password,
         title,
-        updatedAt,
       });
 
       repository.update = jest.fn().mockResolvedValue({ affected: 1 });
@@ -226,13 +222,11 @@ describe('PostsRepository', () => {
       const postId = 1;
       const password = 'password';
       const title = 'update title';
-      const updatedAt = LocalDateTime.of(2023, 1, 20, 19, 19, 19);
 
       const { wherePost, updatePost } = Post.updatePost({
         postId,
         title,
         password,
-        updatedAt,
       });
 
       repository.update = jest.fn().mockResolvedValue({ affected: 0 });

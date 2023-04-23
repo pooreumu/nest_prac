@@ -2,7 +2,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 // 📦 Package imports
-import { LocalDateTime } from '@js-joda/core';
 
 // 🌏 Project imports
 import { GetPostRequestDto } from '@posts/dto/request.dto/get-post-request.dto';
@@ -32,6 +31,7 @@ describe('PostsService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
+
   describe('게시글 작성: createPost', () => {
     it('service.createPost를 실행하면 this.postRepository.createPost를 실행하나?', () => {
       const title = 'title';
@@ -46,7 +46,7 @@ describe('PostsService', () => {
         password,
       });
 
-      const createPost = postData.toEntity(LocalDateTime.now());
+      const createPost = postData.toEntity();
 
       service.createPost(postData);
 
@@ -95,7 +95,7 @@ describe('PostsService', () => {
         password,
       });
 
-      const { wherePost, updatePost } = postData.toEntity(LocalDateTime.now());
+      const { wherePost, updatePost } = postData.toEntity();
 
       service.updatePost(postData);
 

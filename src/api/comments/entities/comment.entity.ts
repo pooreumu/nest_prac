@@ -1,14 +1,16 @@
 // 📦 Package imports
-import { ChronoUnit, LocalDateTime } from '@js-joda/core';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 // 🌏 Project imports
-import { BaseEntity } from '@lib/entity/base-entity';
+
+import { BaseTimeEntity } from '@lib/entity/base-time-entity';
 
 import { Post } from '@posts/entities/post.entity';
 
+import { CreateCommentData } from '@comments/interfaces/create-comment-data';
+
 @Entity()
-export class Comment extends BaseEntity {
+export class Comment extends BaseTimeEntity {
   @Column({
     type: 'varchar',
     comment: '댓글 내용',
@@ -33,16 +35,21 @@ export class Comment extends BaseEntity {
     onDelete: 'CASCADE',
     nullable: false,
   })
+  @JoinColumn()
   post: Post;
 
-  static createComment(commentData) {
+  @Column({
+    type: 'int',
+    comment: '댓글이 달린 게시글 아이디',
+  })
+  postId: number;
+
+  static createComment(commentData: CreateCommentData) {
     const comment = new Comment();
-    comment.post = commentData.post;
+    comment.postId = commentData.postId;
     comment.authorId = commentData.authorId;
     comment.password = commentData.password;
     comment.content = commentData.content;
-    comment.createdAt = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-    comment.updatedAt = comment.createdAt;
 
     return comment;
   }

@@ -1,14 +1,14 @@
 // 📦 Package imports
-import { LocalDateTime } from '@js-joda/core';
 import { Column, Entity, OneToMany } from 'typeorm';
 
 // 🌏 Project imports
-import { BaseEntity } from '@lib/entity/base-entity';
+
+import { BaseTimeEntity } from '@lib/entity/base-time-entity';
 
 import { Comment } from '@comments/entities/comment.entity';
 
 @Entity()
-export class Post extends BaseEntity {
+export class Post extends BaseTimeEntity {
   @Column({
     name: 'title',
     type: 'varchar',
@@ -47,15 +47,12 @@ export class Post extends BaseEntity {
     content: string;
     authorId: string;
     password: string;
-    createdAt: LocalDateTime;
   }): Post {
     const post = new Post();
     post.title = postData.title;
     post.content = postData.content;
     post.authorId = postData.authorId;
     post.password = postData.password;
-    post.createdAt = postData.createdAt;
-    post.updatedAt = postData.createdAt;
 
     return post;
   }
@@ -65,7 +62,6 @@ export class Post extends BaseEntity {
     password: string;
     title?: string;
     content?: string;
-    updatedAt: LocalDateTime;
   }): { wherePost: Post; updatePost: Post } {
     const wherePost = new Post();
     wherePost.id = postData.postId;
@@ -74,7 +70,6 @@ export class Post extends BaseEntity {
     const updatePost = new Post();
     updatePost.title = postData.title;
     updatePost.content = postData.content;
-    updatePost.updatedAt = postData.updatedAt;
 
     return { wherePost: wherePost, updatePost: updatePost };
   }

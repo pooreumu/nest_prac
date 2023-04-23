@@ -17,7 +17,7 @@ export class CreateCommentDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsInt()
-  post: number;
+  postId: number;
 
   @ApiProperty()
   @IsNotEmpty()
@@ -36,7 +36,7 @@ export class CreateCommentDto {
 
   toEntity() {
     return Comment.createComment({
-      post: this.post,
+      postId: this.postId,
       authorId: this.authorId,
       password: this.password,
       content: this.content,

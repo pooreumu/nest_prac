@@ -38,7 +38,7 @@ describe('CommentsService', () => {
   describe('댓글 생성', () => {
     it('service.createComment 실행하면 repository.createComment 실행 함?', async () => {
       const createCommentDto = new CreateCommentDto();
-      createCommentDto.post = commentData.postId;
+      createCommentDto.postId = commentData.postId;
       createCommentDto.authorId = commentData.authorId;
       createCommentDto.content = commentData.content;
       createCommentDto.password = commentData.password;
@@ -52,7 +52,7 @@ describe('CommentsService', () => {
           authorId: commentData.authorId,
           content: commentData.content,
           password: commentData.password,
-          post: commentData.postId,
+          postId: commentData.postId,
         }),
       );
     });

@@ -2,8 +2,6 @@
 import { Injectable } from '@nestjs/common';
 
 // 📦 Package imports
-import { LocalDateTime } from '@js-joda/core';
-
 // 🌏 Project imports
 import { PageDto } from '@posts/dto/page.dto';
 import { GetPostRequestDto } from '@posts/dto/request.dto/get-post-request.dto';
@@ -19,7 +17,7 @@ export class PostsService {
   constructor(private readonly postRepository: PostsRepository) {}
 
   async createPost(postData: CreatePostDto): Promise<void> {
-    const createPost = postData.toEntity(LocalDateTime.now());
+    const createPost = postData.toEntity();
 
     return this.postRepository.createPost(createPost);
   }
@@ -43,7 +41,7 @@ export class PostsService {
   }
 
   async updatePost(postData: UpdatePostDto): Promise<void> {
-    const { wherePost, updatePost } = postData.toEntity(LocalDateTime.now());
+    const { wherePost, updatePost } = postData.toEntity();
 
     return this.postRepository.updatePost(wherePost, updatePost);
   }

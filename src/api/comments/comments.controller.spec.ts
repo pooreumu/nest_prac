@@ -37,7 +37,7 @@ describe('CommentsController', () => {
       };
 
       const createCommentDto = new CreateCommentDto();
-      createCommentDto.post = commentData.postId;
+      createCommentDto.postId = commentData.postId;
       createCommentDto.authorId = commentData.authorId;
       createCommentDto.content = commentData.content;
       createCommentDto.password = commentData.password;
