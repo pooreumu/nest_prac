@@ -2,12 +2,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // 📦 Package imports
-import {
-  IsNotEmpty,
-  IsString,
-  IsOptional,
-  IsAlphanumeric,
-} from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 // 🌏 Project imports
 import { UpdatePostDto } from '../update-post.dto';
@@ -23,17 +18,12 @@ export class UpdatePostRequestDto {
   @IsString()
   content?: string;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsAlphanumeric()
-  password: string;
-
-  public toUpdatePostDto(postId: number) {
+  public toUpdatePostDto(postId: number, userId: number): UpdatePostDto {
     return new UpdatePostDto({
       postId,
+      userId,
       title: this.title,
       content: this.content,
-      password: this.password,
     });
   }
 }

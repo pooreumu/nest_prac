@@ -17,7 +17,7 @@ export class GetPostDto {
   @Exclude() private readonly _id: number;
   @Exclude() private readonly _title: string;
   @Exclude() private readonly _content: string;
-  @Exclude() private readonly _authorId: string;
+  @Exclude() private readonly _userId: number;
   @Exclude() private readonly _createdAt: LocalDateTime | Date;
   @Exclude() private readonly _updatedAt: LocalDateTime | Date;
   @Exclude() private readonly _comments: Comment[];
@@ -26,7 +26,7 @@ export class GetPostDto {
     this._id = post.id;
     this._title = post.title;
     this._content = post.content;
-    this._authorId = post.authorId;
+    this._userId = post.userId;
     this._createdAt = post.createdAt;
     this._updatedAt = post.updatedAt;
     this._comments = post.comments;
@@ -52,8 +52,8 @@ export class GetPostDto {
 
   @ApiProperty()
   @Expose()
-  get authorId(): string {
-    return this._authorId;
+  get userId(): number {
+    return this._userId;
   }
 
   @ApiProperty()

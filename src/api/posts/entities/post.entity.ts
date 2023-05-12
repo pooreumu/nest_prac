@@ -1,43 +1,39 @@
 // 📦 Package imports
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 // 🌏 Project imports
-
 import { BaseTimeEntity } from '@lib/entity/base-time-entity';
 
 import { Comment } from '@comments/entities/comment.entity';
 
+import { User } from '@users/entities/user.entity';
+
 @Entity()
 export class Post extends BaseTimeEntity {
   @Column({
-    name: 'title',
     type: 'varchar',
     comment: '게시글 제목',
   })
   title: string;
 
   @Column({
-    name: 'content',
     type: 'varchar',
     comment: '게시글 내용',
   })
   content: string;
 
   @Column({
-    name: 'author_id',
-    type: 'varchar',
     comment: '게시글 작성자 아이디',
   })
-  authorId: string;
+  userId: number;
 
-  @Column({
-    name: 'password',
-    type: 'varchar',
-    comment: '게시글 비밀번호',
-    nullable: true,
-    select: false,
+  @ManyToOne(() => User, (user) => user.posts, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+    nullable: false,
   })
-  password: string;
+  @JoinColumn()
+  user: User;
 
   @OneToMany(() => Comment, (comment) => comment.post, { cascade: true })
   comments: Comment[];
@@ -45,27 +41,25 @@ export class Post extends BaseTimeEntity {
   static createPost(postData: {
     title: string;
     content: string;
-    authorId: string;
-    password: string;
+    userId: number;
   }): Post {
     const post = new Post();
     post.title = postData.title;
     post.content = postData.content;
-    post.authorId = postData.authorId;
-    post.password = postData.password;
+    post.userId = postData.userId;
 
     return post;
   }
 
   static updatePost(postData: {
     postId: number;
-    password: string;
+    userId: number;
     title?: string;
     content?: string;
   }): { wherePost: Post; updatePost: Post } {
     const wherePost = new Post();
     wherePost.id = postData.postId;
-    wherePost.password = postData.password;
+    wherePost.userId = postData.userId;
 
     const updatePost = new Post();
     updatePost.title = postData.title;
@@ -81,10 +75,10 @@ export class Post extends BaseTimeEntity {
     return post;
   }
 
-  static deleteBy(postData: { id: number; password: string }): Post {
+  static deleteBy(postData: { id: number; userId: number }): Post {
     const post = new Post();
     post.id = postData.id;
-    post.password = postData.password;
+    post.userId = postData.userId;
 
     return post;
   }

@@ -1,44 +1,40 @@
 // 🐱 Nestjs imports
-import { ApiProperty } from '@nestjs/swagger';
-
 // 📦 Package imports
-import {
-  IsAlphanumeric,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
 
 // 🌏 Project imports
 import { Comment } from '../entities/comment.entity';
 
 export class CreateCommentDto {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsInt()
-  postId: number;
+  private readonly _content: string;
+  private readonly _userId: number;
+  private readonly _postId: number;
 
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  content: string;
+  constructor(commentData: {
+    content: string;
+    userId: number;
+    postId: number;
+  }) {
+    this._content = commentData.content;
+    this._userId = commentData.userId;
+    this._postId = commentData.postId;
+  }
 
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  authorId?: string;
+  get content(): string {
+    return this._content;
+  }
 
-  @ApiProperty()
-  @IsOptional()
-  @IsAlphanumeric()
-  password?: string;
+  get userId(): number {
+    return this._userId;
+  }
+
+  get postId(): number {
+    return this._postId;
+  }
 
   toEntity() {
     return Comment.createComment({
       postId: this.postId,
-      authorId: this.authorId,
-      password: this.password,
+      userId: this.userId,
       content: this.content,
     });
   }

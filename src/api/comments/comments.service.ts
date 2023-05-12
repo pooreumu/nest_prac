@@ -2,9 +2,9 @@
 import { Injectable } from '@nestjs/common';
 
 // 🌏 Project imports
+import { CreateCommentDto } from '@comments/dto/create-comment.dto';
 
 import { CommentsRepository } from './comments.repository';
-import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
@@ -15,7 +15,7 @@ export class CommentsService {
     return this.commentsRepository.createComment(commentData.toEntity());
   }
 
-  async updateComment(id: number, commentData: UpdateCommentDto) {
-    return this.commentsRepository.updateComment(commentData.toEntity(id));
+  async updateComment(commentData: UpdateCommentDto) {
+    return this.commentsRepository.updateComment(commentData.toEntity());
   }
 }

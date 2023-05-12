@@ -13,14 +13,14 @@ import { Comment } from '../entities/comment.entity';
 export class GetCommentDto {
   @Exclude() private readonly _id: number;
   @Exclude() private readonly _content: string;
-  @Exclude() private readonly _authorId: string;
+  @Exclude() private readonly _userId: number;
   @Exclude() private readonly _createdAt: LocalDateTime | Date;
   @Exclude() private readonly _updatedAt: LocalDateTime | Date;
 
   constructor(comment: Comment) {
     this._id = comment.id;
     this._content = comment.content;
-    this._authorId = comment.authorId;
+    this._userId = comment.userId;
     this._createdAt = comment.createdAt;
     this._updatedAt = comment.updatedAt;
   }
@@ -39,8 +39,8 @@ export class GetCommentDto {
 
   @ApiProperty()
   @Expose()
-  get authorId(): string {
-    return this._authorId;
+  get userId(): number {
+    return this._userId;
   }
 
   @ApiProperty()

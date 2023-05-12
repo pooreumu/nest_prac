@@ -2,7 +2,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 // 📦 Package imports
-import { LocalDateTime } from '@js-joda/core';
 import { DataSource, Repository } from 'typeorm';
 
 // 🌏 Project imports
@@ -10,9 +9,13 @@ import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
 import { Post } from '@posts/entities/post.entity';
 
+import { CreateCommentDto } from '@comments/dto/create-comment.dto';
+
+import { User } from '@users/entities/user.entity';
+
 import { CommentsModule } from './comments.module';
 import { CommentsRepository } from './comments.repository';
-import { CreateCommentDto } from './dto/create-comment.dto';
+import { CreateCommentRequestDto } from './dto/request.dto/create-comment-request.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Comment } from './entities/comment.entity';
 
@@ -20,6 +23,8 @@ describe('Comments', () => {
   let commentsRepository: CommentsRepository;
   let repository: Repository<Comment>;
   let dataSource: DataSource;
+  let user: User;
+  let post: Post;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,15 +34,18 @@ describe('Comments', () => {
     commentsRepository = module.get<CommentsRepository>(CommentsRepository);
     repository = module.get<Repository<Comment>>('CommentRepository');
     dataSource = module.get<DataSource>(DataSource);
-    const posts = {
-      title: 'test title',
-      content: 'test content',
-      authorId: 'ㅇㅇ',
-      password: 'asdf1234',
-      createdAt: LocalDateTime.of(2023, 2, 16, 19, 10, 15),
-    };
-    const post = Post.createPost(posts);
-    await dataSource.getRepository(Post).insert(post);
+
+    user = await dataSource
+      .getRepository(User)
+      .save(await User.from('nickname', 'password'));
+
+    post = await dataSource.getRepository(Post).save(
+      Post.createPost({
+        title: 'test title',
+        content: 'test content',
+        userId: user.id,
+      }),
+    );
   });
 
   afterEach(async () => {
@@ -48,29 +56,29 @@ describe('Comments', () => {
     expect(commentsRepository).toBeDefined();
   });
 
-  const commentData = {
-    postId: 1,
-    authorId: 'author',
-    content: 'content',
-    password: 'password',
-  };
-
-  const createCommentDto = new CreateCommentDto();
-  createCommentDto.postId = commentData.postId;
-  createCommentDto.authorId = commentData.authorId;
-  createCommentDto.content = commentData.content;
-  createCommentDto.password = commentData.password;
-
   describe('댓글 생성', () => {
     it('commentsRepository.createComment 실행하면 repository.insert 실행 함?', async () => {
-      await commentsRepository.createComment(createCommentDto.toEntity());
+      const commentData = {
+        postId: post.id,
+        userId: user.id,
+        content: 'content',
+      };
+
+      const createCommentRequestDto = new CreateCommentRequestDto();
+      createCommentRequestDto.content = commentData.content;
+
+      await commentsRepository.createComment(
+        createCommentRequestDto
+          .toCreateCommentDto(commentData.postId, commentData.userId)
+          .toEntity(),
+      );
 
       const comment = await repository.findOne({
         where: { id: 1 },
         relations: { post: true },
       });
 
-      expect(comment.authorId).toBe(commentData.authorId);
+      expect(comment.userId).toBe(commentData.userId);
       expect(comment.content).toBe(commentData.content);
       expect(comment.post.id).toBe(commentData.postId);
     });
@@ -78,15 +86,25 @@ describe('Comments', () => {
 
   describe('댓글 수정', () => {
     it('commentsRepository.update 실행하면 repository.update 실행 함?', async () => {
+      const commentData = {
+        postId: post.id,
+        userId: user.id,
+        content: 'content',
+      };
+
+      const createCommentDto = new CreateCommentDto(commentData);
+
       const content = 'update comment content';
       const id = 1;
 
-      const updateCommentDto = new UpdateCommentDto();
-      updateCommentDto.content = content;
-      updateCommentDto.password = commentData.password;
+      const comment1 = await repository.save(createCommentDto.toEntity());
+      const updateCommentDto = new UpdateCommentDto({
+        id: comment1.id,
+        userId: user.id,
+        content,
+      });
 
-      await repository.insert(createCommentDto.toEntity());
-      await commentsRepository.updateComment(updateCommentDto.toEntity(id));
+      await commentsRepository.updateComment(updateCommentDto.toEntity());
 
       const comment = await repository.findOne({ where: { id: 1 } });
 

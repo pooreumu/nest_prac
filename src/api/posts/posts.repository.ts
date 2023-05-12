@@ -32,7 +32,7 @@ export class PostsRepository {
     try {
       const selectQueryBuilder = this.posts
         .createQueryBuilder('p')
-        .select(['p.id', 'p.title', 'p.authorId', 'p.createdAt', 'p.updatedAt'])
+        .select(['p.id', 'p.title', 'p.userId', 'p.createdAt', 'p.updatedAt'])
         .orderBy('p.id', 'DESC')
         .offset(post.getOffset())
         .limit(post.getLimit());
@@ -57,13 +57,13 @@ export class PostsRepository {
           id: true,
           title: true,
           content: true,
-          authorId: true,
+          userId: true,
           createdAt: true,
           updatedAt: true,
           comments: {
             id: true,
             content: true,
-            authorId: true,
+            userId: true,
             createdAt: true,
             updatedAt: true,
           },
@@ -84,7 +84,10 @@ export class PostsRepository {
   async updatePost(wherePost: Post, updatePost: Post): Promise<void> {
     try {
       const result = await this.posts.update(
-        { id: wherePost.id, password: wherePost.password },
+        {
+          id: wherePost.id,
+          userId: wherePost.userId,
+        },
         updatePost,
       );
       if (!result.affected) return Promise.reject(new ForbiddenException());
@@ -97,7 +100,7 @@ export class PostsRepository {
     try {
       const result = await this.posts.delete({
         id: where.id,
-        password: where.password,
+        userId: where.userId,
       });
       if (!result.affected) return Promise.reject(new ForbiddenException());
     } catch (e) {

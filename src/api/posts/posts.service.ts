@@ -46,8 +46,8 @@ export class PostsService {
     return this.postRepository.updatePost(wherePost, updatePost);
   }
 
-  async removePost(postId: number, password: string): Promise<void> {
-    const wherePost = new DeletePostDto({ postId, password }).toEntity();
+  async removePost(postId: number, userId: number): Promise<void> {
+    const wherePost = new DeletePostDto({ postId, userId }).toEntity();
 
     return this.postRepository.removePost(wherePost);
   }

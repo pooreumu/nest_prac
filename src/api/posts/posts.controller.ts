@@ -4,16 +4,20 @@ import {
   Controller,
   Delete,
   Get,
-  Headers,
   Param,
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 // 🌏 Project imports
 import { ResponseEntity } from '@lib/response/response-entity';
+
+import { User } from '@decorator/user.decorator';
+
+import { LoggedInGuard } from '@auth/logged-in.guard';
 
 import { PageDto } from '@posts/dto/page.dto';
 import { GetPostRequestDto } from '@posts/dto/request.dto/get-post-request.dto';
@@ -30,10 +34,12 @@ export class PostsController {
 
   @ApiOperation({ summary: '게시글 작성' })
   @Post()
+  @UseGuards(LoggedInGuard)
   async createPost(
     @Body() postData: CreatePostRequestDto,
+    @User() user,
   ): Promise<ResponseEntity<string>> {
-    await this.postService.createPost(postData.toCreatePostDto());
+    await this.postService.createPost(postData.toCreatePostDto(user.id));
     return ResponseEntity.OK();
   }
 
@@ -57,21 +63,26 @@ export class PostsController {
 
   @ApiOperation({ summary: '게시글 수정' })
   @Patch('/:id')
+  @UseGuards(LoggedInGuard)
   async updatePost(
     @Param('id') postId: number,
     @Body() postData: UpdatePostRequestDto,
+    @User() user,
   ): Promise<ResponseEntity<string>> {
-    await this.postService.updatePost(postData.toUpdatePostDto(postId));
+    await this.postService.updatePost(
+      postData.toUpdatePostDto(postId, user.id),
+    );
     return ResponseEntity.OK();
   }
 
   @ApiOperation({ summary: '게시글 삭제' })
   @Delete('/:id')
+  @UseGuards(LoggedInGuard)
   async removePost(
     @Param('id') postId: number,
-    @Headers('password') password: string,
+    @User() user,
   ): Promise<ResponseEntity<string>> {
-    await this.postService.removePost(postId, password);
+    await this.postService.removePost(postId, user.id);
     return ResponseEntity.OK();
   }
 }

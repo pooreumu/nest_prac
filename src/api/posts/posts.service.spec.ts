@@ -1,9 +1,5 @@
-// 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
 
-// 📦 Package imports
-
-// 🌏 Project imports
 import { GetPostRequestDto } from '@posts/dto/request.dto/get-post-request.dto';
 
 import { CreatePostDto } from './dto/create-post.dto';
@@ -36,14 +32,12 @@ describe('PostsService', () => {
     it('service.createPost를 실행하면 this.postRepository.createPost를 실행하나?', () => {
       const title = 'title';
       const content = 'content';
-      const authorId = 'author';
-      const password = 'password';
+      const userId = 1;
 
       const postData = new CreatePostDto({
         title,
         content,
-        authorId,
-        password,
+        userId,
       });
 
       const createPost = postData.toEntity();
@@ -86,13 +80,13 @@ describe('PostsService', () => {
   describe('게시글 수정: updatePost', () => {
     it('service.updatePost 실행하면 postRepository.updatePost 실행하나?', () => {
       const postId = 1;
+      const userId = 1;
       const title = 'update title';
-      const password = 'password';
 
       const postData = new UpdatePostDto({
         postId,
+        userId,
         title,
-        password,
       });
 
       const { wherePost, updatePost } = postData.toEntity();
@@ -107,11 +101,11 @@ describe('PostsService', () => {
   describe('게시글 삭제: removePost', () => {
     it('service.removePost 실행하면 postRepository.removePost 실행하나?', () => {
       const postId = 1;
-      const password = 'password';
+      const userId = 1;
 
-      const wherePost = new DeletePostDto({ postId, password }).toEntity();
+      const wherePost = new DeletePostDto({ postId, userId }).toEntity();
 
-      service.removePost(postId, password);
+      service.removePost(postId, userId);
 
       expect(repository.removePost).toBeCalledTimes(1);
       expect(repository.removePost).toBeCalledWith(wherePost);

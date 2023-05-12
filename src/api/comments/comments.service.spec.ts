@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 // 🌏 Project imports
 import { CommentsRepository } from './comments.repository';
 import { CommentsService } from './comments.service';
-import { CreateCommentDto } from './dto/create-comment.dto';
+import { CreateCommentRequestDto } from './dto/request.dto/create-comment-request.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
 jest.mock('./comments.repository');
@@ -30,28 +30,28 @@ describe('CommentsService', () => {
 
   const commentData = {
     postId: 1,
-    authorId: 'author',
+    userId: 1,
     content: 'content',
-    password: 'password',
   };
 
   describe('댓글 생성', () => {
     it('service.createComment 실행하면 repository.createComment 실행 함?', async () => {
-      const createCommentDto = new CreateCommentDto();
-      createCommentDto.postId = commentData.postId;
-      createCommentDto.authorId = commentData.authorId;
+      const createCommentDto = new CreateCommentRequestDto();
       createCommentDto.content = commentData.content;
-      createCommentDto.password = commentData.password;
 
       repository.createComment = jest.fn();
-      await service.createComment(createCommentDto);
+      await service.createComment(
+        createCommentDto.toCreateCommentDto(
+          commentData.postId,
+          commentData.userId,
+        ),
+      );
 
       expect(repository.createComment).toBeCalledTimes(1);
       expect(repository.createComment).toBeCalledWith(
         expect.objectContaining({
-          authorId: commentData.authorId,
+          userId: commentData.userId,
           content: commentData.content,
-          password: commentData.password,
           postId: commentData.postId,
         }),
       );
@@ -61,17 +61,20 @@ describe('CommentsService', () => {
   describe('댓글 수정', () => {
     it('service.updateComment 실행하면 repository.updateComment 실행 함?', async () => {
       const id = 1;
+      const userId = 1;
       const content = 'new comment content';
-      const password = commentData.password;
 
-      const updateCommentDto = new UpdateCommentDto();
-      updateCommentDto.content = content;
-      updateCommentDto.password = password;
+      const updateCommentDto = new UpdateCommentDto({
+        id,
+        content,
+        userId,
+      });
 
-      await service.updateComment(id, updateCommentDto);
+      await service.updateComment(updateCommentDto);
+
       expect(repository.updateComment).toBeCalledTimes(1);
       expect(repository.updateComment).toBeCalledWith(
-        expect.objectContaining({ id, content, password }),
+        expect.objectContaining({ id, content }),
       );
     });
   });

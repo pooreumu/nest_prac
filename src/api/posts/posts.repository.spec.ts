@@ -13,6 +13,8 @@ import { PostModel } from '@posts/entities/post.model';
 
 import { paginationSample } from '../../../test/data/post/pagination-sample';
 
+import { User } from '@users/entities/user.entity';
+
 import { Post } from './entities/post.entity';
 import { PostsModule } from './posts.module';
 import { PostsRepository } from './posts.repository';
@@ -21,6 +23,7 @@ describe('PostsRepository', () => {
   let postsRepository: PostsRepository;
   let repository: Repository<Post>;
   let dataSource: DataSource;
+  let user: User;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -33,6 +36,10 @@ describe('PostsRepository', () => {
 
     await dataSource.synchronize(true);
     jest.clearAllMocks();
+
+    user = await dataSource
+      .getRepository(User)
+      .save(await User.from('nickname', 'password'));
   });
 
   it('should be defined', () => {
@@ -43,14 +50,11 @@ describe('PostsRepository', () => {
     it('PostRepository.createPost 실행 하면 this.posts.insert 실행 하나?', async () => {
       const title = 'title';
       const content = 'content';
-      const authorId = 'author';
-      const password = 'password';
 
       const post = Post.createPost({
         title,
         content,
-        authorId,
-        password,
+        userId: user.id,
       });
 
       repository.insert = jest.fn();
@@ -67,8 +71,8 @@ describe('PostsRepository', () => {
       it('size 만큼 가져옴?', async () => {
         const page = 1;
         const size = 3;
-        await repository.insert(paginationSample);
 
+        await repository.insert(paginationSample(user.id));
         const [posts, totalCount] = await postsRepository.getPosts(
           new PostModel({ page, size }),
         );
@@ -80,7 +84,7 @@ describe('PostsRepository', () => {
       it('page 만큼 건너뛰고 가져옴?', async () => {
         const size = 3;
         const page = 2;
-        await repository.insert(paginationSample);
+        await repository.insert(paginationSample(user.id));
 
         const [posts, totalCount] = await postsRepository.getPosts(
           new PostModel({ page, size }),
@@ -102,13 +106,12 @@ describe('PostsRepository', () => {
         const postData = {
           title: search,
           content: 'content',
-          authorId: 'author',
-          password: 'password',
+          userId: user.id,
           createdAt: LocalDateTime.now(),
         };
 
         await repository.insert([
-          ...paginationSample,
+          ...paginationSample(user.id),
           Post.createPost(postData),
         ]);
 
@@ -128,13 +131,12 @@ describe('PostsRepository', () => {
         const postData = {
           title: 'content에 검색어가 포함된 게시글만 가져옴?',
           content: search,
-          authorId: 'author',
-          password: 'password',
+          userId: user.id,
           createdAt: LocalDateTime.now(),
         };
 
         await repository.insert([
-          ...paginationSample,
+          ...paginationSample(user.id),
           Post.createPost(postData),
         ]);
 
@@ -161,9 +163,9 @@ describe('PostsRepository', () => {
       expect(repository.findOneOrFail).toBeCalledTimes(1);
       expect(repository.findOneOrFail).toBeCalledWith({
         select: {
-          authorId: true,
+          userId: true,
           comments: {
-            authorId: true,
+            userId: true,
             content: true,
             createdAt: true,
             id: true,
@@ -198,12 +200,11 @@ describe('PostsRepository', () => {
   describe('게시글 수정: updatePost', () => {
     it('PostRepository.updatePost 실행 하면 this.posts.update 실행 하나?', async () => {
       const postId = 1;
-      const password = 'password';
       const title = 'update title';
 
       const { wherePost, updatePost } = Post.updatePost({
         postId,
-        password,
+        userId: user.id,
         title,
       });
 
@@ -213,20 +214,22 @@ describe('PostsRepository', () => {
 
       expect(repository.update).toBeCalledTimes(1);
       expect(repository.update).toBeCalledWith(
-        { id: wherePost.id, password: wherePost.password },
+        {
+          id: wherePost.id,
+          userId: wherePost.userId,
+        },
         updatePost,
       );
     });
 
     it('수정이 안되면 ForbiddenException 던지나?', async () => {
       const postId = 1;
-      const password = 'password';
       const title = 'update title';
 
       const { wherePost, updatePost } = Post.updatePost({
         postId,
+        userId: user.id,
         title,
-        password,
       });
 
       repository.update = jest.fn().mockResolvedValue({ affected: 0 });
@@ -240,9 +243,8 @@ describe('PostsRepository', () => {
   describe('게시글 삭제: removePost', () => {
     it('PostRepository.removePost 실행 하면 this.posts.delete 실행 하나?', async () => {
       const postId = 1;
-      const password = 'password';
 
-      const wherePost = Post.deleteBy({ id: postId, password });
+      const wherePost = Post.deleteBy({ id: postId, userId: user.id });
 
       repository.delete = jest.fn().mockResolvedValue({ affected: 1 });
 
@@ -251,15 +253,14 @@ describe('PostsRepository', () => {
       expect(repository.delete).toBeCalledTimes(1);
       expect(repository.delete).toBeCalledWith({
         id: wherePost.id,
-        password: wherePost.password,
+        userId: wherePost.userId,
       });
     });
 
     it('삭제가 안되면 ForbiddenException 던지나?', async () => {
       const postId = 1;
-      const password = 'password';
 
-      const wherePost = Post.deleteBy({ id: postId, password });
+      const wherePost = Post.deleteBy({ id: postId, userId: user.id });
 
       repository.delete = jest.fn().mockResolvedValue({ affected: 0 });
 

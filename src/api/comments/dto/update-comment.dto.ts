@@ -1,19 +1,29 @@
-import { PickType } from '@nestjs/swagger';
-
 import { Comment } from '../entities/comment.entity';
 
-import { CreateCommentDto } from './create-comment.dto';
+export class UpdateCommentDto {
+  private readonly _content: string;
+  private readonly _userId: number;
+  private readonly _id: number;
 
-export class UpdateCommentDto extends PickType(CreateCommentDto, [
-  'content',
-  'password',
-] as const) {
-  toEntity(id: number) {
-    const comment = new Comment();
-    comment.content = this.content;
-    comment.password = this.password;
-    comment.id = id;
+  constructor(commentData: { content: string; userId: number; id: number }) {
+    this._content = commentData.content;
+    this._userId = commentData.userId;
+    this._id = commentData.id;
+  }
 
-    return comment;
+  get content(): string {
+    return this._content;
+  }
+
+  get userId(): number {
+    return this._userId;
+  }
+
+  get id(): number {
+    return this._id;
+  }
+
+  toEntity() {
+    return Comment.updateComment(this.id, this.content, this.userId);
   }
 }

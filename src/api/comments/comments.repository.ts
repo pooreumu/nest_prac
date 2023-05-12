@@ -25,7 +25,10 @@ export class CommentsRepository {
   async updateComment(comment: Comment) {
     try {
       await this.comments.update(
-        { id: comment.id, password: comment.password },
+        {
+          id: comment.id,
+          userId: comment.userId,
+        },
         { content: comment.content },
       );
     } catch (e) {

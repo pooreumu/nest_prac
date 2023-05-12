@@ -33,18 +33,15 @@ describe('PostsController', () => {
     it('비회원이 controller.createPost를 실행하면 postService.createPost를 실행하나?', () => {
       const title = 'title';
       const content = 'content';
-      const authorId = 'author';
-      const password = 'password';
+      const user = { id: 1, nickname: 'nickname' };
 
       const postData = new CreatePostRequestDto();
       postData.title = title;
       postData.content = content;
-      postData.authorId = authorId;
-      postData.password = password;
 
-      const createPostDto = postData.toCreatePostDto();
+      const createPostDto = postData.toCreatePostDto(user.id);
 
-      controller.createPost(postData);
+      controller.createPost(postData, user);
 
       expect(service.createPost).toBeCalledTimes(1);
       expect(service.createPost).toBeCalledWith(createPostDto);
@@ -75,16 +72,15 @@ describe('PostsController', () => {
   describe('게시글 수정: updatePost', () => {
     it('controller.updatePost 실행하면 postService.updatePost 실행하나?', () => {
       const postId = 1;
+      const user = { id: 1, nickname: 'nickname' };
       const content = 'update content';
-      const password = 'password';
 
       const postData = new UpdatePostRequestDto();
       postData.content = content;
-      postData.password = password;
 
-      const updatePostDto = postData.toUpdatePostDto(postId);
+      const updatePostDto = postData.toUpdatePostDto(postId, user.id);
 
-      controller.updatePost(postId, postData);
+      controller.updatePost(postId, postData, user);
 
       expect(service.updatePost).toBeCalledTimes(1);
       expect(service.updatePost).toBeCalledWith(updatePostDto);
@@ -94,12 +90,12 @@ describe('PostsController', () => {
   describe('게시글 삭제: removePost', () => {
     it('controller.removePost 실행하면 postService.removePost 실행하나?', () => {
       const postId = 1;
-      const password = 'password';
+      const user = { id: 1, nickname: 'nickname' };
 
-      controller.removePost(postId, password);
+      controller.removePost(postId, user);
 
       expect(service.removePost).toBeCalledTimes(1);
-      expect(service.removePost).toBeCalledWith(postId, password);
+      expect(service.removePost).toBeCalledWith(postId, user.id);
     });
   });
 });

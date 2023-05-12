@@ -4,10 +4,14 @@ import { ApiProperty } from '@nestjs/swagger';
 // 📦 Package imports
 import bcrypt from 'bcrypt';
 import { IsNotEmpty, IsString } from 'class-validator';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 // 🌏 Project imports
 import { BaseTimeEntity } from '@lib/entity/base-time-entity';
+
+import { Post } from '@posts/entities/post.entity';
+
+import { Comment } from '@comments/entities/comment.entity';
 
 @Entity()
 export class User extends BaseTimeEntity {
@@ -35,6 +39,14 @@ export class User extends BaseTimeEntity {
     comment: '비밀번호',
   })
   password: string;
+
+  @OneToMany(() => Post, (post: Post) => post.user, { cascade: true })
+  posts: Post[];
+
+  @OneToMany(() => Comment, (comment: Comment) => comment.user, {
+    cascade: true,
+  })
+  comments: Comment[];
 
   static async from(nickname: string, password: string) {
     const user = new User();

@@ -2,12 +2,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // 📦 Package imports
-import {
-  IsAlphanumeric,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 // 🌏 Project imports
 import { CreatePostDto } from '../create-post.dto';
@@ -23,22 +18,11 @@ export class CreatePostRequestDto {
   @IsString()
   content: string;
 
-  @ApiProperty()
-  @IsOptional()
-  @IsString()
-  authorId?: string;
-
-  @ApiProperty()
-  @IsOptional()
-  @IsAlphanumeric()
-  password?: string;
-
-  public toCreatePostDto() {
+  public toCreatePostDto(userId: number): CreatePostDto {
     return new CreatePostDto({
       title: this.title,
       content: this.content,
-      authorId: this.authorId,
-      password: this.password,
+      userId,
     });
   }
 }
