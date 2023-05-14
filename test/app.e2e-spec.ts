@@ -20,8 +20,10 @@ import { ResponseEntity } from '@lib/response/response-entity';
 
 import { GetPostDto } from '@posts/dto/get-post.dto';
 import { PageDto } from '@posts/dto/page.dto';
+import { Post } from '@posts/entities/post.entity';
 
 import { GetCommentDto } from '@comments/dto/get-comment.dto';
+import { Comment } from '@comments/entities/comment.entity';
 
 import { User } from '@users/entities/user.entity';
 
@@ -62,6 +64,7 @@ describe('AppController (e2e)', () => {
     await app.init();
 
     dataSource = app.get<DataSource>(DataSource);
+    await dataSource.synchronize(true);
   });
 
   afterAll(async () => {
@@ -69,105 +72,164 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  const posts = {
-    title: 'test title',
-    content: 'test content',
-    authorId: 'ㅇㅇ',
-    password: 'asdf1234',
-  };
+  describe('로그인이 필요한 API', () => {
+    let agent;
+    beforeEach(async () => {
+      await request(app.getHttpServer()).post('/users/sign-up').send({
+        nickname: 'nickname',
+        password: 'password',
+      });
 
-  const comments = {
-    post: 1,
-    content: 'test content',
-    authorId: 'ㅇㅇ',
-    password: 'asdf1234',
-  };
+      agent = request.agent(app.getHttpServer());
 
-  const updateComment = { content: 'update comment content' };
-
-  it('게시글 생성 POST /posts', async () => {
-    const res = await request(app.getHttpServer()).post('/posts').send(posts);
-    expect(res.status).toBe(201);
-
-    const body: ResponseEntity<string> = res.body;
-    expect(body.statusCode).toBe('OK');
-  });
-
-  it('댓글 생성 POST /comments', async () => {
-    const res = await request(app.getHttpServer())
-      .post('/comments')
-      .send(comments);
-    expect(res.status).toBe(201);
-
-    const body: ResponseEntity<string> = res.body;
-    expect(body.statusCode).toBe('OK');
-  });
-
-  it('댓글 업데이트 PUT /comments/:id', async () => {
-    const res = await request(app.getHttpServer()).put('/comments/1').send({
-      content: updateComment.content,
-      password: comments.password,
+      await agent.post('/users/sign-in').send({
+        nickname: 'nickname',
+        password: 'password',
+      });
     });
-    expect(res.status).toBe(200);
 
-    const body: ResponseEntity<string> = res.body;
-    expect(body.statusCode).toBe('OK');
+    it('게시글 생성 POST /posts', async () => {
+      const res = await agent.post('/posts').send({
+        title: 'title',
+        content: 'content',
+      });
+      expect(res.status).toBe(201);
+
+      const body: ResponseEntity<string> = res.body;
+      expect(body.statusCode).toBe('OK');
+    });
+
+    describe('게시글이 있어야 하는 API', () => {
+      let post: Post;
+
+      beforeEach(async () => {
+        const postEntity = Post.createPost({
+          title: 'title',
+          content: 'content',
+          userId: 1,
+        });
+
+        post = await dataSource.getRepository(Post).save(postEntity);
+      });
+
+      it('댓글 생성 POST /posts/:postId/comments', async () => {
+        const res = await agent
+          .post(`/posts/${post.id}/comments`)
+          .send({ content: 'comment content' });
+
+        expect(res.status).toBe(201);
+
+        const body: ResponseEntity<string> = res.body;
+        expect(body.statusCode).toBe('OK');
+      });
+
+      it('댓글 업데이트 PUT /posts/:postId/comments/:id', async () => {
+        const commentEntity = Comment.createComment({
+          content: 'comment content',
+          userId: 1,
+          postId: post.id,
+        });
+
+        const comment = await dataSource
+          .getRepository(Comment)
+          .save(commentEntity);
+
+        const res = await agent
+          .put(`/posts/${post.id}/comments/${comment.id}`)
+          .send({
+            content: 'update comment content',
+          });
+        expect(res.status).toBe(200);
+
+        const body: ResponseEntity<string> = res.body;
+        expect(body.statusCode).toBe('OK');
+      });
+
+      it('게시글 업데이트 PATCH /posts/:postId', async () => {
+        const res = await agent
+          .patch(`/posts/${post.id}`)
+          .send({ title: 'update title' });
+        expect(res.status).toBe(200);
+
+        const body: ResponseEntity<string> = res.body;
+        expect(body.statusCode).toBe('OK');
+      });
+
+      it('게시글 삭제 DELETE /posts/:postId', async () => {
+        const res = await agent.delete(`/posts/${post.id}`);
+        expect(res.status).toBe(200);
+
+        const body: ResponseEntity<string> = res.body;
+        expect(body.statusCode).toBe('OK');
+      });
+    });
   });
 
-  it('게시글 전체 조회 GET /posts', async () => {
-    await Promise.all([
-      request(app.getHttpServer()).post('/posts').send(posts),
-      request(app.getHttpServer()).post('/posts').send(posts),
-    ]);
+  describe('회원이 필요한 API', () => {
+    let user: User;
+    let post1: Post;
+    let post2: Post;
 
-    const res = await request(app.getHttpServer()).get('/posts');
-    expect(res.status).toBe(200);
+    beforeEach(async () => {
+      const userEntity = await User.from('nickname', 'password');
 
-    const body: ResponseEntity<PageDto<GetPostDto>> = res.body;
-    expect(body.statusCode).toBe('OK');
+      user = await dataSource.getRepository(User).save(userEntity);
 
-    const data = body.data;
-    expect(data.totalPages).toBe(1);
-    expect(data.items[0].title).toBe(posts.title);
-    expect(data.items[0].authorId).toBe(posts.authorId);
-  });
+      const postEntity1 = Post.createPost({
+        title: 'title1',
+        content: 'content1',
+        userId: user.id,
+      });
 
-  it('게시글 상세 조회 GET /posts/:boarId', async () => {
-    const res = await request(app.getHttpServer()).get('/posts/1');
-    expect(res.status).toBe(200);
+      const postEntity2 = Post.createPost({
+        title: 'title2',
+        content: 'content2',
+        userId: user.id,
+      });
 
-    const body: ResponseEntity<GetPostDto> = res.body;
-    expect(body.statusCode).toBe('OK');
+      [post1, post2] = await Promise.all([
+        dataSource.getRepository(Post).save(postEntity1),
+        dataSource.getRepository(Post).save(postEntity2),
+      ]);
+    });
 
-    const data = body.data;
-    expect(data.id).toBe(1);
-    expect(data.title).toBe(posts.title);
-    expect(data.content).toBe(posts.content);
-    expect(data.authorId).toBe(posts.authorId);
+    it('게시글 전체 조회 GET /posts', async () => {
+      const res = await request(app.getHttpServer()).get('/posts');
+      expect(res.status).toBe(200);
 
-    const dataComments: GetCommentDto[] = data.comments;
-    expect(dataComments[0].authorId).toBe(comments.authorId);
-    expect(dataComments[0].content).toBe(updateComment.content);
-  });
+      const body: ResponseEntity<PageDto<GetPostDto>> = res.body;
+      expect(body.statusCode).toBe('OK');
 
-  it('게시글 업데이트 PATCH /posts/:boarId', async () => {
-    const res = await request(app.getHttpServer())
-      .patch('/posts/1')
-      .send({ password: posts.password, title: 'update title' });
-    expect(res.status).toBe(200);
+      const data = body.data;
+      expect(data.totalPages).toBe(1);
+      expect(data.items[0].title).toBe(post2.title);
+    });
 
-    const body: ResponseEntity<string> = res.body;
-    expect(body.statusCode).toBe('OK');
-  });
+    it('게시글 상세 조회 GET /posts/:postId', async () => {
+      const commentEntity = Comment.createComment({
+        content: 'comment content',
+        userId: user.id,
+        postId: post1.id,
+      });
 
-  it('게시글 삭제 DELETE /posts/:boarId', async () => {
-    const res = await request(app.getHttpServer())
-      .delete('/posts/1')
-      .set('password', `${posts.password}`);
-    expect(res.status).toBe(200);
+      const comment = await dataSource
+        .getRepository(Comment)
+        .save(commentEntity);
 
-    const body: ResponseEntity<string> = res.body;
-    expect(body.statusCode).toBe('OK');
+      const res = await request(app.getHttpServer()).get(`/posts/${post1.id}`);
+      expect(res.status).toBe(200);
+
+      const body: ResponseEntity<GetPostDto> = res.body;
+      expect(body.statusCode).toBe('OK');
+
+      const data = body.data;
+      expect(data.id).toBe(1);
+      expect(data.title).toBe(post1.title);
+      expect(data.content).toBe(post1.content);
+
+      const dataComments: GetCommentDto[] = data.comments;
+      expect(dataComments[0].content).toBe(comment.content);
+    });
   });
 
   it('회원가입 POST /users/sign-up', async () => {
@@ -187,6 +249,8 @@ describe('AppController (e2e)', () => {
       nickname: 'nickname',
       password: 'password',
     };
+
+    await request(app.getHttpServer()).post('/users/sign-up').send(user);
     const res = await request(app.getHttpServer())
       .post('/users/sign-in')
       .send(user);
