@@ -2,7 +2,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 // 📦 Package imports
-import { LocalDateTime } from '@js-joda/core';
 import { Exclude, Expose } from 'class-transformer';
 
 // 🌏 Project imports
@@ -14,8 +13,8 @@ export class GetCommentDto {
   @Exclude() private readonly _id: number;
   @Exclude() private readonly _content: string;
   @Exclude() private readonly _userId: number;
-  @Exclude() private readonly _createdAt: LocalDateTime | Date;
-  @Exclude() private readonly _updatedAt: LocalDateTime | Date;
+  @Exclude() private readonly _createdAt: Date;
+  @Exclude() private readonly _updatedAt: Date;
 
   constructor(comment: Comment) {
     this._id = comment.id;
@@ -46,12 +45,12 @@ export class GetCommentDto {
   @ApiProperty()
   @Expose()
   get createdAt(): string {
-    return DateTimeUtil.toString(this._createdAt as LocalDateTime);
+    return DateTimeUtil.toString(DateTimeUtil.toLocalDateTime(this._createdAt));
   }
 
   @ApiProperty()
   @Expose()
   get updatedAt(): string {
-    return DateTimeUtil.toString(this._updatedAt as LocalDateTime);
+    return DateTimeUtil.toString(DateTimeUtil.toLocalDateTime(this._updatedAt));
   }
 }
