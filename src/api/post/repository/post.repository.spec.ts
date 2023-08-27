@@ -18,13 +18,14 @@ import { Post } from '../entities/post.entity';
 import { PostModule } from '../post.module';
 
 describe('PostsRepository', () => {
+  let module: TestingModule;
   let postsRepository: PostRepository;
   let repository: Repository<Post>;
   let dataSource: DataSource;
   let user: User;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [PostModule, TypeormConfigModule],
     }).compile();
 
@@ -38,6 +39,10 @@ describe('PostsRepository', () => {
     user = await dataSource
       .getRepository(User)
       .save(await User.from('nickname', 'password'));
+  });
+
+  afterEach(async () => {
+    await module.close();
   });
 
   afterAll(async () => {

@@ -11,11 +11,12 @@ import { User } from '@user/entities/user.entity';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
+  let module: TestingModule;
   let authService: AuthService;
   let dataSource: DataSource;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [TypeormConfigModule, AuthModule],
     }).compile();
 
@@ -26,8 +27,8 @@ describe('AuthService', () => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
-    expect(authService).toBeDefined();
+  afterEach(async () => {
+    await module.close();
   });
 
   describe('validateUser test', () => {

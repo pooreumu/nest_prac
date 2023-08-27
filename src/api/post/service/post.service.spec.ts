@@ -14,11 +14,12 @@ import { PostService } from '@post/service/post.service';
 jest.mock('@post/repository/post.typeorm-repository');
 
 describe('PostsService', () => {
+  let module: TestingModule;
   let service: PostService;
   let repository: PostRepository;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [],
       providers: [
         PostService,
@@ -33,8 +34,8 @@ describe('PostsService', () => {
     repository = module.get<PostRepository>(POST_REPOSITORY);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  afterEach(async () => {
+    await module.close();
   });
 
   describe('게시글 작성: createPost', () => {

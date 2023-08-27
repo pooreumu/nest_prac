@@ -7,16 +7,17 @@ import { UpdatePostRequestDto } from '@post/dto/request.dto/update-post-request.
 import { PostService } from '@post/service/post.service';
 import { CreatePostUseCase } from '@post/use-case/create-post.use-case';
 
-jest.mock('@post/post.service');
+jest.mock('@post/service/post.service');
 jest.mock('@post/use-case/create-post.use-case');
 
 describe('PostsController', () => {
+  let module: TestingModule;
   let controller: PostController;
   let service: PostService;
   let useCase: CreatePostUseCase;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       controllers: [PostController],
       providers: [PostService, CreatePostUseCase],
     }).compile();
@@ -26,8 +27,8 @@ describe('PostsController', () => {
     useCase = module.get<CreatePostUseCase>(CreatePostUseCase);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  afterEach(async () => {
+    await module.close();
   });
 
   describe('게시글 작성: createPost', () => {

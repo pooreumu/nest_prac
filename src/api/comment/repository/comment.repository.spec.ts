@@ -18,6 +18,7 @@ import { User } from '@user/entities/user.entity';
 import { CommentRepository } from './comment.repository';
 
 describe('Comments', () => {
+  let module: TestingModule;
   let commentsRepository: CommentRepository;
   let repository: Repository<Comment>;
   let dataSource: DataSource;
@@ -25,7 +26,7 @@ describe('Comments', () => {
   let post: Post;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [CommentModule, TypeormConfigModule],
     }).compile();
 
@@ -48,6 +49,7 @@ describe('Comments', () => {
 
   afterEach(async () => {
     await dataSource.synchronize(true);
+    await module.close();
   });
 
   it('should be defined', () => {

@@ -8,11 +8,12 @@ import { CommentService } from '@comment/service/comment.service';
 jest.mock('@comment/service/comment.service');
 
 describe('CommentsController', () => {
+  let module: TestingModule;
   let controller: CommentController;
   let service: CommentService;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       controllers: [CommentController],
       providers: [CommentService],
     }).compile();
@@ -21,8 +22,8 @@ describe('CommentsController', () => {
     service = module.get<CommentService>(CommentService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  afterEach(async () => {
+    await module.close();
   });
 
   describe('댓글 생성', () => {

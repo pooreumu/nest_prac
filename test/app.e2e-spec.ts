@@ -19,7 +19,7 @@ describe('AppController (e2e)', () => {
   let app: INestApplication;
   let dataSource: DataSource;
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -30,11 +30,13 @@ describe('AppController (e2e)', () => {
     await app.init();
 
     dataSource = app.get<DataSource>(DataSource);
+  });
+
+  afterEach(async () => {
     await dataSource.synchronize(true);
   });
 
   afterAll(async () => {
-    await dataSource.synchronize(true);
     await app.close();
   });
 

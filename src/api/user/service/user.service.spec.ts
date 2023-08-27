@@ -17,12 +17,13 @@ import {
 import { UserService } from './user.service';
 
 describe('UsersService', () => {
+  let module: TestingModule;
   let service: UserService;
   let repository: UserRepository;
   let dataSource: DataSource;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [UserModule, TypeormConfigModule],
     }).compile();
 
@@ -34,8 +35,8 @@ describe('UsersService', () => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  afterEach(async () => {
+    await module.close();
   });
 
   describe('users.signUp test 회원가입 테스트', () => {

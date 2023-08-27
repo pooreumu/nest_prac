@@ -5,14 +5,15 @@ import { UpdateCommentDto } from '@comment/dto/update-comment.dto';
 import { CommentRepository } from '@comment/repository/comment.repository';
 import { CommentService } from '@comment/service/comment.service';
 
-jest.mock('@comment/comment.repository');
+jest.mock('@comment/repository/comment.repository');
 
 describe('CommentsService', () => {
+  let module: TestingModule;
   let service: CommentService;
   let repository: CommentRepository;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       providers: [CommentService, CommentRepository],
     }).compile();
 
@@ -22,8 +23,8 @@ describe('CommentsService', () => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+  afterEach(async () => {
+    await module.close();
   });
 
   const commentData = {

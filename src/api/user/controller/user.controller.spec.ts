@@ -4,14 +4,15 @@ import { UserController } from '@user/controller/user.controller';
 import { CreateUserDto } from '@user/dto/create-user.dto';
 import { UserService } from '@user/service/user.service';
 
-jest.mock('@user/user.service');
+jest.mock('@user/service/user.service');
 
 describe('UsersController', () => {
   let controller: UserController;
   let service: UserService;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       controllers: [UserController],
       providers: [UserService],
     }).compile();
@@ -20,8 +21,8 @@ describe('UsersController', () => {
     service = module.get<UserService>(UserService);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  afterEach(async () => {
+    await module.close();
   });
 
   describe('controller.signUp test 회원가입 테스트', () => {

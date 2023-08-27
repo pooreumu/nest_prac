@@ -5,25 +5,31 @@ import { DataSource } from 'typeorm';
 
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
-import { UserModule } from '../user.module';
-
 import { User } from '@user/entities/user.entity';
-
-import { UserTypeormRepository } from './user.typeorm-repository';
+import {
+  USER_REPOSITORY,
+  UserRepository,
+} from '@user/repository/user.repository';
+import { UserModule } from '@user/user.module';
 
 describe('Users', () => {
-  let usersRepository: UserTypeormRepository;
+  let usersRepository: UserRepository;
   let dataSource: DataSource;
+  let module: TestingModule;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [UserModule, TypeormConfigModule],
     }).compile();
 
-    usersRepository = module.get<UserTypeormRepository>(UserTypeormRepository);
+    usersRepository = module.get<UserRepository>(USER_REPOSITORY);
     dataSource = module.get<DataSource>(DataSource);
 
     await dataSource.synchronize(true);
+  });
+
+  afterEach(async () => {
+    await module.close();
   });
 
   it('should be defined', () => {
