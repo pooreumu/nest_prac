@@ -2,24 +2,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 // 🌏 Project imports
-import { CommentsRepository } from './comments.repository';
-import { CommentsService } from './comments.service';
-import { CreateCommentRequestDto } from './dto/request.dto/create-comment-request.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { CommentRepository } from '@comment/comment.repository';
+import { CommentService } from '@comment/comment.service';
+import { CreateCommentRequestDto } from '@comment/dto/request.dto/create-comment-request.dto';
+import { UpdateCommentDto } from '@comment/dto/update-comment.dto';
 
-jest.mock('./comments.repository');
+jest.mock('@comment/comment.repository');
 
 describe('CommentsService', () => {
-  let service: CommentsService;
-  let repository: CommentsRepository;
+  let service: CommentService;
+  let repository: CommentRepository;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [CommentsService, CommentsRepository],
+      providers: [CommentService, CommentRepository],
     }).compile();
 
-    service = module.get<CommentsService>(CommentsService);
-    repository = module.get<CommentsRepository>(CommentsRepository);
+    service = module.get<CommentService>(CommentService);
+    repository = module.get<CommentRepository>(CommentRepository);
 
     jest.clearAllMocks();
   });

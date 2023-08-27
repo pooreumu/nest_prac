@@ -4,12 +4,12 @@ import { Injectable } from '@nestjs/common';
 // 🌏 Project imports
 import { CreateCommentDto } from '@src/api/comment/dto/create-comment.dto';
 
-import { CommentsRepository } from './comments.repository';
+import { CommentRepository } from './comment.repository';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
-export class CommentsService {
-  constructor(private readonly commentsRepository: CommentsRepository) {}
+export class CommentService {
+  constructor(private readonly commentsRepository: CommentRepository) {}
 
   async createComment(commentData: CreateCommentDto) {
     return this.commentsRepository.createComment(commentData.toEntity());

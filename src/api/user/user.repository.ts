@@ -10,7 +10,7 @@ import { QueryFailedError, Repository } from 'typeorm';
 import { User } from '@src/api/user/entities/user.entity';
 
 @Injectable()
-export class UsersRepository {
+export class UserRepository {
   constructor(
     @InjectRepository(User)
     private readonly userTypeOrmRepository: Repository<User>,

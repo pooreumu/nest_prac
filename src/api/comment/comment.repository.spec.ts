@@ -10,14 +10,14 @@ import { Post } from '@src/api/post/entities/post.entity';
 import { User } from '@src/api/user/entities/user.entity';
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
-import { CommentsModule } from './comments.module';
-import { CommentsRepository } from './comments.repository';
+import { CommentModule } from './comment.module';
+import { CommentRepository } from './comment.repository';
 import { CreateCommentRequestDto } from './dto/request.dto/create-comment-request.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Comment } from './entities/comment.entity';
 
 describe('Comments', () => {
-  let commentsRepository: CommentsRepository;
+  let commentsRepository: CommentRepository;
   let repository: Repository<Comment>;
   let dataSource: DataSource;
   let user: User;
@@ -25,10 +25,10 @@ describe('Comments', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [CommentsModule, TypeormConfigModule],
+      imports: [CommentModule, TypeormConfigModule],
     }).compile();
 
-    commentsRepository = module.get<CommentsRepository>(CommentsRepository);
+    commentsRepository = module.get<CommentRepository>(CommentRepository);
     repository = module.get<Repository<Comment>>('CommentRepository');
     dataSource = module.get<DataSource>(DataSource);
 

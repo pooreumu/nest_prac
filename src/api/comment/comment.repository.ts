@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 import { Comment } from './entities/comment.entity';
 
 @Injectable()
-export class CommentsRepository {
+export class CommentRepository {
   constructor(
     @InjectRepository(Comment) private readonly comments: Repository<Comment>,
   ) {}

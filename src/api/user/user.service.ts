@@ -3,11 +3,11 @@ import { Injectable } from '@nestjs/common';
 
 // 🌏 Project imports
 import { CreateUserDto } from './dto/create-user.dto';
-import { UsersRepository } from './users.repository';
+import { UserRepository } from './user.repository';
 
 @Injectable()
-export class UsersService {
-  constructor(private readonly usersRepository: UsersRepository) {}
+export class UserService {
+  constructor(private readonly usersRepository: UserRepository) {}
 
   async signUp(createUserDto: CreateUserDto): Promise<void> {
     await this.usersRepository.insert(await createUserDto.toEntity());

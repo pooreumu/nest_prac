@@ -1,27 +1,27 @@
 // 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { CommentController } from '@comment/comment.controller';
+import { CommentService } from '@comment/comment.service';
+import { CreateCommentRequestDto } from '@comment/dto/request.dto/create-comment-request.dto';
+import { UpdateCommentRequestDto } from '@comment/dto/request.dto/update-comment-request.dto';
+
 // 🌏 Project imports
-import { UpdateCommentRequestDto } from '@src/api/comment/dto/request.dto/update-comment-request.dto';
 
-import { CommentsController } from './comments.controller';
-import { CommentsService } from './comments.service';
-import { CreateCommentRequestDto } from './dto/request.dto/create-comment-request.dto';
-
-jest.mock('./comments.service');
+jest.mock('@comment/comment.service');
 
 describe('CommentsController', () => {
-  let controller: CommentsController;
-  let service: CommentsService;
+  let controller: CommentController;
+  let service: CommentService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [CommentsController],
-      providers: [CommentsService],
+      controllers: [CommentController],
+      providers: [CommentService],
     }).compile();
 
-    controller = module.get<CommentsController>(CommentsController);
-    service = module.get<CommentsService>(CommentsService);
+    controller = module.get<CommentController>(CommentController);
+    service = module.get<CommentService>(CommentService);
   });
 
   it('should be defined', () => {

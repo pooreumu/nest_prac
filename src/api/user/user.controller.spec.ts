@@ -2,24 +2,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 // 🌏 Project imports
-import { CreateUserDto } from './dto/create-user.dto';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
+import { CreateUserDto } from '@user/dto/create-user.dto';
+import { UserController } from '@user/user.controller';
+import { UserService } from '@user/user.service';
 
-jest.mock('./users.service');
+jest.mock('@user/user.service');
 
 describe('UsersController', () => {
-  let controller: UsersController;
-  let service: UsersService;
+  let controller: UserController;
+  let service: UserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [UsersController],
-      providers: [UsersService],
+      controllers: [UserController],
+      providers: [UserService],
     }).compile();
 
-    controller = module.get<UsersController>(UsersController);
-    service = module.get<UsersService>(UsersService);
+    controller = module.get<UserController>(UserController);
+    service = module.get<UserService>(UserService);
   });
 
   it('should be defined', () => {

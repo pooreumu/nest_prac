@@ -2,12 +2,14 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
 // 🌏 Project imports
-import { CommentsModule } from '@src/api/comment/comments.module';
 import { PostModule } from '@src/api/post/post.module';
-import { UsersModule } from '@src/api/user/users.module';
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
 import { AuthModule } from '@auth/auth.module';
+
+import { CommentModule } from '@comment/comment.module';
+
+import { UserModule } from '@user/user.module';
 
 import { LoggerMiddleware } from './middleware/logger.middleware';
 
@@ -15,8 +17,8 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
   imports: [
     TypeormConfigModule,
     PostModule,
-    CommentsModule,
-    UsersModule,
+    CommentModule,
+    UserModule,
     AuthModule,
   ],
 })

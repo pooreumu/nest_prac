@@ -10,22 +10,22 @@ import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
-import { UsersModule } from './users.module';
-import { UsersRepository } from './users.repository';
-import { UsersService } from './users.service';
+import { UserModule } from './user.module';
+import { UserRepository } from './user.repository';
+import { UserService } from './user.service';
 
 describe('UsersService', () => {
-  let service: UsersService;
-  let repository: UsersRepository;
+  let service: UserService;
+  let repository: UserRepository;
   let dataSource: DataSource;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [UsersModule, TypeormConfigModule],
+      imports: [UserModule, TypeormConfigModule],
     }).compile();
 
-    service = module.get<UsersService>(UsersService);
-    repository = module.get<UsersRepository>(UsersRepository);
+    service = module.get<UserService>(UserService);
+    repository = module.get<UserRepository>(UserRepository);
     dataSource = module.get<DataSource>(DataSource);
 
     await dataSource.synchronize(true);

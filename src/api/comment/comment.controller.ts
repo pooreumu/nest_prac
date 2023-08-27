@@ -10,14 +10,14 @@ import { User } from '@decorator/user/user.decorator';
 
 import { LoggedInGuard } from '@auth/logged-in.guard';
 
-import { CommentsService } from './comments.service';
+import { CommentService } from './comment.service';
 import { CreateCommentRequestDto } from './dto/request.dto/create-comment-request.dto';
 import { UpdateCommentRequestDto } from './dto/request.dto/update-comment-request.dto';
 
 @ApiTags('COMMENT')
 @Controller('/posts/:postId/comments')
-export class CommentsController {
-  constructor(private readonly commentsService: CommentsService) {}
+export class CommentController {
+  constructor(private readonly commentsService: CommentService) {}
 
   @ApiOperation({ summary: '댓글 생성' })
   @Post()
