@@ -53,12 +53,12 @@ describe('PostsRepository', () => {
     expect(postsRepository).toBeDefined();
   });
 
-  describe('게시글 작성: createPost', () => {
+  describe('게시글 작성: save', () => {
     it('게시글 작성은 데이터베이스에 데이터를 저장할 수 있어야 한다.', async () => {
       const title = 'title';
       const content = 'content';
 
-      const post = await postsRepository.createPost(
+      const post = await postsRepository.save(
         Post.createPost({
           title,
           content,

@@ -6,7 +6,7 @@ import { Post } from '@post/entities/post.entity';
 import { POST_REPOSITORY } from '@post/repository/post.repository';
 import { PostTypeormRepository } from '@post/repository/post.typeorm-repository';
 import { PostService } from '@post/service/post.service';
-import { CreatePostUseCase } from '@post/use-case/create-post.use-case';
+import { CreatePostUseCase } from '@post/use-case/create-post/create-post.use-case';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Post])],

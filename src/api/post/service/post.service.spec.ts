@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { CreatePostDto } from '@post/dto/create-post.dto';
 import { DeletePostDto } from '@post/dto/delete-post.dto';
 import { GetPostRequestDto } from '@post/dto/request.dto/get-post-request.dto';
 import { UpdatePostDto } from '@post/dto/update-post.dto';
@@ -36,27 +35,6 @@ describe('PostsService', () => {
 
   afterEach(async () => {
     await module.close();
-  });
-
-  describe('게시글 작성: createPost', () => {
-    it('service.createPost를 실행하면 this.postRepository.createPost를 실행하나?', () => {
-      const title = 'title';
-      const content = 'content';
-      const userId = 1;
-
-      const postData = new CreatePostDto({
-        title,
-        content,
-        userId,
-      });
-
-      const createPost = postData.toEntity();
-
-      service.createPost(postData);
-
-      expect(repository.createPost).toBeCalledTimes(1);
-      expect(repository.createPost).toBeCalledWith(createPost);
-    });
   });
 
   describe('게시글 전체 조회: getAllPosts', () => {

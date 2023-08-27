@@ -1,6 +1,6 @@
-import { Post } from '../entities/post.entity';
+import { Post } from '../../entities/post.entity';
 
-export class CreatePostDto {
+export class CreatePostCommand {
   private readonly _title: string;
   private readonly _content: string;
   private readonly _userId: number;

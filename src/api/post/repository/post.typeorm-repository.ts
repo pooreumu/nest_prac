@@ -14,18 +14,19 @@ import { Post } from '../entities/post.entity';
 import { PostModel } from '../entities/post.model';
 
 @Injectable()
-export class PostTypeormRepository implements PostRepository {
+export class PostTypeormRepository
+  extends Repository<Post>
+  implements PostRepository
+{
   constructor(
-    @InjectRepository(Post) private readonly post: Repository<Post>,
-  ) {}
-
-  async createPost(post: Post): Promise<Post> {
-    return await this.post.save(post);
+    @InjectRepository(Post) private readonly repository: Repository<Post>,
+  ) {
+    super(repository.target, repository.manager);
   }
 
   async getPosts(post: PostModel): Promise<[Post[], number]> {
     try {
-      const selectQueryBuilder = this.post
+      const selectQueryBuilder = this.repository
         .createQueryBuilder('p')
         .select(['p.id', 'p.title', 'p.userId', 'p.createdAt', 'p.updatedAt'])
         .orderBy('p.id', 'DESC')
@@ -47,7 +48,7 @@ export class PostTypeormRepository implements PostRepository {
 
   async getPost(postId: number): Promise<Post> {
     try {
-      return await this.post.findOneOrFail({
+      return await this.repository.findOneOrFail({
         select: {
           id: true,
           title: true,
@@ -77,12 +78,12 @@ export class PostTypeormRepository implements PostRepository {
   }
 
   async updatePost(post: Post): Promise<Post> {
-    return await this.post.save(post);
+    return await this.repository.save(post);
   }
 
   async deletePost(where: Post): Promise<void> {
     try {
-      const result = await this.post.delete({
+      const result = await this.repository.delete({
         id: where.id,
         userId: where.userId,
       });

@@ -5,6 +5,8 @@ import { User } from '@src/api/user/entities/user.entity';
 
 import { BaseTimeEntity } from '@lib/entity/base-time-entity';
 
+import { CreatePostDto } from '@post/use-case/dto/create-post.dto';
+
 @Entity()
 export class Post extends BaseTimeEntity {
   @Column({
@@ -76,5 +78,17 @@ export class Post extends BaseTimeEntity {
     post.userId = postData.userId;
 
     return post;
+  }
+
+  toCreateDto(): CreatePostDto {
+    return new CreatePostDto({
+      id: this.id,
+      title: this.title,
+      content: this.content,
+      userId: this.userId,
+      comments: this.comments,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    });
   }
 }

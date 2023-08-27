@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { IsNotEmpty, IsString } from 'class-validator';
 
-import { CreatePostDto } from '../create-post.dto';
+import { CreatePostCommand } from '../../use-case/command/create-post.command';
 
 export class CreatePostRequestDto {
   @ApiProperty()
@@ -15,8 +15,8 @@ export class CreatePostRequestDto {
   @IsString()
   content: string;
 
-  public toCreatePostDto(userId: number): CreatePostDto {
-    return new CreatePostDto({
+  public toCreatePostDto(userId: number): CreatePostCommand {
+    return new CreatePostCommand({
       title: this.title,
       content: this.content,
       userId,

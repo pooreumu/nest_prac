@@ -4,7 +4,6 @@ import { PageDto } from '@post/dto/page.dto';
 import { GetPostRequestDto } from '@post/dto/request.dto/get-post-request.dto';
 import { POST_REPOSITORY } from '@post/repository/post.repository';
 
-import { CreatePostDto } from '../dto/create-post.dto';
 import { DeletePostDto } from '../dto/delete-post.dto';
 import { GetPostDto } from '../dto/get-post.dto';
 import { UpdatePostDto } from '../dto/update-post.dto';
@@ -16,12 +15,6 @@ export class PostService {
     @Inject(POST_REPOSITORY)
     private readonly postRepository: PostTypeormRepository,
   ) {}
-
-  async createPost(postData: CreatePostDto): Promise<void> {
-    const createPost = postData.toEntity();
-
-    await this.postRepository.createPost(createPost);
-  }
 
   async getPosts(
     getPostRequestDto: GetPostRequestDto,
