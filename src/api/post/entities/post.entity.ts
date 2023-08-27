@@ -55,16 +55,14 @@ export class Post extends BaseTimeEntity {
     userId: number;
     title?: string;
     content?: string;
-  }): { wherePost: Post; updatePost: Post } {
-    const wherePost = new Post();
-    wherePost.id = postData.postId;
-    wherePost.userId = postData.userId;
+  }): Post {
+    const post = new Post();
+    post.id = postData.postId;
+    post.userId = postData.userId;
+    if (postData.title) post.title = postData.title;
+    if (postData.content) post.content = postData.content;
 
-    const updatePost = new Post();
-    if (postData.title) updatePost.title = postData.title;
-    if (postData.content) updatePost.content = postData.content;
-
-    return { wherePost: wherePost, updatePost: updatePost };
+    return post;
   }
 
   static byPk(postData: { id: number }): Post {

@@ -2,13 +2,23 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { GetPostRequestDto } from '@src/api/post/dto/request.dto/get-post-request.dto';
 
-import { CreatePostDto } from './dto/create-post.dto';
-import { DeletePostDto } from './dto/delete-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { PostService } from './post.service';
-import { PostRepository } from './repository/post.repository';
+import { CreatePostDto } from '@post/dto/create-post.dto';
+import { DeletePostDto } from '@post/dto/delete-post.dto';
+import { UpdatePostDto } from '@post/dto/update-post.dto';
+import { PostService } from '@post/post.service';
+import {
+  POST_REPOSITORY,
+  PostRepository,
+} from '@post/repository/post.repository';
+import { PostTypeormRepository } from '@post/repository/post.typeorm-repository';
 
-jest.mock('./repository/post.repository');
+// import { CreatePostDto } from './dto/create-post.dto';
+// import { DeletePostDto } from './dto/delete-post.dto';
+// import { UpdatePostDto } from './dto/update-post.dto';
+// import { PostService } from './post.service';
+// import { PostTypeormRepository } from './repository/post.typeorm-repository';
+
+jest.mock('@post/repository/post.typeorm-repository');
 
 describe('PostsService', () => {
   let service: PostService;
@@ -17,11 +27,17 @@ describe('PostsService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [],
-      providers: [PostService, PostRepository],
+      providers: [
+        PostService,
+        {
+          provide: POST_REPOSITORY,
+          useClass: PostTypeormRepository,
+        },
+      ],
     }).compile();
 
     service = module.get<PostService>(PostService);
-    repository = module.get<PostRepository>(PostRepository);
+    repository = module.get<PostRepository>(POST_REPOSITORY);
   });
 
   it('should be defined', () => {
@@ -89,12 +105,10 @@ describe('PostsService', () => {
         title,
       });
 
-      const { wherePost, updatePost } = postData.toEntity();
-
       service.updatePost(postData);
 
       expect(repository.updatePost).toBeCalledTimes(1);
-      expect(repository.updatePost).toBeCalledWith(wherePost, updatePost);
+      expect(repository.updatePost).toBeCalledWith(postData.toEntity());
     });
   });
 
@@ -107,8 +121,8 @@ describe('PostsService', () => {
 
       service.removePost(postId, userId);
 
-      expect(repository.removePost).toBeCalledTimes(1);
-      expect(repository.removePost).toBeCalledWith(wherePost);
+      expect(repository.deletePost).toBeCalledTimes(1);
+      expect(repository.deletePost).toBeCalledWith(wherePost);
     });
   });
 });

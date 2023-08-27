@@ -1,25 +1,30 @@
 // 🐱 Nestjs imports
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 // 📦 Package imports
 // 🌏 Project imports
 import { PageDto } from '@src/api/post/dto/page.dto';
 import { GetPostRequestDto } from '@src/api/post/dto/request.dto/get-post-request.dto';
 
+import { POST_REPOSITORY } from '@post/repository/post.repository';
+
 import { CreatePostDto } from './dto/create-post.dto';
 import { DeletePostDto } from './dto/delete-post.dto';
 import { GetPostDto } from './dto/get-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { PostRepository } from './repository/post.repository';
+import { PostTypeormRepository } from './repository/post.typeorm-repository';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly postRepository: PostRepository) {}
+  constructor(
+    @Inject(POST_REPOSITORY)
+    private readonly postRepository: PostTypeormRepository,
+  ) {}
 
   async createPost(postData: CreatePostDto): Promise<void> {
     const createPost = postData.toEntity();
 
-    return this.postRepository.createPost(createPost);
+    await this.postRepository.createPost(createPost);
   }
 
   async getPosts(
@@ -41,14 +46,12 @@ export class PostService {
   }
 
   async updatePost(postData: UpdatePostDto): Promise<void> {
-    const { wherePost, updatePost } = postData.toEntity();
-
-    return this.postRepository.updatePost(wherePost, updatePost);
+    await this.postRepository.updatePost(postData.toEntity());
   }
 
   async removePost(postId: number, userId: number): Promise<void> {
     const wherePost = new DeletePostDto({ postId, userId }).toEntity();
 
-    return this.postRepository.removePost(wherePost);
+    return this.postRepository.deletePost(wherePost);
   }
 }

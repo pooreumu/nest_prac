@@ -11,11 +11,14 @@ import { PostModel } from '@src/api/post/entities/post.model';
 import { User } from '@src/api/user/entities/user.entity';
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
+import {
+  POST_REPOSITORY,
+  PostRepository,
+} from '@post/repository/post.repository';
+
 import { paginationSample } from '../../../../test/data/post/pagination-sample';
 import { Post } from '../entities/post.entity';
 import { PostModule } from '../post.module';
-
-import { PostRepository } from './post.repository';
 
 describe('PostsRepository', () => {
   let postsRepository: PostRepository;
@@ -28,7 +31,7 @@ describe('PostsRepository', () => {
       imports: [PostModule, TypeormConfigModule],
     }).compile();
 
-    postsRepository = module.get<PostRepository>(PostRepository);
+    postsRepository = module.get<PostRepository>(POST_REPOSITORY);
     repository = module.get<Repository<Post>>('PostRepository');
     dataSource = module.get<DataSource>(DataSource);
 
@@ -40,27 +43,29 @@ describe('PostsRepository', () => {
       .save(await User.from('nickname', 'password'));
   });
 
+  afterAll(async () => {
+    await dataSource.synchronize(true);
+  });
+
   it('should be defined', () => {
     expect(postsRepository).toBeDefined();
   });
 
   describe('게시글 작성: createPost', () => {
-    it('PostRepository.createPost 실행 하면 this.posts.insert 실행 하나?', async () => {
+    it('게시글 작성은 데이터베이스에 데이터를 저장할 수 있어야 한다.', async () => {
       const title = 'title';
       const content = 'content';
 
-      const post = Post.createPost({
-        title,
-        content,
-        userId: user.id,
-      });
+      const post = await postsRepository.createPost(
+        Post.createPost({
+          title,
+          content,
+          userId: user.id,
+        }),
+      );
 
-      repository.insert = jest.fn();
-
-      await postsRepository.createPost(post);
-
-      expect(repository.insert).toBeCalledTimes(1);
-      expect(repository.insert).toBeCalledWith(post);
+      expect(post.title).toBe(title);
+      expect(post.content).toBe(content);
     });
   });
 
@@ -151,7 +156,7 @@ describe('PostsRepository', () => {
   });
 
   describe('게시글 상세 조회: getOnePost', () => {
-    it('PostRepository.getOnePost 실행 하면 this.posts.findOne 실행 하나?', async () => {
+    it('PostTypeormRepository.getOnePost 실행 하면 this.posts.findOne 실행 하나?', async () => {
       const postId = 1;
 
       repository.findOneOrFail = jest.fn().mockResolvedValue(new Post());
@@ -196,75 +201,60 @@ describe('PostsRepository', () => {
   });
 
   describe('게시글 수정: updatePost', () => {
-    it('PostRepository.updatePost 실행 하면 this.posts.update 실행 하나?', async () => {
-      const postId = 1;
+    it('PostTypeormRepository.updatePost 실행 하면 this.posts.update 실행 하나?', async () => {
+      const post1 = await repository.save(
+        Post.createPost({
+          title: 'title',
+          content: 'content',
+          userId: user.id,
+        }),
+      );
+
       const title = 'update title';
+      await postsRepository.updatePost(
+        Post.updatePost({
+          postId: post1.id,
+          userId: user.id,
+          title: title,
+        }),
+      );
 
-      const { wherePost, updatePost } = Post.updatePost({
-        postId,
-        userId: user.id,
-        title,
+      const post = await repository.findOneOrFail({
+        where: {
+          id: post1.id,
+        },
       });
+      expect(post.title).toBe(title);
+    });
 
-      repository.update = jest.fn().mockResolvedValue({ affected: 1 });
+    describe('게시글 삭제: removePost', () => {
+      it('PostTypeormRepository.removePost 실행 하면 this.posts.delete 실행 하나?', async () => {
+        const postId = 1;
 
-      await postsRepository.updatePost(wherePost, updatePost);
+        const wherePost = Post.deleteBy({ id: postId, userId: user.id });
 
-      expect(repository.update).toBeCalledTimes(1);
-      expect(repository.update).toBeCalledWith(
-        {
+        repository.delete = jest.fn().mockResolvedValue({ affected: 1 });
+
+        await postsRepository.deletePost(wherePost);
+
+        expect(repository.delete).toBeCalledTimes(1);
+        expect(repository.delete).toBeCalledWith({
           id: wherePost.id,
           userId: wherePost.userId,
-        },
-        updatePost,
-      );
-    });
-
-    it('수정이 안되면 ForbiddenException 던지나?', async () => {
-      const postId = 1;
-      const title = 'update title';
-
-      const { wherePost, updatePost } = Post.updatePost({
-        postId,
-        userId: user.id,
-        title,
+        });
       });
 
-      repository.update = jest.fn().mockResolvedValue({ affected: 0 });
+      it('삭제가 안되면 ForbiddenException 던지나?', async () => {
+        const postId = 1;
 
-      await expect(async () => {
-        await postsRepository.updatePost(wherePost, updatePost);
-      }).rejects.toThrowError(new ForbiddenException());
-    });
-  });
+        const wherePost = Post.deleteBy({ id: postId, userId: user.id });
 
-  describe('게시글 삭제: removePost', () => {
-    it('PostRepository.removePost 실행 하면 this.posts.delete 실행 하나?', async () => {
-      const postId = 1;
+        repository.delete = jest.fn().mockResolvedValue({ affected: 0 });
 
-      const wherePost = Post.deleteBy({ id: postId, userId: user.id });
-
-      repository.delete = jest.fn().mockResolvedValue({ affected: 1 });
-
-      await postsRepository.removePost(wherePost);
-
-      expect(repository.delete).toBeCalledTimes(1);
-      expect(repository.delete).toBeCalledWith({
-        id: wherePost.id,
-        userId: wherePost.userId,
+        await expect(async () => {
+          await postsRepository.deletePost(wherePost);
+        }).rejects.toThrowError(new ForbiddenException());
       });
-    });
-
-    it('삭제가 안되면 ForbiddenException 던지나?', async () => {
-      const postId = 1;
-
-      const wherePost = Post.deleteBy({ id: postId, userId: user.id });
-
-      repository.delete = jest.fn().mockResolvedValue({ affected: 0 });
-
-      await expect(async () => {
-        await postsRepository.removePost(wherePost);
-      }).rejects.toThrowError(new ForbiddenException());
     });
   });
 });
