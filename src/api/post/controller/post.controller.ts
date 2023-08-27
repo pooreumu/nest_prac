@@ -18,9 +18,10 @@ import { User } from '@decorator/user/user.decorator';
 
 import { LoggedInGuard } from '@auth/logged-in.guard';
 
+import { CreatePostRequest } from '@post/controller/request/create-post.request';
+import { CreatePostResponse } from '@post/controller/response/create-post.response';
 import { GetPostDto } from '@post/dto/get-post.dto';
 import { PageDto } from '@post/dto/page.dto';
-import { CreatePostRequestDto } from '@post/dto/request.dto/create-post-request.dto';
 import { GetPostRequestDto } from '@post/dto/request.dto/get-post-request.dto';
 import { UpdatePostRequestDto } from '@post/dto/request.dto/update-post-request.dto';
 import { PostService } from '@post/service/post.service';
@@ -38,14 +39,13 @@ export class PostController {
   @Post()
   @UseGuards(LoggedInGuard)
   async createPost(
-    @Body() createPostRequestDto: CreatePostRequestDto,
+    @Body() createPostRequest: CreatePostRequest,
     @User() user: IUser,
-  ): Promise<ResponseEntity<string>> {
-    await this.createPostUseCase.execute(
-      createPostRequestDto.toCreatePostDto(user.id),
+  ): Promise<ResponseEntity<CreatePostResponse>> {
+    const dto = await this.createPostUseCase.execute(
+      createPostRequest.toCreatePostDto(user.id),
     );
-
-    return ResponseEntity.OK();
+    return ResponseEntity.OK_WITH(dto.toResponse());
   }
 
   @ApiOperation({ summary: '전체 게시글 조회' })

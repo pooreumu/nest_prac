@@ -15,6 +15,8 @@ import { AppModule } from '@src/app.module';
 import { setNestApp } from '@lib/common/set-nest-app';
 import { ResponseEntity } from '@lib/response/response-entity';
 
+import { CreatePostDto } from '@post/use-case/dto/create-post.dto';
+
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let dataSource: DataSource;
@@ -63,8 +65,10 @@ describe('AppController (e2e)', () => {
       });
       expect(res.status).toBe(201);
 
-      const body: ResponseEntity<string> = res.body;
+      const body: ResponseEntity<CreatePostDto> = res.body;
       expect(body.statusCode).toBe('OK');
+      expect(body.data.title).toBe('title');
+      expect(body.data.content).toBe('content');
     });
 
     describe('게시글이 있어야 하는 API', () => {

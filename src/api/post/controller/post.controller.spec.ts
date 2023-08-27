@@ -1,11 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { ResponseEntity } from '@lib/response/response-entity';
+
 import { PostController } from '@post/controller/post.controller';
-import { CreatePostRequestDto } from '@post/dto/request.dto/create-post-request.dto';
+import { CreatePostRequest } from '@post/controller/request/create-post.request';
 import { GetPostRequestDto } from '@post/dto/request.dto/get-post-request.dto';
 import { UpdatePostRequestDto } from '@post/dto/request.dto/update-post-request.dto';
 import { PostService } from '@post/service/post.service';
 import { CreatePostUseCase } from '@post/use-case/create-post/create-post.use-case';
+import { CreatePostDto } from '@post/use-case/dto/create-post.dto';
 
 jest.mock('@post/service/post.service');
 jest.mock('@post/use-case/create-post/create-post.use-case');
@@ -32,21 +35,28 @@ describe('PostsController', () => {
   });
 
   describe('게시글 작성: createPost', () => {
-    it('비회원이 controller.createPost를 실행하면 postService.createPost를 실행하나?', () => {
+    it('게시글을 작성하면 응답으로 생성된 데이터를 반환해야 한다.', async () => {
       const title = 'title';
       const content = 'content';
       const user = { id: 1, nickname: 'nickname' };
 
-      const postData = new CreatePostRequestDto();
+      const postData = new CreatePostRequest();
       postData.title = title;
       postData.content = content;
 
-      const createPostDto = postData.toCreatePostDto(user.id);
+      const dto = new CreatePostDto({
+        id: 1,
+        title,
+        content,
+        userId: user.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
 
-      controller.createPost(postData, user);
+      useCase.execute = jest.fn().mockResolvedValue(dto);
+      const res = await controller.createPost(postData, user);
 
-      expect(useCase.execute).toBeCalledTimes(1);
-      expect(useCase.execute).toBeCalledWith(createPostDto);
+      expect(res).toStrictEqual(ResponseEntity.OK_WITH(dto.toResponse()));
     });
   });
 

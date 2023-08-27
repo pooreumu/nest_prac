@@ -4,7 +4,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 import { CreatePostCommand } from '../../use-case/command/create-post.command';
 
-export class CreatePostRequestDto {
+export class CreatePostRequest {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()

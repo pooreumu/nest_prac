@@ -1,9 +1,11 @@
+import { LocalDateTime } from '@js-joda/core';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 import { Comment } from '@src/api/comment/entities/comment.entity';
 import { User } from '@src/api/user/entities/user.entity';
 
 import { BaseTimeEntity } from '@lib/entity/base-time-entity';
+import { DateTimeUtil } from '@lib/util/date-time-util';
 
 import { CreatePostDto } from '@post/use-case/dto/create-post.dto';
 
@@ -36,6 +38,38 @@ export class Post extends BaseTimeEntity {
 
   @OneToMany(() => Comment, (comment) => comment.post, { cascade: true })
   comments: Comment[];
+
+  static of({
+    id,
+    title,
+    content,
+    userId,
+    user,
+    comments,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    title: string;
+    content: string;
+    userId: number;
+    user: User;
+    comments: Comment[];
+    createdAt: LocalDateTime;
+    updatedAt: LocalDateTime;
+  }): Post {
+    const post = new Post();
+    post.id = id;
+    post.title = title;
+    post.content = content;
+    post.userId = userId;
+    post.user = user;
+    post.comments = comments;
+    post.createdAt = DateTimeUtil.toDate(createdAt);
+    post.updatedAt = DateTimeUtil.toDate(updatedAt);
+
+    return post;
+  }
 
   static createPost(postData: {
     title: string;
@@ -80,13 +114,12 @@ export class Post extends BaseTimeEntity {
     return post;
   }
 
-  toCreateDto(): CreatePostDto {
+  toDto(): CreatePostDto {
     return new CreatePostDto({
       id: this.id,
       title: this.title,
       content: this.content,
       userId: this.userId,
-      comments: this.comments,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     });

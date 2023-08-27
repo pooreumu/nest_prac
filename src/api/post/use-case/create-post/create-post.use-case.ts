@@ -20,6 +20,6 @@ export class CreatePostUseCase
     const post: Post = await this.postRepository.save(
       createPostCommand.toEntity(),
     );
-    return post.toCreateDto();
+    return post.toDto();
   }
 }
