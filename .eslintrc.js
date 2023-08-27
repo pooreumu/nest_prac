@@ -64,17 +64,17 @@ module.exports = {
             position: 'after',
           },
           {
-            pattern: '@users/**',
+            pattern: '@user/**',
             group: 'parent',
             position: 'after',
           },
           {
-            pattern: '@posts/**',
+            pattern: '@post/**',
             group: 'internal',
             position: 'after',
           },
           {
-            pattern: '@comments/**',
+            pattern: '@comment/**',
             group: 'internal',
             position: 'after',
           },

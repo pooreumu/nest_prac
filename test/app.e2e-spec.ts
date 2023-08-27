@@ -14,18 +14,16 @@ import request from 'supertest';
 import { DataSource } from 'typeorm';
 
 // 🌏 Project imports
+
+import { GetCommentDto } from '@src/api/comment/dto/get-comment.dto';
+import { Comment } from '@src/api/comment/entities/comment.entity';
+import { GetPostDto } from '@src/api/post/dto/get-post.dto';
+import { PageDto } from '@src/api/post/dto/page.dto';
+import { Post } from '@src/api/post/entities/post.entity';
+import { User } from '@src/api/user/entities/user.entity';
 import { AppModule } from '@src/app.module';
 
 import { ResponseEntity } from '@lib/response/response-entity';
-
-import { GetPostDto } from '@posts/dto/get-post.dto';
-import { PageDto } from '@posts/dto/page.dto';
-import { Post } from '@posts/entities/post.entity';
-
-import { GetCommentDto } from '@comments/dto/get-comment.dto';
-import { Comment } from '@comments/entities/comment.entity';
-
-import { User } from '@users/entities/user.entity';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

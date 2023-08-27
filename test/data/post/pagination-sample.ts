@@ -1,4 +1,4 @@
-import { Post } from '@posts/entities/post.entity';
+import { Post } from '@src/api/post/entities/post.entity';
 
 export function paginationSample(userId: number) {
   return [
