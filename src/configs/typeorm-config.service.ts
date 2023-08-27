@@ -54,6 +54,9 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         namingStrategy: new SnakeNamingStrategy(),
       },
     };
-    return typeOrmModuleOptions[this.configService.get('NODE_ENV')];
+
+    return typeOrmModuleOptions[
+      this.configService.get('NODE_ENV', 'dev') as 'dev' | 'test' | 'product'
+    ];
   }
 }

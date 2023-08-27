@@ -3,8 +3,8 @@ import { Post } from '../entities/post.entity';
 export class UpdatePostDto {
   private readonly _postId: number;
   private readonly _userId: number;
-  private readonly _title: string;
-  private readonly _content: string;
+  private readonly _title?: string;
+  private readonly _content?: string;
 
   constructor(postData: {
     postId: number;
@@ -22,11 +22,11 @@ export class UpdatePostDto {
     return this._postId;
   }
 
-  public get title(): string {
+  public get title(): string | undefined {
     return this._title;
   }
 
-  public get content(): string {
+  public get content(): string | undefined {
     return this._content;
   }
 

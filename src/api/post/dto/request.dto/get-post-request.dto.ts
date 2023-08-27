@@ -8,12 +8,12 @@ export class GetPostRequestDto {
   @ApiProperty()
   @IsOptional()
   @IsInt()
-  page?: number = 1;
+  page = 1;
 
   @ApiProperty()
   @IsOptional()
   @IsInt()
-  size?: number = 10;
+  size = 10;
 
   @ApiProperty()
   @IsOptional()

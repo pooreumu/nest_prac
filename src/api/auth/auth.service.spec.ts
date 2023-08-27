@@ -49,8 +49,8 @@ describe('AuthService', () => {
 
       const result = await authService.validateUser(nickname, password);
 
-      expect(result.id).toBe(1);
-      expect(result.nickname).toBe('nickname');
+      expect(result?.id).toBe(1);
+      expect(result?.nickname).toBe('nickname');
     });
 
     it('유저 비밀번호 틀렸을 때 테스트', async () => {

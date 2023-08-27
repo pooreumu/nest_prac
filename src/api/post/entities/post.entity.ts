@@ -2,7 +2,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 // 🌏 Project imports
-
 import { Comment } from '@src/api/comment/entities/comment.entity';
 import { User } from '@src/api/user/entities/user.entity';
 
@@ -62,8 +61,8 @@ export class Post extends BaseTimeEntity {
     wherePost.userId = postData.userId;
 
     const updatePost = new Post();
-    updatePost.title = postData.title;
-    updatePost.content = postData.content;
+    if (postData.title) updatePost.title = postData.title;
+    if (postData.content) updatePost.content = postData.content;
 
     return { wherePost: wherePost, updatePost: updatePost };
   }

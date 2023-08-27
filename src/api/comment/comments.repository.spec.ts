@@ -75,9 +75,9 @@ describe('Comments', () => {
         relations: { post: true },
       });
 
-      expect(comment.userId).toBe(commentData.userId);
-      expect(comment.content).toBe(commentData.content);
-      expect(comment.post.id).toBe(commentData.postId);
+      expect(comment?.userId).toBe(commentData.userId);
+      expect(comment?.content).toBe(commentData.content);
+      expect(comment?.post.id).toBe(commentData.postId);
     });
   });
 
@@ -105,8 +105,8 @@ describe('Comments', () => {
 
       const comment = await repository.findOne({ where: { id: 1 } });
 
-      expect(comment.id).toBe(id);
-      expect(comment.content).toBe(content);
+      expect(comment?.id).toBe(id);
+      expect(comment?.content).toBe(content);
     });
   });
 });

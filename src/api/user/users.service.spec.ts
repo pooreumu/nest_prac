@@ -47,12 +47,14 @@ describe('UsersService', () => {
     it('usersService.signUp 실행되면 usersRepository.insert로 저장 함?', async () => {
       await service.signUp(createUserDto);
 
-      const user: User = await dataSource.getRepository(User).findOne({
+      const user = await dataSource.getRepository(User).findOne({
         where: {
           id: 1,
         },
       });
-
+      if (!user) {
+        throw new Error();
+      }
       expect(user.nickname).toBe(createUserDto.nickname);
       expect(await bcrypt.compare(createUserDto.password, user.password)).toBe(
         true,

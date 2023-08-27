@@ -17,7 +17,7 @@ export class LocalSerializer extends PassportSerializer {
     super();
   }
 
-  async deserializeUser(userId: string, done: CallableFunction) {
+  async deserializeUser(userId: string, done: CallableFunction): Promise<User> {
     return await this.userRepository
       .findOneOrFail({
         where: {

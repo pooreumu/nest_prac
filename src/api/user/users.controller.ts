@@ -2,9 +2,10 @@ import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 
 import { CreateUserDto } from '@src/api/user/dto/create-user.dto';
 import { UsersService } from '@src/api/user/users.service';
-import { User } from '@src/lib/decorator/user.decorator';
 
 import { ResponseEntity } from '@lib/response/response-entity';
+
+import { User } from '@decorator/user/user.decorator';
 
 import { LocalAuthGuard } from '@auth/local-auth.guard';
 

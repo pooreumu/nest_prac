@@ -5,7 +5,8 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 // 🌏 Project imports
 import { ResponseEntity } from '@lib/response/response-entity';
 
-import { User } from '@decorator/user.decorator';
+import { User as IUser } from '@decorator/user/user';
+import { User } from '@decorator/user/user.decorator';
 
 import { LoggedInGuard } from '@auth/logged-in.guard';
 
@@ -24,7 +25,7 @@ export class CommentsController {
   async createComment(
     @Param('postId') postId: number,
     @Body() commentData: CreateCommentRequestDto,
-    @User() user,
+    @User() user: IUser,
   ): Promise<ResponseEntity<string>> {
     await this.commentsService.createComment(
       commentData.toCreateCommentDto(postId, user.id),
@@ -37,7 +38,7 @@ export class CommentsController {
   async updateComment(
     @Param('id') id: number,
     @Body() updateCommentRequestDto: UpdateCommentRequestDto,
-    @User() user,
+    @User() user: IUser,
   ): Promise<ResponseEntity<string>> {
     await this.commentsService.updateComment(
       updateCommentRequestDto.toUpdateCommentDto(id, user.id),

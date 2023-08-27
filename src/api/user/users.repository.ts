@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 
 import { User } from '@src/api/user/entities/user.entity';
 
@@ -19,10 +19,11 @@ export class UsersRepository {
   async insert(user: User) {
     try {
       return await this.userTypeOrmRepository.insert(user);
-    } catch (e) {
-      throw e.code === 'ER_DUP_ENTRY'
-        ? new BadRequestException('이미 사용중인 닉네임입니다.')
-        : new InternalServerErrorException();
+    } catch (e: unknown) {
+      if (e instanceof QueryFailedError)
+        throw e.driverError.code === 'ER_DUP_ENTRY'
+          ? new BadRequestException('이미 사용중인 닉네임입니다.')
+          : new InternalServerErrorException();
     }
   }
 }

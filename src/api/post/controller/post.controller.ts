@@ -15,7 +15,8 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 // 🌏 Project imports
 import { ResponseEntity } from '@lib/response/response-entity';
 
-import { User } from '@decorator/user.decorator';
+import { User as IUser } from '@decorator/user/user';
+import { User } from '@decorator/user/user.decorator';
 
 import { LoggedInGuard } from '@auth/logged-in.guard';
 
@@ -40,7 +41,7 @@ export class PostController {
   @UseGuards(LoggedInGuard)
   async createPost(
     @Body() createPostRequestDto: CreatePostRequestDto,
-    @User() user,
+    @User() user: IUser,
   ): Promise<ResponseEntity<string>> {
     await this.createPostUseCase.execute(
       createPostRequestDto.toCreatePostDto(user.id),
@@ -73,7 +74,7 @@ export class PostController {
   async updatePost(
     @Param('id') postId: number,
     @Body() postData: UpdatePostRequestDto,
-    @User() user,
+    @User() user: IUser,
   ): Promise<ResponseEntity<string>> {
     await this.postService.updatePost(
       postData.toUpdatePostDto(postId, user.id),
@@ -86,7 +87,7 @@ export class PostController {
   @UseGuards(LoggedInGuard)
   async removePost(
     @Param('id') postId: number,
-    @User() user,
+    @User() user: IUser,
   ): Promise<ResponseEntity<string>> {
     await this.postService.removePost(postId, user.id);
     return ResponseEntity.OK();

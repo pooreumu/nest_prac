@@ -1,7 +1,7 @@
 export class PostModel {
   private readonly _page: number;
   private readonly _size: number;
-  private readonly _search: string;
+  private readonly _search?: string;
 
   constructor({
     page,

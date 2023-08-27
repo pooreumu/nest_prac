@@ -1,20 +1,12 @@
 // 🐱 Nestjs imports
-import {
-  ClassSerializerInterceptor,
-  INestApplication,
-  ValidationPipe,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
 // 📦 Package imports
-import session from 'express-session';
-import passport from 'passport';
 import request from 'supertest';
 import { DataSource } from 'typeorm';
 
 // 🌏 Project imports
-
 import { GetCommentDto } from '@src/api/comment/dto/get-comment.dto';
 import { Comment } from '@src/api/comment/entities/comment.entity';
 import { GetPostDto } from '@src/api/post/dto/get-post.dto';
@@ -23,6 +15,7 @@ import { Post } from '@src/api/post/entities/post.entity';
 import { User } from '@src/api/user/entities/user.entity';
 import { AppModule } from '@src/app.module';
 
+import { setNestApp } from '@lib/common/set-nest-app';
 import { ResponseEntity } from '@lib/response/response-entity';
 
 describe('AppController (e2e)', () => {
@@ -35,29 +28,7 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalInterceptors(
-      new ClassSerializerInterceptor(app.get(Reflector)),
-    );
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transform: true,
-      }),
-    );
-
-    app.use(
-      session({
-        resave: false,
-        saveUninitialized: false,
-        secret: process.env.COOKIE_SECRET,
-        cookie: {
-          httpOnly: true,
-        },
-      }),
-    );
-    app.use(passport.initialize());
-    app.use(passport.session());
+    setNestApp(app);
 
     await app.init();
 
@@ -71,7 +42,7 @@ describe('AppController (e2e)', () => {
   });
 
   describe('로그인이 필요한 API', () => {
-    let agent;
+    let agent: request.SuperTest<request.Test>;
     beforeEach(async () => {
       await request(app.getHttpServer()).post('/users/sign-up').send({
         nickname: 'nickname',

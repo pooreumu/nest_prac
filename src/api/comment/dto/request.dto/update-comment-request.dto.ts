@@ -7,7 +7,7 @@ import { CreateCommentRequestDto } from './create-comment-request.dto';
 export class UpdateCommentRequestDto extends PickType(CreateCommentRequestDto, [
   'content',
 ] as const) {
-  toUpdateCommentDto(id: number, userId) {
+  toUpdateCommentDto(id: number, userId: number) {
     return new UpdateCommentDto({
       id,
       userId,
