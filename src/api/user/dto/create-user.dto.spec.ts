@@ -1,7 +1,5 @@
-// 📦 Package imports
 import bcrypt from 'bcrypt';
 
-// 🌏 Project imports
 import { CreateUserDto } from './create-user.dto';
 
 describe('CreateUserDto TEST', () => {

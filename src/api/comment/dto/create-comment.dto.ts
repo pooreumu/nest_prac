@@ -1,7 +1,3 @@
-// 🐱 Nestjs imports
-// 📦 Package imports
-
-// 🌏 Project imports
 import { Comment } from '../entities/comment.entity';
 
 export class CreateCommentDto {

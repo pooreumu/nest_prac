@@ -1,17 +1,18 @@
-// 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
 
-// 📦 Package imports
 import bcrypt from 'bcrypt';
 import { DataSource } from 'typeorm';
 
-// 🌏 Project imports
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
 import { CreateUserDto } from '../dto/create-user.dto';
 import { User } from '../entities/user.entity';
-import { UserRepository } from '../repository/user.repository';
 import { UserModule } from '../user.module';
+
+import {
+  USER_REPOSITORY,
+  UserRepository,
+} from '@user/repository/user.repository';
 
 import { UserService } from './user.service';
 
@@ -26,7 +27,7 @@ describe('UsersService', () => {
     }).compile();
 
     service = module.get<UserService>(UserService);
-    repository = module.get<UserRepository>(UserRepository);
+    repository = module.get<UserRepository>(USER_REPOSITORY);
     dataSource = module.get<DataSource>(DataSource);
 
     await dataSource.synchronize(true);

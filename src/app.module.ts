@@ -1,7 +1,5 @@
-// 🐱 Nestjs imports
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 
-// 🌏 Project imports
 import { PostModule } from '@src/api/post/post.module';
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 

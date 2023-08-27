@@ -1,10 +1,7 @@
-// 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
 
-// 📦 Package imports
 import { DataSource, Repository } from 'typeorm';
 
-// 🌏 Project imports
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
 import { Post } from '@post/entities/post.entity';

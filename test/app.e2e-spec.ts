@@ -1,12 +1,9 @@
-// 🐱 Nestjs imports
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 
-// 📦 Package imports
 import request from 'supertest';
 import { DataSource } from 'typeorm';
 
-// 🌏 Project imports
 import { GetCommentDto } from '@src/api/comment/dto/get-comment.dto';
 import { Comment } from '@src/api/comment/entities/comment.entity';
 import { GetPostDto } from '@src/api/post/dto/get-post.dto';

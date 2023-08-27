@@ -1,7 +1,5 @@
-// 📦 Package imports
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
-// 🌏 Project imports
 import { CreateCommentData } from '@src/api/comment/interfaces/create-comment-data';
 import { Post } from '@src/api/post/entities/post.entity';
 import { User } from '@src/api/user/entities/user.entity';

@@ -1,10 +1,7 @@
-// 🐱 Nestjs imports
 import { ApiProperty } from '@nestjs/swagger';
 
-// 📦 Package imports
 import { IsNotEmpty, IsString } from 'class-validator';
 
-// 🌏 Project imports
 import { CreateCommentDto } from '@src/api/comment/dto/create-comment.dto';
 
 export class CreateCommentRequestDto {

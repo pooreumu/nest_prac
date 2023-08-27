@@ -1,10 +1,7 @@
-// 🐱 Nestjs imports
 import { ApiProperty } from '@nestjs/swagger';
 
-// 📦 Package imports
 import { Exclude, Expose } from 'class-transformer';
 
-// 🌏 Project imports
 import { ResponseStatus } from './response-status';
 
 export class ResponseEntity<T> {

@@ -1,4 +1,3 @@
-// 📦 Package imports
 import {
   CreateDateColumn,
   Entity,

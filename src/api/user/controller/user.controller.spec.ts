@@ -1,7 +1,5 @@
-// 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
 
-// 🌏 Project imports
 import { UserController } from '@user/controller/user.controller';
 import { CreateUserDto } from '@user/dto/create-user.dto';
 import { UserService } from '@user/service/user.service';

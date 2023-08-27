@@ -1,8 +1,6 @@
-// 🐱 Nestjs imports
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-// 🌏 Project imports
 import { PostController } from '@post/controller/post.controller';
 import { Post } from '@post/entities/post.entity';
 import { POST_REPOSITORY } from '@post/repository/post.repository';

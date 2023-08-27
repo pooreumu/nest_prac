@@ -1,7 +1,5 @@
-// 🐱 Nestjs imports
 import { NestFactory } from '@nestjs/core';
 
-// 🌏 Project imports
 import { setNestApp } from '@lib/common/set-nest-app';
 
 import { AppModule } from './app.module';

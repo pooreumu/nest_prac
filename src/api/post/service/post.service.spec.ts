@@ -11,12 +11,6 @@ import {
 import { PostTypeormRepository } from '@post/repository/post.typeorm-repository';
 import { PostService } from '@post/service/post.service';
 
-// import { CreatePostDto } from './dto/create-post.dto';
-// import { DeletePostDto } from './dto/delete-post.dto';
-// import { UpdatePostDto } from './dto/update-post.dto';
-// import { PostService } from './post.service';
-// import { PostTypeormRepository } from './repository/post.typeorm-repository';
-
 jest.mock('@post/repository/post.typeorm-repository');
 
 describe('PostsService', () => {

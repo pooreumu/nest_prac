@@ -1,4 +1,3 @@
-// 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { CommentController } from '@comment/controller/comment.controller';
@@ -6,9 +5,7 @@ import { CreateCommentRequestDto } from '@comment/dto/request.dto/create-comment
 import { UpdateCommentRequestDto } from '@comment/dto/request.dto/update-comment-request.dto';
 import { CommentService } from '@comment/service/comment.service';
 
-// 🌏 Project imports
-
-jest.mock('@comment/comment.service');
+jest.mock('@comment/service/comment.service');
 
 describe('CommentsController', () => {
   let controller: CommentController;

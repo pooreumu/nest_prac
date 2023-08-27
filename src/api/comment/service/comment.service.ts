@@ -1,7 +1,5 @@
-// 🐱 Nestjs imports
 import { Injectable } from '@nestjs/common';
 
-// 🌏 Project imports
 import { CreateCommentDto } from '@comment/dto/create-comment.dto';
 
 import { UpdateCommentDto } from '../dto/update-comment.dto';

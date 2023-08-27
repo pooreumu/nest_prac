@@ -1,4 +1,3 @@
-// 🐱 Nestjs imports
 import {
   ArgumentsHost,
   Catch,
@@ -6,10 +5,8 @@ import {
   HttpException,
 } from '@nestjs/common';
 
-// 📦 Package imports
 import { Response } from 'express';
 
-// 🌏 Project imports
 import { ResponseEntity } from '@lib/response/response-entity';
 import { ResponseStatus } from '@lib/response/response-status';
 

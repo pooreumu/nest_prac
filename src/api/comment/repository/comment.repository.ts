@@ -1,11 +1,8 @@
-// 🐱 Nestjs imports
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-// 📦 Package imports
 import { Repository } from 'typeorm';
 
-// 🌏 Project imports
 import { Comment } from '../entities/comment.entity';
 
 @Injectable()

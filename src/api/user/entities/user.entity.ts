@@ -1,12 +1,9 @@
-// 🐱 Nestjs imports
 import { ApiProperty } from '@nestjs/swagger';
 
-// 📦 Package imports
 import bcrypt from 'bcrypt';
 import { IsNotEmpty, IsString } from 'class-validator';
 import { Column, Entity, OneToMany } from 'typeorm';
 
-// 🌏 Project imports
 import { Comment } from '@src/api/comment/entities/comment.entity';
 import { Post } from '@src/api/post/entities/post.entity';
 

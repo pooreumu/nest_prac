@@ -1,7 +1,5 @@
-// 🐱 Nestjs imports
 import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
 
-// 📦 Package imports
 import { Request, Response, NextFunction } from 'express';
 
 @Injectable()

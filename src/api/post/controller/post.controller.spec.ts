@@ -1,7 +1,5 @@
-// 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
 
-// 🌏 Project imports
 import { PostController } from '@post/controller/post.controller';
 import { CreatePostRequestDto } from '@post/dto/request.dto/create-post-request.dto';
 import { GetPostRequestDto } from '@post/dto/request.dto/get-post-request.dto';

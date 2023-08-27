@@ -1,10 +1,6 @@
-// 🐱 Nestjs imports
 import { ApiProperty } from '@nestjs/swagger';
 
-// 📦 Package imports
 import { Exclude, Expose } from 'class-transformer';
-
-// 🌏 Project imports
 
 import { GetCommentDto } from '@src/api/comment/dto/get-comment.dto';
 import { Comment } from '@src/api/comment/entities/comment.entity';

@@ -1,9 +1,7 @@
-// 🐱 Nestjs imports
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
-// 📦 Package imports
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 @Injectable()

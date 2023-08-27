@@ -1,7 +1,5 @@
-// 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
 
-// 🌏 Project imports
 import { CreateCommentRequestDto } from '@comment/dto/request.dto/create-comment-request.dto';
 import { UpdateCommentDto } from '@comment/dto/update-comment.dto';
 import { CommentRepository } from '@comment/repository/comment.repository';
