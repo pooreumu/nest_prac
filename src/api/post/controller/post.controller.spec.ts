@@ -6,7 +6,7 @@ import { PostController } from '@post/controller/post.controller';
 import { CreatePostRequestDto } from '@post/dto/request.dto/create-post-request.dto';
 import { GetPostRequestDto } from '@post/dto/request.dto/get-post-request.dto';
 import { UpdatePostRequestDto } from '@post/dto/request.dto/update-post-request.dto';
-import { PostService } from '@post/post.service';
+import { PostService } from '@post/service/post.service';
 import { CreatePostUseCase } from '@post/use-case/create-post.use-case';
 
 jest.mock('@post/post.service');

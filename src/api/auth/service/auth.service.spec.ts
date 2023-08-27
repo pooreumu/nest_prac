@@ -2,10 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 
 import { DataSource } from 'typeorm';
 
-import { User } from '@src/api/user/entities/user.entity';
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
 import { AuthModule } from '@auth/auth.module';
+
+import { User } from '@user/entities/user.entity';
 
 import { AuthService } from './auth.service';
 

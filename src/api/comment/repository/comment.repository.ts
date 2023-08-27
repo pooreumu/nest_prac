@@ -6,7 +6,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 // 🌏 Project imports
-import { Comment } from './entities/comment.entity';
+import { Comment } from '../entities/comment.entity';
 
 @Injectable()
 export class CommentRepository {

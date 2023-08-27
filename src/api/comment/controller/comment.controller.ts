@@ -10,9 +10,9 @@ import { User } from '@decorator/user/user.decorator';
 
 import { LoggedInGuard } from '@auth/logged-in.guard';
 
-import { CommentService } from './comment.service';
-import { CreateCommentRequestDto } from './dto/request.dto/create-comment-request.dto';
-import { UpdateCommentRequestDto } from './dto/request.dto/update-comment-request.dto';
+import { CreateCommentRequestDto } from '../dto/request.dto/create-comment-request.dto';
+import { UpdateCommentRequestDto } from '../dto/request.dto/update-comment-request.dto';
+import { CommentService } from '../service/comment.service';
 
 @ApiTags('COMMENT')
 @Controller('/posts/:postId/comments')

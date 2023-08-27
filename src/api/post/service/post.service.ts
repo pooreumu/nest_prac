@@ -3,16 +3,15 @@ import { Inject, Injectable } from '@nestjs/common';
 
 // 📦 Package imports
 // 🌏 Project imports
-import { PageDto } from '@src/api/post/dto/page.dto';
-import { GetPostRequestDto } from '@src/api/post/dto/request.dto/get-post-request.dto';
-
+import { PageDto } from '@post/dto/page.dto';
+import { GetPostRequestDto } from '@post/dto/request.dto/get-post-request.dto';
 import { POST_REPOSITORY } from '@post/repository/post.repository';
 
-import { CreatePostDto } from './dto/create-post.dto';
-import { DeletePostDto } from './dto/delete-post.dto';
-import { GetPostDto } from './dto/get-post.dto';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { PostTypeormRepository } from './repository/post.typeorm-repository';
+import { CreatePostDto } from '../dto/create-post.dto';
+import { DeletePostDto } from '../dto/delete-post.dto';
+import { GetPostDto } from '../dto/get-post.dto';
+import { UpdatePostDto } from '../dto/update-post.dto';
+import { PostTypeormRepository } from '../repository/post.typeorm-repository';
 
 @Injectable()
 export class PostService {

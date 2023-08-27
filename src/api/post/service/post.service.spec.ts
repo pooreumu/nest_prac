@@ -1,16 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { GetPostRequestDto } from '@src/api/post/dto/request.dto/get-post-request.dto';
-
 import { CreatePostDto } from '@post/dto/create-post.dto';
 import { DeletePostDto } from '@post/dto/delete-post.dto';
+import { GetPostRequestDto } from '@post/dto/request.dto/get-post-request.dto';
 import { UpdatePostDto } from '@post/dto/update-post.dto';
-import { PostService } from '@post/post.service';
 import {
   POST_REPOSITORY,
   PostRepository,
 } from '@post/repository/post.repository';
 import { PostTypeormRepository } from '@post/repository/post.typeorm-repository';
+import { PostService } from '@post/service/post.service';
 
 // import { CreatePostDto } from './dto/create-post.dto';
 // import { DeletePostDto } from './dto/delete-post.dto';

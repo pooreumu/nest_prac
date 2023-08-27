@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 
 import { User } from '@src/api/user/entities/user.entity';
 
-import { AuthService } from './auth.service';
+import { AuthService } from './service/auth.service';
 
 @Injectable()
 export class LocalSerializer extends PassportSerializer {

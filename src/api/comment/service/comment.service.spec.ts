@@ -2,10 +2,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 // 🌏 Project imports
-import { CommentRepository } from '@comment/comment.repository';
-import { CommentService } from '@comment/comment.service';
 import { CreateCommentRequestDto } from '@comment/dto/request.dto/create-comment-request.dto';
 import { UpdateCommentDto } from '@comment/dto/update-comment.dto';
+import { CommentRepository } from '@comment/repository/comment.repository';
+import { CommentService } from '@comment/service/comment.service';
 
 jest.mock('@comment/comment.repository');
 

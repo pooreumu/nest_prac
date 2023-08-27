@@ -1,14 +1,13 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 
-import { CreateUserDto } from '@src/api/user/dto/create-user.dto';
-
 import { ResponseEntity } from '@lib/response/response-entity';
 
 import { User } from '@decorator/user/user.decorator';
 
 import { LocalAuthGuard } from '@auth/local-auth.guard';
 
-import { UserService } from '@user/user.service';
+import { CreateUserDto } from '@user/dto/create-user.dto';
+import { UserService } from '@user/service/user.service';
 
 @Controller('users')
 export class UserController {

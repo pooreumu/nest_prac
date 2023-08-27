@@ -8,10 +8,11 @@ import { DataSource } from 'typeorm';
 // 🌏 Project imports
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
-import { UserModule } from './user.module';
-import { UserRepository } from './user.repository';
+import { CreateUserDto } from '../dto/create-user.dto';
+import { User } from '../entities/user.entity';
+import { UserRepository } from '../repository/user.repository';
+import { UserModule } from '../user.module';
+
 import { UserService } from './user.service';
 
 describe('UsersService', () => {

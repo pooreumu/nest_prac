@@ -5,16 +5,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { DataSource, Repository } from 'typeorm';
 
 // 🌏 Project imports
-import { CreateCommentDto } from '@src/api/comment/dto/create-comment.dto';
-import { Post } from '@src/api/post/entities/post.entity';
-import { User } from '@src/api/user/entities/user.entity';
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
-import { CommentModule } from './comment.module';
+import { Post } from '@post/entities/post.entity';
+
+import { CreateCommentDto } from '@comment/dto/create-comment.dto';
+
+import { CommentModule } from '../comment.module';
+import { CreateCommentRequestDto } from '../dto/request.dto/create-comment-request.dto';
+import { UpdateCommentDto } from '../dto/update-comment.dto';
+import { Comment } from '../entities/comment.entity';
+
+import { User } from '@user/entities/user.entity';
+
 import { CommentRepository } from './comment.repository';
-import { CreateCommentRequestDto } from './dto/request.dto/create-comment-request.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
-import { Comment } from './entities/comment.entity';
 
 describe('Comments', () => {
   let commentsRepository: CommentRepository;

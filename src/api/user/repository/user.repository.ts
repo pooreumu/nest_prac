@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { QueryFailedError, Repository } from 'typeorm';
 
-import { User } from '@src/api/user/entities/user.entity';
+import { User } from '@user/entities/user.entity';
 
 @Injectable()
 export class UserRepository {

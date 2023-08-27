@@ -5,10 +5,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 // 🌏 Project imports
 import { DataSource } from 'typeorm';
 
-import { User } from '@src/api/user/entities/user.entity';
 import { TypeormConfigModule } from '@src/configs/typeorm-config.module';
 
-import { UserModule } from './user.module';
+import { UserModule } from '../user.module';
+
+import { User } from '@user/entities/user.entity';
+
 import { UserRepository } from './user.repository';
 
 describe('Users', () => {

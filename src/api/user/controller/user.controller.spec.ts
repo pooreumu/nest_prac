@@ -2,9 +2,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 // 🌏 Project imports
+import { UserController } from '@user/controller/user.controller';
 import { CreateUserDto } from '@user/dto/create-user.dto';
-import { UserController } from '@user/user.controller';
-import { UserService } from '@user/user.service';
+import { UserService } from '@user/service/user.service';
 
 jest.mock('@user/user.service');
 

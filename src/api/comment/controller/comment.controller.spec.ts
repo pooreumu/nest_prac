@@ -1,10 +1,10 @@
 // 🐱 Nestjs imports
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { CommentController } from '@comment/comment.controller';
-import { CommentService } from '@comment/comment.service';
+import { CommentController } from '@comment/controller/comment.controller';
 import { CreateCommentRequestDto } from '@comment/dto/request.dto/create-comment-request.dto';
 import { UpdateCommentRequestDto } from '@comment/dto/request.dto/update-comment-request.dto';
+import { CommentService } from '@comment/service/comment.service';
 
 // 🌏 Project imports
 
